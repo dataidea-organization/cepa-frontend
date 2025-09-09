@@ -342,6 +342,174 @@ const About: React.FC = () => {
         </div>
       </section>
 
+      {/* Our Team */}
+      <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Our Team
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Meet the dedicated professionals who drive CEPA's mission of strengthening democratic governance and promoting evidence-based policy analysis in Uganda.
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {/* Executive Director */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                    <span className="text-4xl">👨‍💼</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Dr. Sarah Namukasa</h3>
+                  <p className="text-primary font-medium mb-3">Executive Director</p>
+                  <p className="text-sm text-muted-foreground">
+                    Leading CEPA's strategic vision with over 15 years of experience in policy research and governance advocacy.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Research Director */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center">
+                    <span className="text-4xl">👩‍🔬</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Dr. Michael Okello</h3>
+                  <p className="text-secondary font-medium mb-3">Research Director</p>
+                  <p className="text-sm text-muted-foreground">
+                    Overseeing research methodologies and ensuring the highest standards of evidence-based policy analysis.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Policy Analyst */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-accent/20 to-destructive/20 flex items-center justify-center">
+                    <span className="text-4xl">👨‍💻</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Grace Nakamya</h3>
+                  <p className="text-accent font-medium mb-3">Senior Policy Analyst</p>
+                  <p className="text-sm text-muted-foreground">
+                    Specializing in public finance and budget analysis with expertise in parliamentary oversight mechanisms.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Communications Manager */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center">
+                    <span className="text-4xl">👩‍💼</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">James Musinguzi</h3>
+                  <p className="text-destructive font-medium mb-3">Communications Manager</p>
+                  <p className="text-sm text-muted-foreground">
+                    Leading stakeholder engagement and ensuring CEPA's research reaches policymakers and the public effectively.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Program Coordinator */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.2 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-destructive/20 flex items-center justify-center">
+                    <span className="text-4xl">👨‍🎓</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Rebecca Nalwanga</h3>
+                  <p className="text-primary font-medium mb-3">Program Coordinator</p>
+                  <p className="text-sm text-muted-foreground">
+                    Managing CEPA's flagship programs and coordinating partnerships with civil society organizations.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Research Associate */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                <CardContent className="p-6">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary/20 to-primary/20 flex items-center justify-center">
+                    <span className="text-4xl">👩‍🎓</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">David Kato</h3>
+                  <p className="text-secondary font-medium mb-3">Research Associate</p>
+                  <p className="text-sm text-muted-foreground">
+                    Supporting research initiatives with focus on digital rights and data protection policy analysis.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.6 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <Button asChild size="lg" className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+              <Link href="/get-involved/career">
+                Join Our Team
+              </Link>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="py-20" style={{background: 'linear-gradient(to right, rgb(30 64 175), rgb(245 158 11), rgb(16 185 129), rgb(239 68 68))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

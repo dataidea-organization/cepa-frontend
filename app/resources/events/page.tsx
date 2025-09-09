@@ -192,9 +192,6 @@ const Events: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {upcomingEvents.map((event, index) => {
-                const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
-                const currentColor = themeColors[index % 4];
-                
                 return (
                   <Card key={event.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                     <div 
@@ -253,11 +250,8 @@ const Events: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {pastEvents.map((event, index) => {
-              const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
-              const currentColor = themeColors[index % 4];
-              
               return (
-                <Card key={event.id} className={`relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group border-2 ${currentColor}`}>
+                <Card key={event.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                     style={{ backgroundImage: `url(${event.image})` }}
