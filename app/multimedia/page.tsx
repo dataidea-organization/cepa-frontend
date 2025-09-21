@@ -77,7 +77,7 @@ const Multimedia: React.FC = () => {
                   <Card key={itemIndex} hover className="p-6 bg-white/20 border border-white/30 backdrop-blur-sm">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
-                        {item.duration || item.type}
+                        {(item as any).duration || (item as any).type}
                       </span>
                       <span className="text-sm text-gray-500">{item.date}</span>
                     </div>
@@ -120,7 +120,7 @@ const Multimedia: React.FC = () => {
               </div>
             </div>
             <h4 className="text-lg font-semibold text-gray-900 mb-3">
-              "The Future of Democracy in Uganda"
+              &ldquo;The Future of Democracy in Uganda&rdquo;
             </h4>
             <p className="text-gray-600 mb-4">
               An in-depth discussion with leading experts on the challenges and opportunities facing Uganda's democratic institutions.
@@ -139,7 +139,7 @@ const Multimedia: React.FC = () => {
               </div>
             </div>
             <h4 className="text-lg font-semibold text-gray-900 mb-3">
-              "Parliamentary Oversight in Action"
+              &ldquo;Parliamentary Oversight in Action&rdquo;
             </h4>
             <p className="text-gray-600 mb-4">
               A comprehensive look at how parliamentary oversight mechanisms work in practice and their impact on governance.
@@ -161,16 +161,16 @@ const Multimedia: React.FC = () => {
             Subscribe to our channels to get notified about new multimedia content and stay updated with our latest work.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/resources#newsletters">
+            <Link href="/resources#newsletters">
+              <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
                 Subscribe to Newsletter
-              </Link>
-            </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved">
+              </Button>
+            </Link>
+            <Link href="/get-involved">
+              <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
                 Get Involved
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Users, Calendar, MapPin, Award, BookOpen, Globe, ArrowRight, ExternalLink } from "lucide-react";
 
 export default function FellowshipsPage() {
-  const fellowshipPrograms = [
+  const fellowshipPrograms: any[] = [
     // {
     //   id: 1,
     //   title: "Policy Research Fellowship",
@@ -19,12 +19,12 @@ export default function FellowshipsPage() {
     //   benefits: [
     //     "Monthly stipend of $1,500",
     //     "Research mentorship from senior experts",
-    //     "Access to CEPA&apos;s research network",
+    //     "Access to CEPA's research network",
     //     "Publication opportunities",
     //     "Conference presentation support"
     //   ],
     //   requirements: [
-    //     "Master&apos;s degree in relevant field",
+    //     "Master's degree in relevant field",
     //     "2+ years research experience",
     //     "Strong analytical skills",
     //     "Commitment to governance research"
@@ -218,7 +218,7 @@ export default function FellowshipsPage() {
                           <div>
                             <h4 className="font-semibold text-gray-900 mb-3">Benefits</h4>
                             <ul className="space-y-2">
-                              {program.benefits.length > 0 ? program.benefits.map((benefit, idx) => (
+                              {program.benefits.length > 0 ? program.benefits.map((benefit: any, idx: number) => (
                                 <li key={idx} className="flex items-start gap-2 text-gray-600">
                                   <span className="text-green-500 mt-1">•</span>
                                   {benefit}
@@ -234,7 +234,7 @@ export default function FellowshipsPage() {
                           <div>
                             <h4 className="font-semibold text-gray-900 mb-3">Requirements</h4>
                             <ul className="space-y-2">
-                              {program.requirements.length > 0 ? program.requirements.map((requirement, idx) => (
+                              {program.requirements.length > 0 ? program.requirements.map((requirement: any, idx: number) => (
                                 <li key={idx} className="flex items-start gap-2 text-gray-600">
                                   <span className="text-blue-500 mt-1">•</span>
                                   {requirement}

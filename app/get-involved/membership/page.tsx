@@ -399,7 +399,7 @@ export default function MembershipPage() {
               {
                 step: "04",
                 title: "Welcome & Access",
-                description: "Once approved, you&apos;ll receive welcome materials and access to member benefits."
+                description: "Once approved, you'll receive welcome materials and access to member benefits."
               }
             ].map((step, index) => (
               <motion.div

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, Users, FileText, ExternalLink, ArrowRight, Bell, Megaphone, AlertCircle, Check } from "lucide-react";
 
 export default function AnnouncementsPage() {
-  const announcements = [
+  const announcements: any[] = [
     // {
     //   id: 1,
     //   title: "New Policy Research Fellowship Program Launch",
@@ -393,7 +393,7 @@ export default function AnnouncementsPage() {
               viewport={{ once: true }}
               className="text-xl text-white/90 mb-8 max-w-2xl mx-auto"
             >
-              Don&apos;t miss out on important updates, new opportunities, and exclusive events. Stay informed and engaged with our community.
+              Don't miss out on important updates, new opportunities, and exclusive events. Stay informed and engaged with our community.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}

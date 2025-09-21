@@ -162,7 +162,7 @@ export default function GetInvolvedPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Contact Us</h3>
                   <p className="text-gray-600 mb-6">
-                    Have questions or want to discuss partnership opportunities? We&apos;d love to hear from you.
+                    Have questions or want to discuss partnership opportunities? We'd love to hear from you.
                   </p>
                   <Link href="/get-involved/contact">
                     <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">

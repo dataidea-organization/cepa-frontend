@@ -34,7 +34,7 @@ export default function ContactPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl text-gray-600 max-w-3xl mx-auto"
             >
-              We&apos;d love to hear from you. Reach out to us for inquiries, partnerships, or to learn more about our work in governance and policy research.
+              We'd love to hear from you. Reach out to us for inquiries, partnerships, or to learn more about our work in governance and policy research.
             </motion.p>
           </motion.div>
         </div>
@@ -128,7 +128,7 @@ export default function ContactPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
-            <p className="text-lg text-gray-600">We&apos;ll get back to you within 24 hours</p>
+            <p className="text-lg text-gray-600">We'll get back to you within 24 hours</p>
           </motion.div>
 
           <motion.div
@@ -184,7 +184,7 @@ export default function ContactPage() {
                     <Input
                       id="subject"
                       type="text"
-                      placeholder="What&apos;s this about?"
+                      placeholder="What's this about?"
                       className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200"
                     />
                   </div>
