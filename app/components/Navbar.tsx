@@ -25,18 +25,13 @@ const Navbar = () => {
       dropdown: null
     },
     {
-      label: 'Activities',
-      href: '/activities',
-      dropdown: null
-    },
-    {
       label: 'Resources',
       href: '/resources',
       dropdown: [
         { label: 'Publications', href: '/resources/publications' },
         { label: 'News', href: '/resources/news' },
         { label: 'Blogs', href: '/resources/blog' },
-        { label: 'Events', href: '/resources/events' },
+        { label: 'Events and Activities', href: '/resources/events-and-activities' },
         // { label: 'Policy Briefs', href: '/resources/policy-briefs' },
         // { label: 'Annual Reports', href: '/resources/annual-reports' },
         // { label: 'Articles', href: '/resources/articles' },

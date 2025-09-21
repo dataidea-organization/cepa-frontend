@@ -1,13 +1,60 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
+interface NewsArticle {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  description: string;
+  image?: string;
+  slug: string;
+  featured: boolean;
+  content?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface NewsApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: NewsArticle[];
+}
+
 const News: React.FC = () => {
-  const newsArticles = [
+  const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchNewsArticles = async () => {
+      try {
+        // Fetch news articles from backend API
+        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/?page_size=100');
+        if (!response.ok) {
+          throw new Error('Failed to fetch news articles');
+        }
+        const data: NewsApiResponse = await response.json();
+        setNewsArticles(data.results);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching news articles:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNewsArticles();
+  }, []);
+
+  // Fallback news articles in case API fails
+  const fallbackNewsArticles = [
     {
       id: "ministry-health-ugx450bn-emergency-services",
       title: "Ministry of Health Seeks UGX450Bn for Emergency Medical Services for Road Crash Victims",
@@ -110,6 +157,19 @@ const News: React.FC = () => {
     }
   ];
 
+  // Use API data if available, otherwise use fallback
+  const articlesToDisplay = newsArticles.length > 0 ? newsArticles : fallbackNewsArticles;
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    } catch {
+      return dateString;
+    }
+  };
+
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       "Health": "bg-primary/10 text-primary border-primary",
@@ -121,6 +181,28 @@ const News: React.FC = () => {
     };
     return colors[category] || "bg-muted text-muted-foreground border-muted";
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading news articles...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && articlesToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-destructive mb-4">Error loading news articles: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -179,7 +261,7 @@ const News: React.FC = () => {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {newsArticles.filter(article => article.featured).map((article, index) => {
+            {articlesToDisplay.filter(article => article.featured).map((article, index) => {
               const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
               const currentColor = themeColors[index % 4];
               
@@ -194,7 +276,7 @@ const News: React.FC = () => {
                   <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${article.image})` }}
+                    style={{ backgroundImage: `url(${article.image || '/news/default-news.jpg'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -204,7 +286,7 @@ const News: React.FC = () => {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{article.date}</p>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(article.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{article.description}</p>
                     <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
                       <Link href={`/resources/news/${article.slug}`} className="text-black">
@@ -239,7 +321,7 @@ const News: React.FC = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsArticles.map((article, index) => {
+            {articlesToDisplay.map((article, index) => {
               const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
               const currentColor = themeColors[index % 4];
               
@@ -247,7 +329,7 @@ const News: React.FC = () => {
                 <Card key={article.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${article.image})` }}
+                    style={{ backgroundImage: `url(${article.image || '/news/default-news.jpg'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -257,7 +339,7 @@ const News: React.FC = () => {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{article.date}</p>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(article.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{article.description}</p>
                     <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
                       <Link href={`/resources/news/${article.slug}`} className="text-black">

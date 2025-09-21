@@ -1,6 +1,7 @@
 .plan/
 old/
 screenshots/
+cepa.or.ug/
 
 # dependencies
 /node_modules

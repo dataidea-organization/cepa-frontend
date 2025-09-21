@@ -6,11 +6,69 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
-const Podcasts: React.FC = () => {
-  const [selectedPodcast, setSelectedPodcast] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface Podcast {
+  id: string;
+  title: string;
+  description: string;
+  youtube_id: string;
+  youtube_embed_url: string;
+  thumbnail?: string;
+  duration?: string;
+  category?: string;
+  date: string;
+  guest?: string;
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
-  const openPodcastModal = (podcast: any) => {
+const Podcasts: React.FC = () => {
+  const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch podcasts and categories in parallel
+        const [podcastsResponse, categoriesResponse] = await Promise.all([
+          fetch('https://cepa-backend-production.up.railway.app/multimedia/podcasts/'),
+          fetch('https://cepa-backend-production.up.railway.app/multimedia/podcasts/categories/')
+        ]);
+
+        if (!podcastsResponse.ok || !categoriesResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const podcastsData = await podcastsResponse.json();
+        const categoriesData = await categoriesResponse.json();
+
+        setPodcasts(podcastsData.results || podcastsData);
+        setCategories(['All', ...categoriesData.filter((cat: string) => cat)]);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching podcasts:', err);
+        setError('Failed to load podcasts. Please try again later.');
+        
+        // Fallback data
+        setPodcasts([]);
+        setCategories(['All']);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const openPodcastModal = (podcast: Podcast) => {
     setSelectedPodcast(podcast);
     setIsModalOpen(true);
   };
@@ -38,114 +96,31 @@ const Podcasts: React.FC = () => {
     };
   }, [isModalOpen]);
 
-  const podcasts = [
-    {
-      id: 1,
-      title: "UPC: Breaking Feudalism, Building a Republic",
-      description: "A deep dive into Uganda's political history with Joseph Ochieno from UPC, exploring the party's vision for building a modern republic.",
-      youtubeId: "-hfxM9BFBa4",
-      thumbnail: "/videos/UPC-Breaking-Feudalism-Building-a-Republic.png",
-      duration: "15:30",
-      category: "Policy Digest Podcast",
-      date: "2025-05-06",
-      guest: "Joseph Ochieno (UPC)"
-    },
-    {
-      id: 2,
-      title: "Dr. Obote's Common Man's Charter",
-      description: "An insightful analysis of Dr. Milton Obote's Common Man's Charter and its impact on Uganda's development trajectory.",
-      youtubeId: "doboz00R5t8",
-      thumbnail: "/videos/Dr.-Obotes-Common-Mans-Charter.png",
-      duration: "12:45",
-      category: "Historical Analysis",
-      date: "2025-05-04",
-      guest: "Policy Expert"
-    },
-    {
-      id: 3,
-      title: "Building Uganda's Silicon Valley",
-      description: "A comprehensive look at Uganda's tech ecosystem and the potential for creating a thriving innovation hub in East Africa.",
-      youtubeId: "aVCnJfWW480",
-      thumbnail: "/videos/Building-Ugands-Silicon-Valley.png",
-      duration: "18:20",
-      category: "Technology & Development",
-      date: "2025-05-02",
-      guest: "Tech Industry Leader"
-    },
-    {
-      id: 4,
-      title: "Women's Movement in Uganda: A Legacy of Courage",
-      description: "A powerful conversation with Ms. Akiteng Isabella about the women's movement in Uganda and its lasting impact on society.",
-      youtubeId: "T5lrqFImjeY",
-      thumbnail: "/videos/Womens-Movement-in-Uganda-A-Legacy-of-Courage.png",
-      duration: "22:15",
-      category: "Social Justice",
-      date: "2025-04-28",
-      guest: "Ms. Akiteng Isabella"
-    },
-    {
-      id: 5,
-      title: "The Political Economy of UMEME's Exit",
-      description: "An economist from CSBAG discusses the implications of UMEME's exit from Uganda's electricity sector.",
-      youtubeId: "luSlo0n0PO8",
-      thumbnail: "/videos/The-Political-Economy-of-UMEMEs-Exit.png",
-      duration: "25:30",
-      category: "Economic Analysis",
-      date: "2025-04-25",
-      guest: "CSBAG Economist"
-    },
-    {
-      id: 6,
-      title: "Decolonising Philanthropy",
-      description: "A thought-provoking discussion with Eshban Kwesiga about reimagining philanthropy in the African context.",
-      youtubeId: "qMw1VIaQoV8",
-      thumbnail: "/videos/Decolonising-Philantropy.png",
-      duration: "20:45",
-      category: "Development",
-      date: "2025-04-22",
-      guest: "Eshban Kwesiga"
-    },
-    {
-      id: 7,
-      title: "Harnessing Population Dynamics for Peace and Development",
-      description: "Exploring how population dynamics in East and Southern Africa can be leveraged for sustainable peace and development.",
-      youtubeId: "HWwyYl0aTgE",
-      thumbnail: "/videos/Harnessing-Population-Dynamics-for-Peace-and-Development-in-East-and-Southern-Africa.png",
-      duration: "28:10",
-      category: "Demographics",
-      date: "2025-04-20",
-      guest: "Demographics Expert"
-    },
-    {
-      id: 8,
-      title: "Sexual and Reproductive Health in Uganda",
-      description: "A critical examination of sexual and reproductive health policies and their implementation in Uganda.",
-      youtubeId: "GtWuQOey7Hg",
-      thumbnail: "/videos/Sexual-and-Reproductive-Health-in-Uganda.png",
-      duration: "24:35",
-      category: "Public Health",
-      date: "2025-04-18",
-      guest: "Health Policy Expert"
-    },
-    {
-      id: 9,
-      title: "Regional Unrest and Stability",
-      description: "Analyzing regional conflicts and their impact on stability in East Africa and the broader region.",
-      youtubeId: "QLkVDcndNHs",
-      thumbnail: "/videos/Regional-Unrest--scaled.png",
-      duration: "26:20",
-      category: "Regional Security",
-      date: "2025-04-15",
-      guest: "Security Analyst"
-    }
-  ];
-
-  const categories = ["All", "Policy Digest Podcast", "Historical Analysis", "Technology & Development", "Social Justice", "Economic Analysis", "Development", "Demographics", "Public Health", "Regional Security"];
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
   const filteredPodcasts = selectedCategory === "All" 
     ? podcasts 
     : podcasts.filter(podcast => podcast.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading podcasts...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -241,9 +216,13 @@ const Podcasts: React.FC = () => {
             >
               <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
               <img
-                src={podcast.thumbnail}
+                src={podcast.thumbnail || `/videos/default-podcast.jpg`}
                 alt={podcast.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/videos/default-podcast.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -255,8 +234,12 @@ const Podcasts: React.FC = () => {
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-primary/90 text-white px-2 py-1 rounded text-xs">{podcast.category}</span>
-                  <span className="bg-black/70 text-white px-2 py-1 rounded text-xs">{podcast.duration}</span>
+                  {podcast.category && (
+                    <span className="bg-primary/90 text-white px-2 py-1 rounded text-xs">{podcast.category}</span>
+                  )}
+                  {podcast.duration && (
+                    <span className="bg-black/70 text-white px-2 py-1 rounded text-xs">{podcast.duration}</span>
+                  )}
                 </div>
                 <h3 className="text-xl font-bold mb-2 line-clamp-2">{podcast.title}</h3>
                 <p className="text-white/90 text-sm mb-3 line-clamp-2">{podcast.description}</p>
@@ -326,7 +309,7 @@ const Podcasts: React.FC = () => {
             </button>
             <div className="aspect-video">
               <iframe
-                src={`https://www.youtube.com/embed/${selectedPodcast.youtubeId}?autoplay=1&rel=0`}
+                src={`https://www.youtube.com/embed/${selectedPodcast.youtube_id}?autoplay=1&rel=0`}
                 title={selectedPodcast.title}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -337,8 +320,10 @@ const Podcasts: React.FC = () => {
               <h3 className="text-2xl font-bold text-foreground mb-2">{selectedPodcast.title}</h3>
               <p className="text-muted-foreground mb-4">{selectedPodcast.description}</p>
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                <span className="bg-primary/20 text-primary px-3 py-1 rounded-full">{selectedPodcast.category}</span>
-                <span>{selectedPodcast.duration}</span>
+                {selectedPodcast.category && (
+                  <span className="bg-primary/20 text-primary px-3 py-1 rounded-full">{selectedPodcast.category}</span>
+                )}
+                {selectedPodcast.duration && <span>{selectedPodcast.duration}</span>}
                 <span>{new Date(selectedPodcast.date).toLocaleDateString()}</span>
               </div>
               {selectedPodcast.guest && (

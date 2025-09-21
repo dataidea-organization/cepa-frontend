@@ -1,13 +1,60 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
+interface Publication {
+  id: string;
+  title: string;
+  type: string;
+  date: string;
+  description: string;
+  category: string;
+  url?: string;
+  pdf?: string;
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface PublicationsApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Publication[];
+}
+
 const Publications: React.FC = () => {
-  const publications = [
+  const [publications, setPublications] = useState<Publication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPublications = async () => {
+      try {
+        // Fetch publications from backend API
+        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/publications/?page_size=100');
+        if (!response.ok) {
+          throw new Error('Failed to fetch publications');
+        }
+        const data: PublicationsApiResponse = await response.json();
+        setPublications(data.results);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching publications:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPublications();
+  }, []);
+
+  // Fallback publications in case API fails
+  const fallbackPublications = [
     {
       id: "policy-brief-democratic-governance",
       title: "Policy Brief: Advancing Democratic Governance: Leveraging Digital Tools for Inclusive Parliamentary Monitoring in Africa and Beyond",
@@ -120,6 +167,18 @@ const Publications: React.FC = () => {
     }
   ];
 
+  // Use API data if available, otherwise use fallback
+  const publicationsToDisplay = publications.length > 0 ? publications : fallbackPublications;
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    } catch {
+      return dateString;
+    }
+  };
 
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
@@ -134,6 +193,28 @@ const Publications: React.FC = () => {
     };
     return colors[category] || "bg-muted text-muted-foreground border-muted";
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading publications...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && publicationsToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-destructive mb-4">Error loading publications: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -168,7 +249,7 @@ const Publications: React.FC = () => {
       </section>
 
       {/* Featured Publications */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
@@ -192,7 +273,7 @@ const Publications: React.FC = () => {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {publications.filter(pub => pub.featured).map((publication, index) => (
+            {publicationsToDisplay.filter(pub => pub.featured).map((publication, index) => (
               <motion.div
                 key={publication.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -200,34 +281,44 @@ const Publications: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="hover:shadow-lg transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
+                <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(/publications/default-publication.jpg)` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute top-4 left-4">
                     <Badge className={`${getCategoryColor(publication.category)} text-xs`}>
                       {publication.category}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">{publication.date}</span>
                   </div>
-                  <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors">
-                    {publication.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm">
-                    {publication.type}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                    {publication.description}
-                  </p>
-                  {publication.pdf && (
-                    <Button asChild size="sm" variant="secondary" className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-                      <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
-                        Download PDF
-                      </a>
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="outline" className="bg-white/20 text-white border-white/30 text-xs">
+                      {publication.type}
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2 line-clamp-2">{publication.title}</h3>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(publication.date)}</p>
+                    <p className="text-sm text-white/80 mb-4 line-clamp-3">{publication.description}</p>
+                    <div className="flex gap-2">
+                      {publication.pdf && (
+                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                          <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
+                            Download PDF
+                          </a>
+                        </Button>
+                      )}
+                      {publication.url && (
+                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                          <a href={publication.url} target="_blank" rel="noopener noreferrer">
+                            View Online
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
               </motion.div>
             ))}
           </motion.div>
@@ -235,7 +326,7 @@ const Publications: React.FC = () => {
       </section>
 
       {/* All Publications */}
-      <section className="py-20 bg-muted/50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
@@ -259,7 +350,7 @@ const Publications: React.FC = () => {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {publications.map((publication, index) => (
+            {publicationsToDisplay.map((publication, index) => (
               <motion.div
                 key={publication.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -267,34 +358,44 @@ const Publications: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="hover:shadow-lg transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
+                <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(/publications/default-publication.jpg)` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute top-4 left-4">
                     <Badge className={`${getCategoryColor(publication.category)} text-xs`}>
                       {publication.category}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">{publication.date}</span>
                   </div>
-                  <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors">
-                    {publication.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm">
-                    {publication.type}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                    {publication.description}
-                  </p>
-                  {publication.pdf && (
-                    <Button asChild size="sm" variant="secondary" className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-                      <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
-                        Download PDF
-                      </a>
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="outline" className="bg-white/20 text-white border-white/30 text-xs">
+                      {publication.type}
+                    </Badge>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2 line-clamp-2">{publication.title}</h3>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(publication.date)}</p>
+                    <p className="text-sm text-white/80 mb-4 line-clamp-3">{publication.description}</p>
+                    <div className="flex gap-2">
+                      {publication.pdf && (
+                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                          <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
+                            Download PDF
+                          </a>
+                        </Button>
+                      )}
+                      {publication.url && (
+                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                          <a href={publication.url} target="_blank" rel="noopener noreferrer">
+                            View Online
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
               </motion.div>
             ))}
           </motion.div>

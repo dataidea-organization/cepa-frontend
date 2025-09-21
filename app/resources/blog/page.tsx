@@ -1,13 +1,60 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
+interface BlogPost {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  description: string;
+  image?: string;
+  slug: string;
+  featured: boolean;
+  content?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface BlogApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: BlogPost[];
+}
+
 const Blog: React.FC = () => {
-  const blogPosts = [
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        // Fetch more posts to ensure we get all content
+        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/blog/?page_size=100');
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        const data: BlogApiResponse = await response.json();
+        setBlogPosts(data.results);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching blog posts:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
+
+  // Fallback blog posts in case API fails
+  const fallbackBlogPosts = [
     {
       id: "education-are-we-doing-good-job-children",
       title: "Education: Are we doing a good job with our children?",
@@ -110,6 +157,19 @@ const Blog: React.FC = () => {
     }
   ];
 
+  // Use API data if available, otherwise use fallback
+  const postsToDisplay = blogPosts.length > 0 ? blogPosts : fallbackBlogPosts;
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+    } catch {
+      return dateString;
+    }
+  };
+
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       "Education": "bg-primary/10 text-primary border-primary",
@@ -123,6 +183,28 @@ const Blog: React.FC = () => {
     };
     return colors[category] || "bg-muted text-muted-foreground border-muted";
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading blog posts...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && postsToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-destructive mb-4">Error loading blog posts: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -175,7 +257,7 @@ const Blog: React.FC = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.filter(post => post.featured).map((post, index) => {
+            {postsToDisplay.filter(post => post.featured).map((post, index) => {
               const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
               const currentColor = themeColors[index % 4];
               
@@ -183,7 +265,7 @@ const Blog: React.FC = () => {
                 <Card key={post.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${post.image})` }}
+                    style={{ backgroundImage: `url(${post.image || '/blog/default-blog.jpg'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -193,7 +275,7 @@ const Blog: React.FC = () => {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{post.date}</p>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(post.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{post.description}</p>
                     <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
                       <Link href={`/resources/blog/${post.slug}`} className="text-black">
@@ -221,7 +303,7 @@ const Blog: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => {
+            {postsToDisplay.map((post, index) => {
               const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
               const currentColor = themeColors[index % 4];
               
@@ -229,7 +311,7 @@ const Blog: React.FC = () => {
                 <Card key={post.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${post.image})` }}
+                    style={{ backgroundImage: `url(${post.image || '/blog/default-blog.jpg'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -239,7 +321,7 @@ const Blog: React.FC = () => {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{post.date}</p>
+                    <p className="text-sm text-white/90 mb-3">{formatDate(post.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{post.description}</p>
                     <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
                       <Link href={`/resources/blog/${post.slug}`} className="text-black">

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,8 +7,57 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
 
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  category: string;
+  description: string;
+  image?: string;
+  slug: string;
+  featured: boolean;
+  status: 'upcoming' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+
+interface EventsApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Event[];
+}
+
 const Events: React.FC = () => {
-  const events = [
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        // Fetch events from backend API
+        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/events/?page_size=100');
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data: EventsApiResponse = await response.json();
+        setEvents(data.results);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching events:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  // Fallback events in case API fails
+  const fallbackEvents = [
     {
       id: "uganda-road-safety-conference-2025",
       title: "Driving Policy into Action: CEPA Co-Convenes the 2025 Uganda Road Safety Conference",
@@ -115,6 +164,32 @@ const Events: React.FC = () => {
     }
   ];
 
+  // Use API data if available, otherwise use fallback
+  const eventsToDisplay = events.length > 0 ? events : fallbackEvents;
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch {
+      return dateString;
+    }
+  };
+
+  // Format time for display
+  const formatTime = (timeString: string) => {
+    try {
+      const [hours, minutes] = timeString.split(':');
+      const hour = parseInt(hours);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour % 12 || 12;
+      return `${displayHour}:${minutes} ${ampm}`;
+    } catch {
+      return timeString;
+    }
+  };
+
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       "Conference": "bg-primary/10 text-primary border-primary",
@@ -136,8 +211,30 @@ const Events: React.FC = () => {
     return colors[status] || "bg-muted text-muted-foreground border-muted";
   };
 
-  const upcomingEvents = events.filter(event => event.status === "upcoming");
-  const pastEvents = events.filter(event => event.status === "completed");
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && eventsToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-destructive mb-4">Error loading events: {error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const upcomingEvents = eventsToDisplay.filter(event => event.status === "upcoming");
+  const pastEvents = eventsToDisplay.filter(event => event.status === "completed");
 
   return (
     <div className="min-h-screen">
@@ -211,11 +308,11 @@ const Events: React.FC = () => {
                       <h3 className="text-xl font-bold mb-2 line-clamp-2">{event.title}</h3>
                       <div className="flex items-center text-sm text-white/90 mb-2">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {event.date}
+                        {formatDate(event.date)}
                       </div>
                       <div className="flex items-center text-sm text-white/90 mb-2">
                         <Clock className="w-4 h-4 mr-2" />
-                        {event.time}
+                        {formatTime(event.time)}
                       </div>
                       <div className="flex items-center text-sm text-white/90 mb-4">
                         <MapPin className="w-4 h-4 mr-2" />
@@ -269,11 +366,11 @@ const Events: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{event.title}</h3>
                     <div className="flex items-center text-sm text-white/90 mb-2">
                       <Calendar className="w-4 h-4 mr-2" />
-                      {event.date}
+                      {formatDate(event.date)}
                     </div>
                     <div className="flex items-center text-sm text-white/90 mb-2">
                       <Clock className="w-4 h-4 mr-2" />
-                      {event.time}
+                      {formatTime(event.time)}
                     </div>
                     <div className="flex items-center text-sm text-white/90 mb-4">
                       <MapPin className="w-4 h-4 mr-2" />
