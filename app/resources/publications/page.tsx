@@ -284,7 +284,7 @@ const Publications: React.FC = () => {
                 <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(/publications/default-publication.jpg)` }}
+                    style={{ backgroundImage: `url(/publications/default-publications.jpg)` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -361,7 +361,7 @@ const Publications: React.FC = () => {
                 <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(/publications/default-publication.jpg)` }}
+                    style={{ backgroundImage: `url(/publications/default-publications.jpg)` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">

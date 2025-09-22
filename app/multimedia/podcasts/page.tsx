@@ -124,7 +124,7 @@ const Podcasts: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-96 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/hero/podcasts-hero.jpg')" }}>
+      <div className="relative h-96 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/hero/podcast-hero.jpg')" }}>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-4xl">
