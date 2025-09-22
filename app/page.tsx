@@ -5,17 +5,69 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 const Home: React.FC = () => {
+  const heroImages = [
+    { src: "/hero/about-hero.jpg", alt: "About CEPA" },
+    { src: "/hero/focus-areas-hero.jpg", alt: "Focus Areas" },
+    { src: "/hero/publications-hero.jpg", alt: "Publications" },
+    { src: "/hero/events-hero.jpg", alt: "Events" },
+    { src: "/hero/gallery-hero.jpg", alt: "Gallery" },
+    { src: "/hero/videos-hero.jpg", alt: "Videos" },
+    { src: "/hero/news-hero.jpg", alt: "News" },
+    { src: "/hero/blog-hero.jpg", alt: "Blog" },
+    { src: "/hero/home-hero.jpg", alt: "CEPA - Center for Policy Analysis" },
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section with Slider */}
       <section className="relative h-[85vh] min-h-[600px] max-h-[800px] overflow-hidden">
-        <img 
-          src="/hero/home-hero.jpg" 
-          alt="CEPA - Center for Policy Analysis"
-          className="w-full h-full object-cover"
-        />
+        {/* Image Slider */}
+        <div className="relative w-full h-full">
+          {heroImages.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img 
+                src={image.src} 
+                alt={image.alt}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+        
+        {/* Slide Indicators */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide 
+                  ? 'bg-white scale-110' 
+                  : 'bg-white/50 hover:bg-white/70'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+        
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8 pb-16">
           <div className="max-w-7xl mx-auto text-center">
@@ -173,7 +225,7 @@ const Home: React.FC = () => {
               {
                 title: "Parliament Watch",
                 description: "Monitoring parliamentary proceedings and ensuring accountability in legislative processes.",
-                image: "/focus-areas/parliament-new.jpg",
+                image: "/focus-areas/parliament-watch.jpg",
                 color: "blue"
               },
               {
@@ -197,13 +249,13 @@ const Home: React.FC = () => {
               {
                 title: "Public Health & Safety",
                 description: "Improving public health outcomes and road safety across Uganda.",
-                image: "/focus-areas/health-new.jpg",
+                image: "/focus-areas/health.jpg",
                 color: "blue"
               },
               {
                 title: "Climate Justice",
                 description: "Addressing climate change impacts and promoting environmental sustainability.",
-                image: "/focus-areas/climate-new.jpg",
+                image: "/focus-areas/climate.jpg",
                 color: "green"
               }
             ].map((area, index) => {
@@ -236,20 +288,6 @@ const Home: React.FC = () => {
                 </motion.div>
               );
             })}
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Button asChild size="lg" className="shadow-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-              <Link href="/focus-areas">
-                Explore All Focus Areas
-              </Link>
-            </Button>
           </motion.div>
         </div>
       </section>
@@ -416,78 +454,6 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Events Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl font-bold text-foreground">Upcoming Events</h3>
-              <Button asChild variant="outline" className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm">
-                <Link href="/resources/events">View All Events</Link>
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Driving Policy into Action: CEPA Co-Convenes the 2025 Uganda Road Safety Conference",
-                  date: "May 14-15, 2025",
-                  category: "Conference",
-                  description: "From 14–15 May 2025, CEPA co-convened the Uganda Road Safety Conference, bringing together policymakers, civil society organizations, and road safety experts.",
-                  image: "/events/road-safety-conference.jpg",
-                  slug: "uganda-road-safety-conference-2025"
-                },
-                {
-                  title: "Championing SRHR through Legislative Engagement: CEPA at the 16th NEAPACOH Meeting in Tanzania",
-                  date: "March 5-8, 2025",
-                  category: "Meeting",
-                  description: "CEPA participated in the 16th NEAPACOH meeting from 5th to 8th March 2025, focusing on sexual and reproductive health rights (SRHR) advocacy.",
-                  image: "/events/neapacoh-meeting.jpg",
-                  slug: "neapacoh-meeting-tanzania-2025"
-                },
-                {
-                  title: "Bridging Borders, Deepening Democracy: CEPA's Experience-Sharing at the Ethiopia Civil Society Engagement Workshop",
-                  date: "November 19, 2024",
-                  category: "Workshop",
-                  description: "CEPA joined regional civil society leaders in Ethiopia for a comprehensive workshop on democratic engagement, policy advocacy, and cross-border collaboration.",
-                  image: "/events/ethiopia-workshop.jpg",
-                  slug: "ethiopia-civil-society-workshop-2024"
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Link href={`/resources/events/${item.slug}`}>
-                    <Card className="relative h-80 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm cursor-pointer">
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                        style={{ backgroundImage: `url(${item.image})` }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute top-4 left-4">
-                        <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-2 py-1 rounded-full text-xs font-medium">{item.category}</Badge>
-                      </div>
-                      <div className="absolute top-4 right-4">
-                        <span className="text-sm text-white font-medium bg-black/30 px-2 py-1 rounded-md">{item.date}</span>
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 className="text-lg font-bold mb-2 line-clamp-2">{item.title}</h3>
-                        <p className="text-sm text-white/90 line-clamp-3">{item.description}</p>
-                      </div>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
           {/* Publications Section */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -509,7 +475,7 @@ const Home: React.FC = () => {
                   date: "2024",
                   category: "Policy Brief",
                   description: "This policy brief explores how digital tools can enhance parliamentary monitoring and democratic governance across Africa, providing recommendations for inclusive oversight mechanisms.",
-                  image: "/activities/parliamentary-training.jpg",
+                  image: "/publications/parliamentary-training.png",
                   pdf: "/publications/policy-brief-democratic-governance.pdf",
                   url: "https://cepa.or.ug/blogs/policy-brief-advancing-democratic-governance-leveraging-digital-tools-for-inclusive-parliamentary-monitoring-in-africa-and-beyond/"
                 },
@@ -518,7 +484,7 @@ const Home: React.FC = () => {
                   date: "2024",
                   category: "Policy Paper",
                   description: "A comprehensive analysis of Uganda's 2024-25 budget framework, examining its sustainability and providing evidence-based policy recommendations for improved fiscal management.",
-                  image: "/activities/activity1.jpg",
+                  image: "/publications/activity1.png",
                   pdf: "/publications/policy-paper-budget-analysis.pdf",
                   url: "https://cepa.or.ug/blogs/policy-paper-analyzing-the-practicability-and-sustainability-of-ugandas-fy2024-25-budget-challenges-implications-and-policy-recommendations/"
                 },
@@ -600,12 +566,12 @@ const Home: React.FC = () => {
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
             <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved#donate">
+              <Link href="/get-involved/donate">
                 Donate Now
               </Link>
             </Button>
             <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved#careers">
+              <Link href="/get-involved/career">
                 Explore Careers
               </Link>
             </Button>
