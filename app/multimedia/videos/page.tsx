@@ -333,11 +333,6 @@ const Videos: React.FC = () => {
                 Subscribe on YouTube
               </a>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/resources#newsletters">
-                Subscribe to Newsletter
-              </Link>
-            </Button>
           </motion.div>
         </div>
       </section>
