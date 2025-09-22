@@ -107,24 +107,6 @@ const Career: React.FC = () => {
                   </p>
                 </div>
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 shadow-lg"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Send Your CV
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="bg-white/20 text-foreground border border-white/30 hover:bg-white/30"
-                >
-                  <Bell className="w-4 h-4 mr-2" />
-                  Get Notified
-                </Button>
-              </div>
             </Card>
           </motion.div>
         </div>
