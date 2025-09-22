@@ -374,122 +374,348 @@ const About: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <span className="text-4xl">👨‍💼</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/timothy-chemonges.jpg" 
+                    alt="Chemonges M. Timothy"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Chemonges M. Timothy</h3>
+                    <p className="text-white/90 font-semibold mb-4">Executive Director</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://www.linkedin.com/in/timothy-chemonges-1a47a4173/?originalSubdomain=ug" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Dr. Sarah Namukasa</h3>
-                  <p className="text-primary font-medium mb-3">Executive Director</p>
-                  <p className="text-sm text-muted-foreground">
-                    Leading CEPA's strategic vision with over 15 years of experience in policy research and governance advocacy.
-                  </p>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
 
-            {/* Research Director */}
+            {/* Communication Manager */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center">
-                    <span className="text-4xl">👩‍🔬</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/angella-kemirembe.jpg" 
+                    alt="Angella Hilda Kemirembe"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Angella Hilda Kemirembe</h3>
+                    <p className="text-white/90 font-semibold mb-4">Communication Manager</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://ug.linkedin.com/in/angella-hilda-kemirembe-35111a9b" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Dr. Michael Okello</h3>
-                  <p className="text-secondary font-medium mb-3">Research Director</p>
-                  <p className="text-sm text-muted-foreground">
-                    Overseeing research methodologies and ensuring the highest standards of evidence-based policy analysis.
-                  </p>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
 
-            {/* Policy Analyst */}
+            {/* Programmes Officer */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-accent/20 to-destructive/20 flex items-center justify-center">
-                    <span className="text-4xl">👨‍💻</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/joseph-tahinduka.jpg" 
+                    alt="Joseph Tahinduka"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Joseph Tahinduka</h3>
+                    <p className="text-white/90 font-semibold mb-4">Programmes Officer</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://www.linkedin.com/in/tahinduka-joseph-8ba5401b5/" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Grace Nakamya</h3>
-                  <p className="text-accent font-medium mb-3">Senior Policy Analyst</p>
-                  <p className="text-sm text-muted-foreground">
-                    Specializing in public finance and budget analysis with expertise in parliamentary oversight mechanisms.
-                  </p>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
 
-            {/* Communications Manager */}
+            {/* Programmes Associate - Rebecca */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.0 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-destructive/20 to-primary/20 flex items-center justify-center">
-                    <span className="text-4xl">👩‍💼</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/rebecca-karagwa.jpg" 
+                    alt="Rebecca Karagwa"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Rebecca Karagwa</h3>
+                    <p className="text-white/90 font-semibold mb-4">Programmes Associate</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://www.linkedin.com/in/rebecca-karagwa-10a7b3133/" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">James Musinguzi</h3>
-                  <p className="text-destructive font-medium mb-3">Communications Manager</p>
-                  <p className="text-sm text-muted-foreground">
-                    Leading stakeholder engagement and ensuring CEPA's research reaches policymakers and the public effectively.
-                  </p>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
 
-            {/* Program Coordinator */}
+            {/* Programme Associate - Thembo */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.2 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-destructive/20 flex items-center justify-center">
-                    <span className="text-4xl">👨‍🎓</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/thembo-misairi.jpg" 
+                    alt="Thembo Kahungu Misairi"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Thembo Kahungu Misairi</h3>
+                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="#" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Rebecca Nalwanga</h3>
-                  <p className="text-primary font-medium mb-3">Program Coordinator</p>
-                  <p className="text-sm text-muted-foreground">
-                    Managing CEPA's flagship programs and coordinating partnerships with civil society organizations.
-                  </p>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
 
-            {/* Research Associate */}
+            {/* Programme Associate - Prisca */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.4 }}
               viewport={{ once: true }}
             >
-              <Card className="text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-secondary/20 to-primary/20 flex items-center justify-center">
-                    <span className="text-4xl">👩‍🎓</span>
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/prisca-wanyenya.jpg" 
+                    alt="Prisca Wanyenya"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Prisca Wanyenya</h3>
+                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="#" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">David Kato</h3>
-                  <p className="text-secondary font-medium mb-3">Research Associate</p>
-                  <p className="text-sm text-muted-foreground">
-                    Supporting research initiatives with focus on digital rights and data protection policy analysis.
-                  </p>
-                </CardContent>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Programme Associate - Dominic */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.6 }}
+              viewport={{ once: true }}
+            >
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/dominic-ochola.jpg" 
+                    alt="Dominic Ochola"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Dominic Ochola</h3>
+                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://www.linkedin.com/in/dominic-ochola" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Production Lead - Rashid */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.8 }}
+              viewport={{ once: true }}
+            >
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/rashid-kasule.jpg" 
+                    alt="Rashid Kasule"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Rashid Kasule</h3>
+                    <p className="text-white/90 font-semibold mb-4">Production Lead</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="#" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Volunteer - Timothy */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 2.0 }}
+              viewport={{ once: true }}
+            >
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/timothy-ainebyoona.jpg" 
+                    alt="Timothy Ainebyoona"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Timothy Ainebyoona</h3>
+                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="http://www.LinkedIn.com/in/timothy-ainebyoona-31906a216" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Volunteer - Faith */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 2.2 }}
+              viewport={{ once: true }}
+            >
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/faith-uwizeye.jpg" 
+                    alt="Faith Uwizeye"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Faith Uwizeye</h3>
+                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="#" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Volunteer - Fraide */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 2.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                <div className="relative h-80 w-full">
+                  <img 
+                    src="/team-images/fraide-solomon.jpg" 
+                    alt="Fraide Solomon"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-1 text-white">Fraide Solomon</h3>
+                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    >
+                      <a href="https://www.linkedin.com/in/fraide-solomon-101491311" target="_blank" rel="noopener noreferrer">
+                        See Profile
+                      </a>
+                    </Button>
+                  </div>
+                </div>
               </Card>
             </motion.div>
           </motion.div>
