@@ -11,7 +11,7 @@ const FocusAreas: React.FC = () => {
     {
       id: "parliament-watch",
       title: "Parliament Watch",
-      image: "/focus-areas/parliament-new.jpg",
+      image: "/focus-areas/parliament.jpg",
       description: "Monitoring parliamentary proceedings and ensuring accountability in legislative processes.",
       details: "We track parliamentary sessions, analyze voting patterns, monitor committee activities, and assess the quality of legislative debates to ensure transparency and accountability in Uganda's parliament.",
       activities: [
@@ -67,7 +67,7 @@ const FocusAreas: React.FC = () => {
     {
       id: "health",
       title: "Public Health and Road Safety",
-      image: "/focus-areas/health-new.jpg",
+      image: "/focus-areas/health.jpg",
       description: "Improving public health outcomes and road safety across Uganda.",
       details: "We conduct research on public health issues, advocate for better healthcare policies, and work to improve road safety through evidence-based interventions.",
       activities: [
@@ -81,7 +81,7 @@ const FocusAreas: React.FC = () => {
     {
       id: "climate",
       title: "Climate Justice",
-      image: "/focus-areas/climate-new.jpg",
+      image: "/focus-areas/climate.jpg",
       description: "Addressing climate change impacts and promoting environmental sustainability.",
       details: "We research climate change impacts on Uganda, advocate for sustainable policies, and work with communities to build resilience against climate-related challenges.",
       activities: [
@@ -95,7 +95,7 @@ const FocusAreas: React.FC = () => {
     {
       id: "ai",
       title: "Artificial Intelligence (AI)",
-      image: "/focus-areas/transparency.jpg",
+      image: "/focus-areas/artificial-intelligence.jpg",
       description: "Leveraging technology and AI for better governance and policy outcomes.",
       details: "We explore how AI and technology can improve governance, enhance service delivery, and support evidence-based policy making in Uganda.",
       activities: [
@@ -233,19 +233,6 @@ const FocusAreas: React.FC = () => {
                           ))}
                         </ul>
                       </motion.div>
-                      
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 1.4 }}
-                        viewport={{ once: true }}
-                      >
-                        <Button asChild className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-                          <Link href="/resources">
-                            View Related Resources
-                          </Link>
-                        </Button>
-                      </motion.div>
                     </motion.div>
                     
                     <motion.div 
@@ -321,13 +308,8 @@ const FocusAreas: React.FC = () => {
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
             <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/resources">
-                View Our Resources
-              </Link>
-            </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved">
-                Get Involved
+              <Link href="/get-involved/contact">
+                Contact Us
               </Link>
             </Button>
           </motion.div>
