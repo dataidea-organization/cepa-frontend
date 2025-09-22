@@ -765,12 +765,12 @@ const About: React.FC = () => {
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
             <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved#donate">
+              <Link href="/get-involved/donate">
                 Donate Now
               </Link>
             </Button>
             <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
-              <Link href="/get-involved#careers">
+              <Link href="/get-involved/career">
                 Explore Careers
               </Link>
             </Button>
