@@ -1,14 +1,94 @@
 "use client";
 
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  organization: string;
+  subject: string;
+  message: string;
+  inquiry_type: string;
+}
+
+const inquiryTypes = [
+  { value: 'general', label: 'General Inquiry' },
+  { value: 'training', label: 'Training Programs' },
+  { value: 'consultancy', label: 'Consultancy Services' },
+  { value: 'partnership', label: 'Partnership Opportunities' },
+  { value: 'other', label: 'Other' },
+];
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState<ContactFormData>({
+    name: '',
+    email: '',
+    phone: '',
+    organization: '',
+    subject: '',
+    message: '',
+    inquiry_type: 'general'
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/contact/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          organization: '',
+          subject: '',
+          message: '',
+          inquiry_type: 'general'
+        });
+      } else {
+        const errorData = await response.json();
+        setSubmitStatus('error');
+        setErrorMessage(errorData.message || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      setErrorMessage('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Hero Section */}
@@ -18,297 +98,239 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center"
+            className="text-center mb-16"
           >
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6"
-            >
-              Get in Touch
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Contact Us
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Get in touch with us for inquiries, partnerships, or to learn more about our work in governance and policy analysis.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Contact Information */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
+              className="lg:col-span-1"
             >
-              We'd love to hear from you. Reach out to us for inquiries, partnerships, or to learn more about our work in governance and policy research.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Contact Information Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact Information</h2>
-            <p className="text-lg text-gray-600">Multiple ways to reach us</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Address</h3>
-                <p className="text-gray-600">
-                  Plot 17, Ntinda Complex<br />
-                  Ntinda, Kampala<br />
-                  Uganda
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Phone</h3>
-                <p className="text-gray-600">
-                  +256 414 123 456<br />
-                  +256 700 123 456
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Mail className="w-6 h-6 text-yellow-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Email</h3>
-                <p className="text-gray-600">
-                  info@cepa.or.ug<br />
-                  research@cepa.or.ug
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-6 h-6 text-red-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Hours</h3>
-                <p className="text-gray-600">
-                  Mon - Fri: 8:00 - 17:00<br />
-                  Sat: 9:00 - 13:00
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Contact Form Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-green-50">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Send us a Message</h2>
-            <p className="text-lg text-gray-600">We'll get back to you within 24 hours</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm">
-              <CardContent className="p-8">
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName" className="text-gray-700 font-medium">
-                        First Name
-                      </Label>
-                      <Input
-                        id="firstName"
-                        type="text"
-                        placeholder="Enter your first name"
-                        className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200"
-                      />
+              <Card className="p-8 bg-white/80 backdrop-blur-sm border border-white/30">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-blue-100 p-3 rounded-lg">
+                      <MapPin className="w-6 h-6 text-blue-600" />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName" className="text-gray-700 font-medium">
-                        Last Name
-                      </Label>
-                      <Input
-                        id="lastName"
-                        type="text"
-                        placeholder="Enter your last name"
-                        className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200"
-                      />
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Address</h3>
+                      <p className="text-gray-600">
+                        Plot 11, Yusuf Lule Road<br />
+                        P.O. Box 23276, Kampala<br />
+                        Uganda
+                      </p>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-700 font-medium">
-                      Email Address
+                  <div className="flex items-start gap-4">
+                    <div className="bg-green-100 p-3 rounded-lg">
+                      <Phone className="w-6 h-6 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Phone</h3>
+                      <p className="text-gray-600">+256 414 540 856</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="bg-purple-100 p-3 rounded-lg">
+                      <Mail className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Email</h3>
+                      <p className="text-gray-600">info@cepa.or.ug</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="lg:col-span-2"
+            >
+              <Card className="p-8 bg-white/80 backdrop-blur-sm border border-white/30">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+                
+                {submitStatus === 'success' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg flex items-center gap-3"
+                  >
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <p className="text-green-800">Thank you! Your message has been sent successfully.</p>
+                  </motion.div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg flex items-center gap-3"
+                  >
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    <p className="text-red-800">{errorMessage}</p>
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <Label htmlFor="name" className="text-gray-700 font-medium">
+                      Full Name *
                     </Label>
                     <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email address"
-                      className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200"
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      placeholder="Your full name"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="email" className="text-gray-700 font-medium">
+                        Email Address *
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="phone" className="text-gray-700 font-medium">
+                        Phone Number
+                      </Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                        placeholder="+256 XXX XXX XXX"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="organization" className="text-gray-700 font-medium">
+                      Organization
+                    </Label>
+                    <Input
+                      id="organization"
+                      name="organization"
+                      type="text"
+                      value={formData.organization}
+                      onChange={handleInputChange}
+                      className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      placeholder="Your organization"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="inquiry_type" className="text-gray-700 font-medium">
+                      Inquiry Type *
+                    </Label>
+                    <select
+                      id="inquiry_type"
+                      name="inquiry_type"
+                      value={formData.inquiry_type}
+                      onChange={handleInputChange}
+                      className="mt-2 w-full px-3 py-2 bg-white/50 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    >
+                      {inquiryTypes.map((type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
                     <Label htmlFor="subject" className="text-gray-700 font-medium">
-                      Subject
+                      Subject *
                     </Label>
                     <Input
                       id="subject"
+                      name="subject"
                       type="text"
-                      placeholder="What's this about?"
-                      className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200"
+                      required
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      placeholder="Brief subject of your message"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="message" className="text-gray-700 font-medium">
-                      Message
+                      Message *
                     </Label>
                     <Textarea
                       id="message"
-                      placeholder="Tell us more about your inquiry..."
+                      name="message"
+                      required
                       rows={6}
-                      className="bg-white/20 border border-gray-300 backdrop-blur-sm focus:bg-white/30 focus:border-gray-400 transition-all duration-200 resize-none"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      className="mt-2 bg-white/50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      placeholder="Please provide details about your inquiry..."
                     />
                   </div>
 
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="pt-4"
                   >
                     <Button
                       type="submit"
-                      className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-3 px-6 rounded-md transition-all duration-200 flex items-center justify-center gap-2"
+                      disabled={isSubmitting}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
                     >
-                      <Send className="w-5 h-5" />
-                      Send Message
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Send Message
+                        </>
+                      )}
                     </Button>
                   </motion.div>
                 </form>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Find Us</h2>
-            <p className="text-lg text-gray-600">Visit our office in Kampala</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <Card className="bg-white/20 border border-white/30 backdrop-blur-sm overflow-hidden">
-              <CardContent className="p-0">
-                <div className="h-96 bg-gray-200 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 text-lg">Interactive Map</p>
-                    <p className="text-gray-500 text-sm">Plot 17, Ntinda Complex, Kampala</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 via-yellow-500 to-green-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="text-3xl sm:text-4xl font-bold text-white mb-6"
-            >
-              Ready to Make a Difference?
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-xl text-white/90 mb-8 max-w-2xl mx-auto"
-            >
-              Join us in strengthening governance and democracy across East Africa. Get involved today.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="lg"
-                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
-                >
-                  Learn More About Us
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="lg"
-                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
-                >
-                  View Our Work
-                </Button>
-              </motion.div>
+              </Card>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>

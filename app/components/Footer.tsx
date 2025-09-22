@@ -1,10 +1,46 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus('idle');
+
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/contact/newsletter/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
             <div className="flex items-center mb-4">
               <img 
@@ -67,6 +103,36 @@ const Footer = () => {
                 </a>
               </div>
             </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
+            <p className="text-gray-400 mb-4">
+              Subscribe to our newsletter for the latest updates on governance and policy analysis.
+            </p>
+            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+              />
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+              </Button>
+              {status === 'success' && (
+                <p className="text-green-400 text-sm">Successfully subscribed!</p>
+              )}
+              {status === 'error' && (
+                <p className="text-red-400 text-sm">Subscription failed. Please try again.</p>
+              )}
+            </form>
           </div>
         </div>
         
