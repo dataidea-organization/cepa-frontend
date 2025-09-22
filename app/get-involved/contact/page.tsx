@@ -26,10 +26,6 @@ const inquiryTypes = [
   { value: 'fellowships', label: 'Fellowship Programs' },
   { value: 'membership', label: 'Membership' },
   { value: 'announcements', label: 'Announcements' },
-  { value: 'training', label: 'Training Programs' },
-  { value: 'consultancy', label: 'Consultancy Services' },
-  { value: 'partnership', label: 'Partnership Opportunities' },
-  { value: 'other', label: 'Other' },
 ];
 
 export default function ContactPage() {
