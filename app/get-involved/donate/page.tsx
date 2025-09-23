@@ -56,27 +56,6 @@ export default function DonatePage() {
     }
   ];
 
-  const successStories = [
-    {
-      title: "Youth Parliament Program",
-      amount: "UGX 2,500,000",
-      impact: "Supported 50 young leaders in policy advocacy training",
-      description: "Your donations helped establish the 7th National Youth Parliament, empowering young voices in governance."
-    },
-    {
-      title: "Road Safety Campaign",
-      amount: "UGX 1,800,000",
-      impact: "Reached 10,000+ people with road safety awareness",
-      description: "Funded community road safety education and advocacy for better traffic regulations."
-    },
-    {
-      title: "Health Rights Research",
-      amount: "UGX 3,200,000",
-      impact: "Published 5 policy briefs on health governance",
-      description: "Supported research on malaria control and health policy development in Uganda."
-    }
-  ];
-
   const paymentMethods = [
     {
       icon: CreditCard,
@@ -126,27 +105,6 @@ export default function DonatePage() {
             >
               Your donation helps CEPA strengthen governance, promote democracy, and advance human rights across Uganda and East Africa.
             </motion.p>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button
-                size="lg"
-                className="bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-900 border border-yellow-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
-              >
-                <Heart className="w-5 h-5 mr-2" />
-                Donate Now
-              </Button>
-              <Button
-                size="lg"
-                className="bg-green-500/20 hover:bg-green-500/30 text-green-900 border border-green-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
-              >
-                <Gift className="w-5 h-5 mr-2" />
-                Become a Partner
-              </Button>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -247,62 +205,6 @@ export default function DonatePage() {
           </motion.div>
         </div>
       </section>
-
-      {/* Success Stories Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Impact in Action</h2>
-            <p className="text-lg text-gray-600">See how donations have made a difference</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            {successStories.map((story, index) => (
-              <motion.div
-                key={story.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.01 }}
-              >
-                <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-4">
-                          <Star className="w-6 h-6 text-yellow-500" />
-                          <h3 className="text-2xl font-semibold text-gray-900">{story.title}</h3>
-                          <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1 rounded-full text-sm font-medium">
-                            {story.amount}
-                          </Badge>
-                        </div>
-                        <p className="text-gray-600 mb-4">{story.description}</p>
-                        <div className="bg-blue-50 p-4 rounded-md">
-                          <p className="text-blue-800 font-medium">{story.impact}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       
       {/* Call to Action Section */}
       <section className="py-20" style={{background: 'linear-gradient(to right, rgb(30 64 175), rgb(245 158 11), rgb(16 185 129), rgb(239 68 68))'}}>
@@ -334,17 +236,12 @@ export default function DonatePage() {
           >
             <Button
               size="lg"
-              className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg"
+              className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg cursor-pointer"
+              onClick={() => {
+                window.location.href = '/get-involved/contact';
+              }}
             >
-              <Heart className="w-5 h-5 mr-2" />
-              Donate Now
-            </Button>
-            <Button
-              size="lg"
-              className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg"
-            >
-              <Users className="w-5 h-5 mr-2" />
-              Become a Partner
+              Contact Us
             </Button>
           </motion.div>
         </div>

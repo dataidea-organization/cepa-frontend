@@ -54,10 +54,14 @@ const Navbar = () => {
         { label: 'Careers & Internships', href: '/get-involved/career' },
         { label: 'Fellowships', href: '/get-involved/fellowships' },
         { label: 'Announcements', href: '/get-involved/announcements' },
-        { label: 'Contact Us', href: '/get-involved/contact' },
         { label: 'Donate', href: '/get-involved/donate' },
         { label: 'Membership', href: '/get-involved/membership' },
       ]
+    },
+    {
+      label: 'Contact Us',
+      href: '/get-involved/contact',
+      dropdown: null
     },
   ];
 
