@@ -128,9 +128,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900">Address</h3>
                       <p className="text-gray-600">
-                        Plot 11, Yusuf Lule Road<br />
-                        P.O. Box 23276, Kampala<br />
-                        Uganda
+                        Plot 3, Ssunna close, Ntinda, Kla, Ug<br />
                       </p>
                     </div>
                   </div>
@@ -141,7 +139,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">Phone</h3>
-                      <p className="text-gray-600">+256 414 540 856</p>
+                      <p className="text-gray-600" ><a href="tel:+256393228160">+256 393 228 160</a></p>
                     </div>
                   </div>
 
@@ -151,7 +149,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">Email</h3>
-                      <p className="text-gray-600">info@cepa.or.ug</p>
+                      <p className="text-gray-600"><a href="mailto:info@cepa.or.ug">info@cepa.or.ug</a></p>
                     </div>
                   </div>
                 </div>

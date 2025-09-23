@@ -79,7 +79,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-400">
               <li>Plot 3, Ssunna close, Ntinda, Kla, Ug</li>
-              <li>info@cepa.or.ug</li>
+              <li><a href="mailto:info@cepa.or.ug">info@cepa.or.ug</a></li>
               <li><a href='tel:+256393228160'>+256 393 228 160</a></li>
             </ul>
             <div className="mt-4">
