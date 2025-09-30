@@ -5,27 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-
-interface NewsArticle {
-  id: string;
-  title: string;
-  date: string;
-  category: string;
-  description: string;
-  image?: string;
-  slug: string;
-  featured: boolean;
-  content?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface NewsApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: NewsArticle[];
-}
+import { NewsService, NewsArticle } from "@/lib/news-service";
 
 const News: React.FC = () => {
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
@@ -35,13 +15,8 @@ const News: React.FC = () => {
   useEffect(() => {
     const fetchNewsArticles = async () => {
       try {
-        // Fetch news articles from backend API
-        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/?page_size=100');
-        if (!response.ok) {
-          throw new Error('Failed to fetch news articles');
-        }
-        const data: NewsApiResponse = await response.json();
-        setNewsArticles(data.results);
+        const news = await NewsService.getAllNews();
+        setNewsArticles(news);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error('Error fetching news articles:', err);
@@ -53,112 +28,8 @@ const News: React.FC = () => {
     fetchNewsArticles();
   }, []);
 
-  // Fallback news articles in case API fails
-  const fallbackNewsArticles = [
-    {
-      id: "ministry-health-ugx450bn-emergency-services",
-      title: "Ministry of Health Seeks UGX450Bn for Emergency Medical Services for Road Crash Victims",
-      date: "September 2023",
-      category: "Health",
-      description: "The Ministry of Health has revealed that Uganda needs UGX450Bn over 5 years to purchase and operationalize ambulances to reduce road crash deaths. The call was made during an advocacy meeting organized by CEPA.",
-      image: "/news/health-emergency-services.jpg",
-      slug: "ministry-of-health-seeks-ugx450bn-for-emergency-medical-services-for-road-crash-victims",
-      featured: true
-    },
-    {
-      id: "world-remembrance-day-road-traffic-victims",
-      title: "World Remembrance Day For Road Traffic Victims Should be a Day to Propel Action",
-      date: "November 2023",
-      category: "Road Safety",
-      description: "As Uganda commemorates World Remembrance Day for Road Traffic Victims, CEPA calls for concrete action to address the growing road safety crisis and implement effective measures to reduce traffic-related deaths.",
-      image: "/news/road-safety-remembrance.jpg",
-      slug: "world-remembrance-day-for-road-traffic-victims-should-be-a-day-to-propel-action",
-      featured: true
-    },
-    {
-      id: "financing-safer-roads-stakeholders",
-      title: "Financing Safer Roads: CEPA Rallies Stakeholders for Increased Road Safety Investment",
-      date: "July 2025",
-      category: "Road Safety",
-      description: "CEPA convenes key stakeholders to discuss strategies for increasing investment in road safety infrastructure and programs across Uganda to reduce traffic accidents and fatalities.",
-      image: "/news/financing-safer-roads.jpg",
-      slug: "financing-safer-roads-cepa-rallies-stakeholders-for-increased-road-safety-investment",
-      featured: true
-    },
-    {
-      id: "parliamentary-committee-health-neapacoh",
-      title: "16th Network of African Parliamentary Committees of Health (NEAPACOH) Meeting",
-      date: "July 2025",
-      category: "Health",
-      description: "CEPA participates in the 16th NEAPACOH meeting, contributing to regional discussions on health policy and parliamentary oversight to improve healthcare delivery across Africa.",
-      image: "/news/neapacoh-meeting.jpg",
-      slug: "16th-network-of-african-parliamentary-committees-of-health-neapacoh",
-      featured: false
-    },
-    {
-      id: "road-safety-advocacy-continued",
-      title: "Road Safety Advocacy: CEPA's Continued Commitment to Safer Roads",
-      date: "July 2025",
-      category: "Advocacy",
-      description: "Ongoing advocacy efforts by CEPA to promote road safety policies and improve transportation infrastructure in Uganda through evidence-based research and stakeholder engagement.",
-      image: "/news/road-safety-advocacy.jpg",
-      slug: "road-safety-advocacy",
-      featured: false
-    },
-    {
-      id: "biotechnology-biosafety-uganda",
-      title: "Biotechnology and Biosafety in Uganda: Utility in Transforming the Economy and Health Sector",
-      date: "August 2023",
-      category: "Health",
-      description: "Analysis of Uganda's biotechnology and biosafety framework and its potential to transform the economy and health sector through innovative scientific solutions.",
-      image: "/news/biotechnology-biosafety.jpg",
-      slug: "biotechnology-and-biosafety-in-uganda-utility-in-transforming-the-economy-and-health-sector",
-      featured: false
-    },
-    {
-      id: "education-pregnant-students-rights",
-      title: "Education: Uganda Registers Rights Progress for Pregnant Students but Barriers Remain",
-      date: "June 2023",
-      category: "Education",
-      description: "While Uganda has made progress in protecting the rights of pregnant students to continue their education, significant barriers still exist that need to be addressed.",
-      image: "/news/education-pregnant-students.jpg",
-      slug: "education-uganda-registers-rights-progress-for-pregnant-students-but-barriers-remain",
-      featured: false
-    },
-    {
-      id: "national-road-safety-action-plan",
-      title: "National Road Safety Action Plan 2022-2026",
-      date: "March 2023",
-      category: "Road Safety",
-      description: "Analysis of Uganda's National Road Safety Action Plan 2022-2026 and its implementation strategies to reduce road traffic accidents and improve safety standards.",
-      image: "/news/national-road-safety-plan.jpg",
-      slug: "national-road-safety-action-plan-2022-2026",
-      featured: false
-    },
-    {
-      id: "parliamentary-pensions-amendment-bill",
-      title: "Parliamentary Pensions Amendment Bill 2022",
-      date: "February 2023",
-      category: "Governance",
-      description: "Analysis of the Parliamentary Pensions Amendment Bill 2022 and its implications for legislative accountability and pension management in Uganda.",
-      image: "/news/parliamentary-pensions-bill.jpg",
-      slug: "parliamentary-pensions-amendment-bill-2022",
-      featured: false
-    },
-    {
-      id: "computer-misuse-amendment-bill",
-      title: "Computer Misuse Amendment Bill 2022",
-      date: "August 2022",
-      category: "Digital Rights",
-      description: "Analysis of the Computer Misuse Amendment Bill 2022 and its implications for digital rights, freedom of expression, and cybersecurity in Uganda.",
-      image: "/news/computer-misuse-bill.jpg",
-      slug: "computer-misuse-amendment-bill-2022",
-      featured: false
-    }
-  ];
-
-  // Use API data if available, otherwise use fallback
-  const articlesToDisplay = newsArticles.length > 0 ? newsArticles : fallbackNewsArticles;
+  // Only use fetched news articles from API
+  const articlesToDisplay = newsArticles;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -193,12 +64,24 @@ const News: React.FC = () => {
     );
   }
 
-  if (error && articlesToDisplay.length === 0) {
+  if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-destructive mb-4">Error loading news articles: {error}</p>
           <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && articlesToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">No News Articles Available</h1>
+          <p className="text-xl text-muted-foreground mb-8">There are currently no news articles to display. Please check back later.</p>
+          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
         </div>
       </div>
     );

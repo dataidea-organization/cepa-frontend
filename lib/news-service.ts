@@ -1,0 +1,82 @@
+interface NewsArticle {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  description: string;
+  image?: string;
+  slug: string;
+  featured: boolean;
+  content?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface NewsApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: NewsArticle[];
+}
+
+// Cache for news articles to avoid redundant API calls
+let newsCache: NewsArticle[] | null = null;
+let cacheTimestamp: number | null = null;
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+export class NewsService {
+  private static async fetchNews(): Promise<NewsArticle[]> {
+    // Check if we have valid cached data
+    if (newsCache && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_DURATION) {
+      return newsCache;
+    }
+
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/?page_size=100', {
+        next: { revalidate: 600 } // Revalidate every 10 minutes
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch news articles');
+      }
+      
+      const data: NewsApiResponse = await response.json();
+      
+      // Update cache
+      newsCache = data.results;
+      cacheTimestamp = Date.now();
+      
+      return data.results;
+    } catch (error) {
+      console.error('Error fetching news articles:', error);
+      throw error;
+    }
+  }
+
+  static async getAllNews(): Promise<NewsArticle[]> {
+    return this.fetchNews();
+  }
+
+  static async getNewsBySlug(slug: string): Promise<NewsArticle | null> {
+    const news = await this.fetchNews();
+    return news.find(article => article.slug === slug) || null;
+  }
+
+  static async getFeaturedNews(): Promise<NewsArticle[]> {
+    const news = await this.fetchNews();
+    return news.filter(article => article.featured);
+  }
+
+  static async getRelatedNews(currentArticleId: string, limit: number = 3): Promise<NewsArticle[]> {
+    const news = await this.fetchNews();
+    return news.filter(article => article.id !== currentArticleId).slice(0, limit);
+  }
+
+  static clearCache(): void {
+    newsCache = null;
+    cacheTimestamp = null;
+  }
+}
+
+export type { NewsArticle, NewsApiResponse };
+

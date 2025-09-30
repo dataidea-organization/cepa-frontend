@@ -6,29 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  category: string;
-  description: string;
-  image?: string;
-  slug: string;
-  featured: boolean;
-  status: 'upcoming' | 'completed' | 'cancelled';
-  created_at: string;
-  updated_at: string;
-}
-
-interface EventsApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Event[];
-}
+import { EventsService, Event } from "@/lib/events-service";
 
 const Events: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -38,13 +16,8 @@ const Events: React.FC = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        // Fetch events from backend API
-        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/events/?page_size=100');
-        if (!response.ok) {
-          throw new Error('Failed to fetch events');
-        }
-        const data: EventsApiResponse = await response.json();
-        setEvents(data.results);
+        const eventsData = await EventsService.getAllEvents();
+        setEvents(eventsData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error('Error fetching events:', err);
@@ -56,116 +29,8 @@ const Events: React.FC = () => {
     fetchEvents();
   }, []);
 
-  // Fallback events in case API fails
-  const fallbackEvents = [
-    {
-      id: "uganda-road-safety-conference-2025",
-      title: "Driving Policy into Action: CEPA Co-Convenes the 2025 Uganda Road Safety Conference",
-      date: "May 14-15, 2025",
-      time: "9:00 AM - 5:00 PM",
-      location: "Kampala, Uganda",
-      category: "Conference",
-      description: "From 14–15 May 2025, CEPA co-convened the Uganda Road Safety Conference, bringing together policymakers, civil society organizations, and road safety experts to discuss innovative approaches to reducing road traffic accidents and fatalities in Uganda.",
-      image: "/events/road-safety-conference.jpg",
-      slug: "uganda-road-safety-conference-2025",
-      featured: true,
-      status: "upcoming"
-    },
-    {
-      id: "neapacoh-meeting-tanzania-2025",
-      title: "Championing SRHR through Legislative Engagement: CEPA at the 16th NEAPACOH Meeting in Tanzania",
-      date: "March 5-8, 2025",
-      time: "8:00 AM - 6:00 PM",
-      location: "Dar es Salaam, Tanzania",
-      category: "Meeting",
-      description: "CEPA participated in the 16th NEAPACOH meeting from 5th to 8th March 2025, focusing on sexual and reproductive health rights (SRHR) advocacy and legislative engagement across East and Central Africa.",
-      image: "/events/neapacoh-meeting.jpg",
-      slug: "neapacoh-meeting-tanzania-2025",
-      featured: true,
-      status: "upcoming"
-    },
-    {
-      id: "ethiopia-civil-society-workshop-2024",
-      title: "Bridging Borders, Deepening Democracy: CEPA's Experience-Sharing at the Ethiopia Civil Society Engagement Workshop",
-      date: "November 19, 2024",
-      time: "9:00 AM - 4:00 PM",
-      location: "Addis Ababa, Ethiopia",
-      category: "Workshop",
-      description: "CEPA joined regional civil society leaders in Ethiopia for a comprehensive workshop on democratic engagement, policy advocacy, and cross-border collaboration in East Africa.",
-      image: "/events/ethiopia-workshop.jpg",
-      slug: "ethiopia-civil-society-workshop-2024",
-      featured: false,
-      status: "completed"
-    },
-    {
-      id: "africa-road-safety-seminar-2024",
-      title: "The Africa Road Safety Seminar 2024 in Nairobi, Kenya",
-      date: "October 21, 2024",
-      time: "8:30 AM - 5:30 PM",
-      location: "Nairobi, Kenya",
-      category: "Seminar",
-      description: "Being half way through the African Road Safety Action Plan, this seminar brought together road safety stakeholders from across the continent to assess progress and chart the way forward for safer roads in Africa.",
-      image: "/events/africa-road-safety-seminar.jpg",
-      slug: "africa-road-safety-seminar-2024",
-      featured: false,
-      status: "completed"
-    },
-    {
-      id: "speed-management-validation-meetings-2024",
-      title: "Speed Management in Uganda: Insights from the validation meetings on the speed regulations",
-      date: "August 5, 2024",
-      time: "10:00 AM - 3:00 PM",
-      location: "Kampala, Uganda",
-      category: "Validation Meeting",
-      description: "In an effort to strengthen the road safety policy framework, CEPA facilitated validation meetings to review and refine speed management regulations for Uganda's road network.",
-      image: "/events/speed-management-meeting.jpg",
-      slug: "speed-management-validation-meetings-2024",
-      featured: false,
-      status: "completed"
-    },
-    {
-      id: "youth-policy-advocacy-training-2024",
-      title: "Youth Policy Advocacy Training Workshop",
-      date: "July 15-17, 2024",
-      time: "9:00 AM - 4:00 PM",
-      location: "Kampala, Uganda",
-      category: "Training",
-      description: "A comprehensive training program designed to equip young people with the skills and knowledge needed to effectively engage in policy advocacy and legislative processes.",
-      image: "/events/youth-training.jpg",
-      slug: "youth-policy-advocacy-training-2024",
-      featured: false,
-      status: "completed"
-    },
-    {
-      id: "parliamentary-oversight-seminar-2024",
-      title: "Strengthening Parliamentary Oversight: A Regional Seminar",
-      date: "June 10-12, 2024",
-      time: "8:30 AM - 5:00 PM",
-      location: "Kampala, Uganda",
-      category: "Seminar",
-      description: "This regional seminar brought together parliamentarians and civil society representatives to discuss best practices in parliamentary oversight and accountability mechanisms.",
-      image: "/events/parliamentary-oversight.jpg",
-      slug: "parliamentary-oversight-seminar-2024",
-      featured: false,
-      status: "completed"
-    },
-    {
-      id: "digital-rights-conference-2024",
-      title: "Digital Rights and Data Protection Conference 2024",
-      date: "May 20-22, 2024",
-      time: "9:00 AM - 6:00 PM",
-      location: "Kampala, Uganda",
-      category: "Conference",
-      description: "A comprehensive conference exploring digital rights, data protection, and cybersecurity challenges in Uganda and the broader East African region.",
-      image: "/events/digital-rights-conference.jpg",
-      slug: "digital-rights-conference-2024",
-      featured: false,
-      status: "completed"
-    }
-  ];
-
-  // Use API data if available, otherwise use fallback
-  const eventsToDisplay = events.length > 0 ? events : fallbackEvents;
+  // Only use fetched events from API
+  const eventsToDisplay = events;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -222,12 +87,24 @@ const Events: React.FC = () => {
     );
   }
 
-  if (error && eventsToDisplay.length === 0) {
+  if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-destructive mb-4">Error loading events: {error}</p>
           <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && eventsToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">No Events Available</h1>
+          <p className="text-xl text-muted-foreground mb-8">There are currently no events to display. Please check back later.</p>
+          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
         </div>
       </div>
     );
@@ -320,7 +197,7 @@ const Events: React.FC = () => {
                       </div>
                       <p className="text-sm text-white/80 mb-4 line-clamp-2">{event.description}</p>
                       <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
-                        <Link href={`/resources/events/${event.slug}`} className="text-black">
+                        <Link href={`/resources/events-and-activities/${event.slug}`} className="text-black">
                           Learn More
                         </Link>
                       </Button>
@@ -378,7 +255,7 @@ const Events: React.FC = () => {
                     </div>
                     <p className="text-sm text-white/80 mb-4 line-clamp-2">{event.description}</p>
                     <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
-                      <Link href={`/resources/events/${event.slug}`} className="text-white">
+                      <Link href={`/resources/events-and-activities/${event.slug}`} className="text-white">
                         View Details
                       </Link>
                     </Button>

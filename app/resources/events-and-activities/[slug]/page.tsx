@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, MapPin, Clock, Users, ExternalLink } from "lucide-react";
+import { EventsService, Event } from "@/lib/events-service";
 
 interface EventDetailPageProps {
   params: {
@@ -11,174 +13,56 @@ interface EventDetailPageProps {
 }
 
 const EventDetailPage: React.FC<EventDetailPageProps> = ({ params }) => {
-  // Events data - in a real app, this would come from a CMS or API
-  const events = {
-    "uganda-road-safety-conference-2025": {
-      id: "uganda-road-safety-conference-2025",
-      title: "Driving Policy into Action: CEPA Co-Convenes the 2025 Uganda Road Safety Conference",
-      date: "May 14-15, 2025",
-      time: "9:00 AM - 5:00 PM",
-      location: "Kampala, Uganda",
-      category: "Conference",
-      status: "upcoming",
-      image: "/events/road-safety-conference.jpg",
-      description: "From 14–15 May 2025, CEPA co-convened the Uganda Road Safety Conference, bringing together policymakers, civil society organizations, and road safety experts to discuss innovative approaches to reducing road traffic accidents and fatalities in Uganda.",
-      content: `
-        <h2>Event Overview</h2>
-        <p>The Uganda Road Safety Conference 2025 represents a critical milestone in the country's efforts to address the growing challenge of road traffic accidents. This two-day conference brings together key stakeholders from government, civil society, academia, and the private sector to develop comprehensive strategies for improving road safety across Uganda.</p>
-        
-        <h3>Conference Objectives</h3>
-        <ul>
-          <li>Review current road safety policies and their implementation</li>
-          <li>Identify gaps in road safety legislation and enforcement</li>
-          <li>Share best practices from regional and international experiences</li>
-          <li>Develop actionable recommendations for policy makers</li>
-          <li>Strengthen partnerships between government and civil society</li>
-        </ul>
-        
-        <h3>Key Topics</h3>
-        <ul>
-          <li>Speed management and enforcement strategies</li>
-          <li>Road infrastructure safety improvements</li>
-          <li>Vehicle safety standards and regulations</li>
-          <li>Driver education and licensing reforms</li>
-          <li>Emergency response and post-crash care</li>
-          <li>Data collection and monitoring systems</li>
-        </ul>
-        
-        <h3>Target Audience</h3>
-        <p>This conference is designed for:</p>
-        <ul>
-          <li>Government officials and policymakers</li>
-          <li>Civil society organizations</li>
-          <li>Road safety experts and researchers</li>
-          <li>Transport sector representatives</li>
-          <li>International development partners</li>
-          <li>Media and communication professionals</li>
-        </ul>
-        
-        <h3>Registration Information</h3>
-        <p>Registration for the conference is now open. Please contact CEPA for more information about registration fees and requirements. Limited spaces are available, so early registration is encouraged.</p>
-      `,
-      speakers: [
-        "Hon. Minister of Works and Transport",
-        "Dr. Sarah Nakamya - Road Safety Expert",
-        "Mr. John Kato - Civil Society Representative",
-        "Prof. Mary Nalubega - Transport Research Institute"
-      ],
-      agenda: [
-        "Day 1: Policy Review and Current Challenges",
-        "Day 2: Solutions and Implementation Strategies"
-      ]
-    },
-    "neapacoh-meeting-tanzania-2025": {
-      id: "neapacoh-meeting-tanzania-2025",
-      title: "Championing SRHR through Legislative Engagement: CEPA at the 16th NEAPACOH Meeting in Tanzania",
-      date: "March 5-8, 2025",
-      time: "8:00 AM - 6:00 PM",
-      location: "Dar es Salaam, Tanzania",
-      category: "Meeting",
-      status: "upcoming",
-      image: "/events/neapacoh-meeting.jpg",
-      description: "CEPA participated in the 16th NEAPACOH meeting from 5th to 8th March 2025, focusing on sexual and reproductive health rights (SRHR) advocacy and legislative engagement across East and Central Africa.",
-      content: `
-        <h2>Meeting Overview</h2>
-        <p>The 16th NEAPACOH (Network of East African Parliamentarians on Population and Development) meeting represents a crucial platform for advancing sexual and reproductive health rights through legislative engagement across East and Central Africa.</p>
-        
-        <h3>Meeting Objectives</h3>
-        <ul>
-          <li>Strengthen parliamentary oversight of SRHR policies</li>
-          <li>Share experiences and best practices across the region</li>
-          <li>Develop joint advocacy strategies for SRHR issues</li>
-          <li>Review progress on regional SRHR commitments</li>
-          <li>Plan collaborative initiatives for the coming year</li>
-        </ul>
-        
-        <h3>Key Discussion Points</h3>
-        <ul>
-          <li>Adolescent sexual and reproductive health policies</li>
-          <li>Maternal health and family planning access</li>
-          <li>Gender-based violence prevention and response</li>
-          <li>HIV/AIDS prevention and treatment programs</li>
-          <li>Budget allocation for SRHR services</li>
-          <li>Legal frameworks and policy implementation</li>
-        </ul>
-        
-        <h3>Expected Outcomes</h3>
-        <p>The meeting aims to produce concrete action plans for advancing SRHR through parliamentary channels, with specific commitments from participating countries to strengthen their legislative frameworks and oversight mechanisms.</p>
-      `,
-      speakers: [
-        "Hon. Sarah Mwangi - NEAPACOH Chair",
-        "Dr. Amina Hassan - UNFPA Representative",
-        "Ms. Grace Mwangi - Civil Society Coalition",
-        "Hon. John Mwangi - Parliamentary Health Committee"
-      ],
-      agenda: [
-        "Day 1: Opening and Regional Overview",
-        "Day 2: Policy Analysis and Challenges",
-        "Day 3: Best Practices and Solutions",
-        "Day 4: Action Planning and Commitments"
-      ]
-    },
-    "ethiopia-civil-society-workshop-2024": {
-      id: "ethiopia-civil-society-workshop-2024",
-      title: "Bridging Borders, Deepening Democracy: CEPA's Experience-Sharing at the Ethiopia Civil Society Engagement Workshop",
-      date: "November 19, 2024",
-      time: "9:00 AM - 4:00 PM",
-      location: "Addis Ababa, Ethiopia",
-      category: "Workshop",
-      status: "completed",
-      image: "/events/ethiopia-workshop.jpg",
-      description: "CEPA joined regional civil society leaders in Ethiopia for a comprehensive workshop on democratic engagement, policy advocacy, and cross-border collaboration in East Africa.",
-      content: `
-        <h2>Workshop Summary</h2>
-        <p>This workshop brought together civil society organizations from across East Africa to share experiences, challenges, and best practices in democratic engagement and policy advocacy. The event provided a unique opportunity for cross-border learning and collaboration.</p>
-        
-        <h3>Workshop Sessions</h3>
-        <ul>
-          <li>Opening Plenary: Regional Democratic Landscape</li>
-          <li>Panel Discussion: Civil Society Challenges and Opportunities</li>
-          <li>Breakout Sessions: Sector-Specific Advocacy Strategies</li>
-          <li>Case Study Presentations: Successful Campaign Examples</li>
-          <li>Networking and Partnership Building</li>
-          <li>Closing: Action Plans and Next Steps</li>
-        </ul>
-        
-        <h3>Key Outcomes</h3>
-        <ul>
-          <li>Established regional civil society network</li>
-          <li>Developed joint advocacy strategies</li>
-          <li>Created knowledge sharing platform</li>
-          <li>Identified opportunities for collaboration</li>
-          <li>Agreed on regular communication mechanisms</li>
-        </ul>
-        
-        <h3>Follow-up Activities</h3>
-        <p>Participants committed to regular virtual meetings and joint advocacy campaigns on issues of regional importance, with CEPA taking a leading role in coordinating these efforts.</p>
-      `,
-      speakers: [
-        "Dr. Abebe Bekele - Ethiopian Civil Society Forum",
-        "Ms. Grace Mwangi - East African Civil Society Network",
-        "Mr. John Kato - CEPA Executive Director",
-        "Prof. Sarah Hassan - Regional Governance Expert"
-      ],
-      agenda: [
-        "Morning: Opening and Keynote Addresses",
-        "Afternoon: Breakout Sessions and Networking"
-      ]
-    }
-  };
+  const [event, setEvent] = useState<Event | null>(null);
+  const [relatedEvents, setRelatedEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const event = events[params.slug as keyof typeof events];
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        // Fetch the specific event by slug
+        const foundEvent = await EventsService.getEventBySlug(params.slug);
+        if (foundEvent) {
+          setEvent(foundEvent);
+          // Fetch related events
+          const related = await EventsService.getRelatedEvents(foundEvent.id, 3);
+          setRelatedEvents(related);
+        } else {
+          setError('Event not found');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching event:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!event) {
+    fetchEvent();
+  }, [params.slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading event...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !event) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">Event Not Found</h1>
-          <p className="text-muted-foreground mb-8">The requested event could not be found.</p>
+          <p className="text-muted-foreground mb-8">
+            {error || "The requested event could not be found."}
+          </p>
           <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
-            <Link href="/resources/events">
+            <Link href="/resources/events-and-activities">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Events
             </Link>
@@ -214,7 +98,7 @@ const EventDetailPage: React.FC<EventDetailPageProps> = ({ params }) => {
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <img 
-          src={event.image} 
+          src={event.image || '/events/default-event.jpg'} 
           alt={event.title}
           className="w-full h-full object-cover"
         />
@@ -266,7 +150,7 @@ const EventDetailPage: React.FC<EventDetailPageProps> = ({ params }) => {
             <div className="lg:col-span-2">
               <article 
                 className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg"
-                dangerouslySetInnerHTML={{ __html: event.content }}
+                dangerouslySetInnerHTML={{ __html: event.content || event.description }}
               />
             </div>
             
@@ -349,10 +233,7 @@ const EventDetailPage: React.FC<EventDetailPageProps> = ({ params }) => {
             Related Events
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Object.values(events)
-              .filter(e => e.id !== event.id)
-              .slice(0, 3)
-              .map((relatedEvent, index) => {
+            {relatedEvents.map((relatedEvent, index) => {
                 const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
                 const currentColor = themeColors[index % 4];
                 
@@ -379,7 +260,7 @@ const EventDetailPage: React.FC<EventDetailPageProps> = ({ params }) => {
                         {relatedEvent.date}
                       </p>
                       <Button asChild size="sm" className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium py-1 px-3 rounded-md transition-all duration-200">
-                        <Link href={`/resources/events/${relatedEvent.id}`}>
+                        <Link href={`/resources/events-and-activities/${relatedEvent.slug}`}>
                           View Details
                         </Link>
                       </Button>

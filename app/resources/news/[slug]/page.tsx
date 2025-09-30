@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import { NewsService, NewsArticle } from "@/lib/news-service";
 
 interface NewsDetailPageProps {
   params: {
@@ -11,8 +13,66 @@ interface NewsDetailPageProps {
 }
 
 const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
-  // News articles data - in a real app, this would come from a CMS or API
-  const newsArticles = {
+  const [article, setArticle] = useState<NewsArticle | null>(null);
+  const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        // Fetch the specific article by slug
+        const foundArticle = await NewsService.getNewsBySlug(params.slug);
+        if (foundArticle) {
+          setArticle(foundArticle);
+          // Fetch related articles
+          const related = await NewsService.getRelatedNews(foundArticle.id, 3);
+          setRelatedArticles(related);
+        } else {
+          setError('Article not found');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching article:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticle();
+  }, [params.slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-xl text-muted-foreground">Loading article...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">Article Not Found</h1>
+          <p className="text-muted-foreground mb-8">
+            {error || "The requested news article could not be found."}
+          </p>
+          <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+            <Link href="/resources/news">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to News
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const _oldNewsArticles = {
     "ministry-of-health-seeks-ugx450bn-for-emergency-medical-services-for-road-crash-victims": {
       id: "ministry-health-ugx450bn-emergency-services",
       title: "Ministry of Health Seeks UGX450Bn for Emergency Medical Services for Road Crash Victims",
@@ -92,25 +152,6 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
     }
   };
 
-  const article = newsArticles[params.slug as keyof typeof newsArticles];
-
-  if (!article) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Article Not Found</h1>
-          <p className="text-muted-foreground mb-8">The requested news article could not be found.</p>
-          <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
-            <Link href="/resources/news">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to News
-            </Link>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       "Health": "bg-primary/10 text-primary border-primary",
@@ -128,7 +169,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <img 
-          src={article.image} 
+          src={article.image || '/news/default-news.jpg'} 
           alt={article.title}
           className="w-full h-full object-cover"
         />
@@ -165,7 +206,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
           
           <article 
             className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: article.content || article.description }}
           />
           
           <div className="mt-12 pt-8 border-t border-border">
@@ -196,9 +237,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
             Related Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Object.values(newsArticles)
-              .filter(a => a.id !== article.id)
-              .slice(0, 3)
+            {relatedArticles
               .map((relatedArticle, index) => {
                 const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
                 const currentColor = themeColors[index % 4];
@@ -207,7 +246,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                   <div key={relatedArticle.id} className="relative h-80 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                     <div 
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                      style={{ backgroundImage: `url(${relatedArticle.image})` }}
+                      style={{ backgroundImage: `url(${relatedArticle.image || '/events/default-event.jpg'})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     <div className="absolute top-4 left-4">
@@ -223,7 +262,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                         {relatedArticle.date}
                       </p>
                       <Button asChild size="sm" className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium py-1 px-3 rounded-md transition-all duration-200">
-                        <Link href={`/resources/news/${relatedArticle.id}`}>
+                        <Link href={`/resources/news/${relatedArticle.slug}`}>
                           Read More
                         </Link>
                       </Button>

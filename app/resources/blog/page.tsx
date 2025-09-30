@@ -5,27 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-
-interface BlogPost {
-  id: string;
-  title: string;
-  date: string;
-  category: string;
-  description: string;
-  image?: string;
-  slug: string;
-  featured: boolean;
-  content?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface BlogApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: BlogPost[];
-}
+import { BlogService, BlogPost } from "@/lib/blog-service";
 
 const Blog: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -35,13 +15,8 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        // Fetch more posts to ensure we get all content
-        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/blog/?page_size=100');
-        if (!response.ok) {
-          throw new Error('Failed to fetch blog posts');
-        }
-        const data: BlogApiResponse = await response.json();
-        setBlogPosts(data.results);
+        const posts = await BlogService.getAllBlogPosts();
+        setBlogPosts(posts);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error('Error fetching blog posts:', err);
@@ -53,112 +28,8 @@ const Blog: React.FC = () => {
     fetchBlogPosts();
   }, []);
 
-  // Fallback blog posts in case API fails
-  const fallbackBlogPosts = [
-    {
-      id: "education-are-we-doing-good-job-children",
-      title: "Education: Are we doing a good job with our children?",
-      date: "February 2022",
-      category: "Education",
-      description: "An analysis of Uganda's education sector challenges, particularly the impact of COVID-19 lockdowns on learners and the need for increased government investment in education.",
-      image: "/blog/education-children.jpg",
-      slug: "education-are-we-doing-a-good-job-with-our-children",
-      featured: true
-    },
-    {
-      id: "parliament-approving-decisions-wrong-reasons",
-      title: "Parliament Approving Decisions for all the Wrong Reasons",
-      date: "March 2022",
-      category: "Governance",
-      description: "A critical examination of parliamentary decision-making processes and the need for more evidence-based policy formulation in Uganda's legislative body.",
-      image: "/blog/parliament-decisions.jpg",
-      slug: "parliament-approving-decisions-for-all-the-wrong-reasons",
-      featured: true
-    },
-    {
-      id: "data-protection-digital-age-analysis",
-      title: "Data Protection in the Digital Age: An Analysis of Uganda's Data Protection and Privacy Bill 2015",
-      date: "April 2022",
-      category: "Digital Rights",
-      description: "Comprehensive analysis of Uganda's proposed data protection legislation and its implications for digital rights, privacy, and cybersecurity in the country.",
-      image: "/blog/data-protection.jpg",
-      slug: "data-protection-in-the-digital-age-an-analysis-of-ugandas-data-protection-and-privacy-bill-2015",
-      featured: true
-    },
-    {
-      id: "road-safety-uganda-comprehensive-regulations",
-      title: "Road Safety in Uganda: Why Uganda Needs Comprehensive Regulations for Road Users",
-      date: "May 2022",
-      category: "Road Safety",
-      description: "Analysis of road safety challenges in Uganda and recommendations for comprehensive regulatory framework to reduce traffic accidents and fatalities.",
-      image: "/blog/road-safety-regulations.jpg",
-      slug: "road-safety-in-uganda-why-uganda-needs-comprehensive-regulations-for-road-users",
-      featured: false
-    },
-    {
-      id: "parliamentary-oversight-accountability-service-delivery",
-      title: "Parliamentary Oversight in Accountability Affects Service Delivery in Public Institutions",
-      date: "June 2022",
-      category: "Governance",
-      description: "Examination of how effective parliamentary oversight mechanisms can improve accountability and service delivery in Uganda's public institutions.",
-      image: "/blog/parliamentary-oversight.jpg",
-      slug: "parliamentary-oversight-in-accountability-affects-service-delivery-in-public-institutions",
-      featured: false
-    },
-    {
-      id: "health-sector-resources-properly",
-      title: "Health Sector: We are still not using the little resources allocated properly",
-      date: "July 2022",
-      category: "Health",
-      description: "Critical analysis of resource allocation and utilization in Uganda's health sector, highlighting inefficiencies and recommendations for improvement.",
-      image: "/blog/health-sector-resources.jpg",
-      slug: "health-sector-we-are-still-not-using-the-little-resources-allocated-properly",
-      featured: false
-    },
-    {
-      id: "affirmative-action-youth-misunderstood",
-      title: "Affirmative Action to the Youth was Misunderstood: Can we do better?",
-      date: "August 2022",
-      category: "Youth",
-      description: "Analysis of youth affirmative action policies in Uganda, examining their effectiveness and proposing better approaches to youth empowerment.",
-      image: "/blog/youth-affirmative-action.jpg",
-      slug: "affirmative-action-to-the-youth-was-misunderstood-can-we-do-better",
-      featured: false
-    },
-    {
-      id: "budget-framework-paper-young-peoples-interests",
-      title: "Analysis of the 2020-2021 Budget Framework Paper: Where the Young People's Interests? A Look at ICT and Taxation",
-      date: "September 2022",
-      category: "Budget Analysis",
-      description: "Detailed analysis of Uganda's budget framework paper focusing on youth interests, ICT development, and taxation policies affecting young people.",
-      image: "/blog/budget-framework-youth.jpg",
-      slug: "analysis-of-the-2020-2021-budget-framework-paper-where-the-young-peoples-interests-a-look-at-ict-and-taxation",
-      featured: false
-    },
-    {
-      id: "parliament-needs-change-loans-handling",
-      title: "Parliament Needs to Change its Mode of Loans Handling",
-      date: "October 2022",
-      category: "Public Finance",
-      description: "Analysis of parliamentary oversight of loan approvals and recommendations for improving transparency and accountability in debt management.",
-      image: "/blog/parliament-loans.jpg",
-      slug: "parliament-needs-to-change-its-mode-of-loans-handling",
-      featured: false
-    },
-    {
-      id: "reproductive-health-public-health-concern",
-      title: "Reproductive Health is a Public Health Concern",
-      date: "November 2022",
-      category: "Health",
-      description: "Examination of reproductive health challenges in Uganda and the need for comprehensive policies to address maternal and child health issues.",
-      image: "/blog/reproductive-health.jpg",
-      slug: "reproductive-health-is-a-public-health-concern",
-      featured: false
-    }
-  ];
-
-  // Use API data if available, otherwise use fallback
-  const postsToDisplay = blogPosts.length > 0 ? blogPosts : fallbackBlogPosts;
+  // Only use fetched blog posts from API
+  const postsToDisplay = blogPosts;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -195,12 +66,24 @@ const Blog: React.FC = () => {
     );
   }
 
-  if (error && postsToDisplay.length === 0) {
+  if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-destructive mb-4">Error loading blog posts: {error}</p>
           <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && postsToDisplay.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">No Blog Posts Available</h1>
+          <p className="text-xl text-muted-foreground mb-8">There are currently no blog posts to display. Please check back later.</p>
+          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
         </div>
       </div>
     );
