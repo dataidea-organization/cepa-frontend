@@ -1,9 +1,5 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Users, Briefcase, GraduationCap, Award, Calendar, ExternalLink, Mail, Bell } from "lucide-react";
+import Image from "next/image";
 import { CareerService, CareerOpportunity } from "@/lib/career-service";
 import CareerClient from "./client";
 
@@ -22,10 +18,11 @@ const Career = async () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
-        <img 
+        <Image 
           src="/hero/career-hero.jpg" 
           alt="Career & Internships - CEPA"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">

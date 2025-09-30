@@ -14,7 +14,7 @@ interface AnnouncementsClientProps {
   hasError: boolean;
 }
 
-const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements, hasError }) => {
+const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements }) => {
   const [selectedType, setSelectedType] = useState<string>('All');
   const [selectedPriority, setSelectedPriority] = useState<string>('All');
 

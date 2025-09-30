@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Users, Briefcase, GraduationCap, Award, Calendar, ArrowRight } from "lucide-react";
+import { MapPin, Users, Briefcase, GraduationCap, Award, Calendar, ArrowRight } from "lucide-react";
 import { CareerOpportunity } from "@/lib/career-service";
 
 interface CareerClientProps {
@@ -14,7 +14,7 @@ interface CareerClientProps {
   hasError: boolean;
 }
 
-const CareerClient: React.FC<CareerClientProps> = ({ opportunities, hasError }) => {
+const CareerClient: React.FC<CareerClientProps> = ({ opportunities }) => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'Full-time':
@@ -146,7 +146,7 @@ const CareerClient: React.FC<CareerClientProps> = ({ opportunities, hasError }) 
                   No Current Openings
                 </h3>
                 <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                  We don't have any open positions at the moment, but we're always interested in hearing from talented individuals who share our passion for governance and policy research.
+                  We don&apos;t have any open positions at the moment, but we&apos;re always interested in hearing from talented individuals who share our passion for governance and policy research.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

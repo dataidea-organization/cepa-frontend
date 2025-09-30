@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, ArrowLeft, ExternalLink, Bell, AlertCircle, Share2 } from "lucide-react";
+import { Calendar, ArrowLeft, ExternalLink, Bell, AlertCircle } from "lucide-react";
 import { AnnouncementService, Announcement } from "@/lib/announcement-service";
 import AnnouncementDetailClient from "./client";
 
@@ -122,11 +123,12 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                 <CardContent className="space-y-8">
                   {/* Image */}
                   {announcement.image && (
-                    <div className="rounded-lg overflow-hidden">
-                      <img 
+                    <div className="rounded-lg overflow-hidden relative h-64">
+                      <Image 
                         src={announcement.image} 
                         alt={announcement.title}
-                        className="w-full h-auto object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </div>
                   )}

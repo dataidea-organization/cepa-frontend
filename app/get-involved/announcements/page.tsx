@@ -1,6 +1,5 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { AnnouncementService, Announcement } from "@/lib/announcement-service";
 import AnnouncementsClient from "./client";
 
@@ -19,10 +18,11 @@ const AnnouncementsPage = async () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
-        <img 
+        <Image 
           src="/hero/announcements-hero.jpg" 
           alt="Announcements - CEPA"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -33,10 +33,10 @@ const AnnouncementsPage = async () => {
             <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed">
               Stay informed with the latest news, updates, and important announcements from CEPA.
             </p>
-          </div>
+              </div>
         </div>
       </section>
-      
+
       {/* Pass announcements to client component */}
       <AnnouncementsClient announcements={announcements} hasError={hasError} />
     </div>
