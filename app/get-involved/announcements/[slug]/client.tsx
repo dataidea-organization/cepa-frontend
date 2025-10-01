@@ -87,7 +87,7 @@ const AnnouncementDetailClient: React.FC<AnnouncementDetailClientProps> = ({ rel
                     {announcement.summary}
                   </p>
                   <Link href={`/get-involved/announcements/${announcement.slug}`} className="w-full">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2">
+                    <Button className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium flex items-center justify-center gap-2">
                       Read More
                       <ArrowRight className="w-4 h-4" />
                     </Button>

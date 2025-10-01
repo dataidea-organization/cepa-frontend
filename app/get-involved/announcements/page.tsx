@@ -19,7 +19,7 @@ const AnnouncementsPage = async () => {
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
         <Image 
-          src="/hero/announcements-hero.jpg" 
+          src="/hero/announcement-hero.jpg" 
           alt="Announcements - CEPA"
           fill
           className="object-cover"

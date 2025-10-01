@@ -198,7 +198,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                       
                       <div className="flex flex-wrap gap-3">
                         <Link href={`/get-involved/announcements/${announcement.slug}`}>
-                          <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+                          <Button className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium flex items-center gap-2">
                             Read More
                             <ArrowRight className="w-4 h-4" />
                           </Button>
@@ -206,7 +206,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                         
                         {announcement.external_link && (
                           <a href={announcement.external_link} target="_blank" rel="noopener noreferrer">
-                            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                            <Button variant="outline" className="border-blue-600/30 text-blue-900 hover:bg-blue-600/10 backdrop-blur-sm flex items-center gap-2">
                               External Link
                               <ExternalLink className="w-4 h-4" />
                             </Button>
@@ -242,7 +242,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                       setSelectedType('All');
                       setSelectedPriority('All');
                     }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium"
                   >
                     Clear Filters
                   </Button>
