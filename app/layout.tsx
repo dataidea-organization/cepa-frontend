@@ -21,10 +21,10 @@ const gabarito = Gabarito({
 });
 
 export const metadata: Metadata = {
-  title: "CEPA - Center for Policy Analysis",
-  description: "The Center for Policy Analysis (CEPA) is a leading think tank in Uganda focused on parliamentary democracy, governance, transparency, accountability, and human rights.",
+  title: "CEPA - Centre for Policy Analysis",
+  description: "The Centre for Policy Analysis (CEPA) is a leading think tank in Uganda focused on parliamentary democracy, governance, transparency, accountability, and human rights.",
   keywords: "policy analysis, Uganda, parliamentary democracy, governance, transparency, accountability, human rights, think tank",
-  authors: [{ name: "Center for Policy Analysis" }],
+  authors: [{ name: "Centre for Policy Analysis" }],
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "CEPA - Center for Policy Analysis",
+    title: "CEPA - Centre for Policy Analysis",
     description: "Leading think tank in Uganda focused on policy analysis and governance",
     type: "website",
     locale: "en_UG",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CEPA - Center for Policy Analysis",
+    title: "CEPA - Centre for Policy Analysis",
     description: "Leading think tank in Uganda focused on policy analysis and governance",
     images: ["/android-chrome-512x512.png"]
   }

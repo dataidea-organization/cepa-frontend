@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     { src: "/hero/videos-hero.jpg", alt: "Videos" },
     { src: "/hero/news-hero.jpg", alt: "News" },
     { src: "/hero/blog-hero.jpg", alt: "Blog" },
-    { src: "/hero/home-hero.jpg", alt: "CEPA - Center for Policy Analysis" },
+    { src: "/hero/home-hero.jpg", alt: "CEPA - Centre for Policy Analysis" },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
             >
-              Center for Policy Analysis
+              Centre for Policy Analysis
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 30 }}

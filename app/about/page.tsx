@@ -14,7 +14,7 @@ const About: React.FC = () => {
       <section className="relative h-96 overflow-hidden">
         <img 
           src="/hero/about-hero.jpg" 
-          alt="About CEPA - Center for Policy Analysis"
+          alt="About CEPA - Centre for Policy Analysis"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -338,6 +338,199 @@ const About: React.FC = () => {
                 </CardContent>
               </Card>
             </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Our Partners */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Our Partners
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              We work with a diverse network of organizations, institutions, and stakeholders to advance our mission of strengthening democratic governance and promoting evidence-based policy analysis.
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 items-center"
+          >
+            {/* GRSP */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/grsp.png" 
+                  alt="Global Road Safety Partnership" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* UPFYA */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/upfya.jpg" 
+                  alt="Uganda Parliamentary Forum for Youth Affairs" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* Twaweza */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/twaweza.png" 
+                  alt="Twaweza East Africa" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* WFD */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.0 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/wfd.png" 
+                  alt="Westminster Foundation for Democracy" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* KAS */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.2 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/kas.png" 
+                  alt="Konrad-Adenauer-Stiftung" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* GAPP */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.4 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/gapp.jpeg" 
+                  alt="Global Action for Policy and Practice" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* Diakonia */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.6 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/diakonia.jpeg" 
+                  alt="Diakonia" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* NED */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.8 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/ned.jpeg" 
+                  alt="National Endowment for Democracy" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+
+            {/* AFIDEP */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 2.0 }}
+              viewport={{ once: true }}
+              className="w-full h-full"
+            >
+              <div className="bg-white/20 border border-white/30 backdrop-blur-sm rounded-lg p-6 hover:bg-white/30 transition-all duration-300 hover:shadow-lg w-full h-full flex items-center justify-center min-h-[200px]">
+                <img 
+                  src="/partners/afidep.jpg" 
+                  alt="African Institute for Development Policy" 
+                  className="h-16 w-auto object-contain mx-auto"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 2.2 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Our partnerships enable us to leverage diverse expertise, resources, and networks to create meaningful impact in Uganda's governance landscape.
+            </p>
           </motion.div>
         </div>
       </section>
