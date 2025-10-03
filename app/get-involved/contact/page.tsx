@@ -128,7 +128,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900">Address</h3>
                       <p className="text-gray-600">
-                        Plot 3, Ssunna close, Ntinda, Kla, Ug<br />
+                        Plot 3, Ssunna Close, Ntinda, Kampala, Uganda<br />
                       </p>
                     </div>
                   </div>

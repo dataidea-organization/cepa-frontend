@@ -83,7 +83,7 @@ export default function DonatePage() {
       <section className="relative h-96 overflow-hidden">
         <img 
           src="/hero/donate-hero.jpg" 
-          alt="Support CEPA - Donate"
+          alt="Support CEPA - Support Us"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

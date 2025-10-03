@@ -206,13 +206,13 @@ export default function GetInvolvedPage() {
                   <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Heart className="w-8 h-8 text-pink-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Donate</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Support Us</h3>
                   <p className="text-gray-600 mb-6">
                     Support our mission to strengthen governance and promote democracy across Uganda and East Africa.
                   </p>
                   <Link href="/get-involved/donate">
                     <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
-                      Donate Now
+                      Support Us
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>

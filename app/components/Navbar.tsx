@@ -17,7 +17,13 @@ const Navbar = () => {
     {
       label: 'About Us',
       href: '/about',
-      dropdown: null
+      dropdown: [
+        { label: 'Who We Are', href: '/about#who-we-are' },
+        { label: 'Our Story', href: '/about#story' },
+        { label: 'What Sets CEPA Apart', href: '/about#what-sets-cepa-apart' },
+        { label: 'Our Partners', href: '/about#our-partners' },
+        { label: 'Our Team', href: '/about#our-team' },
+      ]
     },
     {
       label: 'Focus Areas',
@@ -52,12 +58,15 @@ const Navbar = () => {
       href: '/get-involved',
       dropdown: [
         { label: 'Careers & Internships', href: '/get-involved/career' },
-        { label: 'Fellowships', href: '/get-involved/fellowships' },
         { label: 'Announcements', href: '/get-involved/announcements' },
         { label: 'Contact Us', href: '/get-involved/contact' },
-        { label: 'Donate', href: '/get-involved/donate' },
         { label: 'Membership', href: '/get-involved/membership' },
       ]
+    },
+    {
+      label: 'Fellowships',
+      href: '/get-involved/fellowships',
+      dropdown: null
     },
   ];
 
@@ -109,6 +118,13 @@ const Navbar = () => {
                 );
               }
             })}
+            
+            {/* Support Us Button */}
+            <Button asChild className="bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+              <Link href="/get-involved/donate">
+                Support Us
+              </Link>
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -154,6 +170,15 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+              
+              {/* Mobile Support Us Button */}
+              <div className="px-3 py-2">
+                <Button asChild className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+                  <Link href="/get-involved/donate" onClick={() => setActiveDropdown(null)}>
+                    Support Us
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         )}

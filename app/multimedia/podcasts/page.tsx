@@ -245,7 +245,7 @@ const Podcasts: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/70">{new Date(podcast.date).toLocaleDateString()}</span>
                   <Button size="sm" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 rounded-md px-4 py-2" onClick={() => openPodcastModal(podcast)}>
-                    Listen Now
+                    Play Now
                   </Button>
                 </div>
               </div>

@@ -126,7 +126,7 @@ const Multimedia: React.FC = () => {
               An in-depth discussion with leading experts on the challenges and opportunities facing Uganda's democratic institutions.
             </p>
             <Button variant="primary" size="sm">
-              Listen Now
+              Play Now
             </Button>
           </Card>
           
