@@ -134,7 +134,7 @@ const Podcasts: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-4xl md:text-6xl font-bold text-white mb-6"
             >
-              Policy Digest Podcast
+              Podcasts
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 30 }}

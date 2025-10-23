@@ -44,9 +44,9 @@ const Footer = () => {
           <div>
             <div className="flex items-center mb-4">
               <img 
-                src="/CEPA-LOGO.webp" 
+                src="/CEPA-LOGO.png" 
                 alt="CEPA Logo" 
-                className="h-8 w-auto"
+                className="h-30 w-auto"
               />
             </div>
             <p className="text-gray-400">

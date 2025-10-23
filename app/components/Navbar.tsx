@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   DropdownMenu,
@@ -9,9 +9,24 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { cohortService, Cohort } from '@/lib/cohort-service';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [cohorts, setCohorts] = useState<Cohort[]>([]);
+
+  useEffect(() => {
+    async function fetchCohorts() {
+      try {
+        const data = await cohortService.getActiveCohorts();
+        setCohorts(data);
+      } catch (error) {
+        console.error("Error fetching cohorts:", error);
+      }
+    }
+
+    fetchCohorts();
+  }, []);
 
   const menuItems = [
     {
@@ -63,12 +78,24 @@ const Navbar = () => {
         { label: 'Membership', href: '/get-involved/membership' },
       ]
     },
-    {
-      label: 'Fellowships',
-      href: '/get-involved/fellowships',
-      dropdown: null
-    },
   ];
+
+  // Dynamic Fellowships menu item with cohorts
+  const fellowshipsMenuItem = {
+    label: 'Fellowships',
+    href: '/get-involved/fellowships',
+    dropdown: cohorts.length > 0 ? [
+      { label: 'All Fellowships', href: '/get-involved/fellowships' },
+      ...cohorts.map(cohort => ({
+        label: cohort.name,
+        href: `/get-involved/fellowships/cohorts/${cohort.slug}`
+      }))
+    ] : [
+      { label: 'All Fellowships', href: '/get-involved/fellowships' }
+    ]
+  };
+
+  const allMenuItems = [...menuItems, fellowshipsMenuItem];
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -77,15 +104,15 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img 
-              src="/CEPA-LOGO.webp" 
+              src="/CEPA-LOGO.png" 
               alt="CEPA Logo" 
-              className="h-10 w-auto"
+              className="h-30 w-auto"
             />
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => {
+            {allMenuItems.map((item) => {
               if (item.dropdown) {
                 return (
                   <DropdownMenu key={item.label}>
@@ -145,7 +172,7 @@ const Navbar = () => {
         {activeDropdown === 'mobile' && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-              {menuItems.map((item) => (
+              {allMenuItems.map((item) => (
                 <div key={item.label}>
                   <Link
                     href={item.href}
