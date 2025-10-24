@@ -1,8 +1,7 @@
 ---
 alwaysApply: true
 ---
-All buttons should always be semi-transparent, and never rounded pill
-The hero buttons should also always be yellowish and greenish
+All buttons should always be maroon-ish, and where there's a pair of buttons, let one be semi-transparent, and never rounded pill
 A page should have section backgrounds alternating instead of just plain
 For cards with images, the image should cover the whole card with text laying over in a dark shade close to the bottom
 Always use shadcn where applicable
