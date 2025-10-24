@@ -10,10 +10,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { cohortService, Cohort } from '@/lib/cohort-service';
+import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [cohorts, setCohorts] = useState<Cohort[]>([]);
+  const [focusAreas, setFocusAreas] = useState<FocusAreaListItem[]>([]);
 
   useEffect(() => {
     async function fetchCohorts() {
@@ -25,7 +27,17 @@ const Navbar = () => {
       }
     }
 
+    async function fetchFocusAreas() {
+      try {
+        const data = await FocusAreaService.getActiveFocusAreas();
+        setFocusAreas(data);
+      } catch (error) {
+        console.error("Error fetching focus areas:", error);
+      }
+    }
+
     fetchCohorts();
+    fetchFocusAreas();
   }, []);
 
   const menuItems = [
@@ -39,11 +51,6 @@ const Navbar = () => {
         { label: 'Our Partners', href: '/about#our-partners' },
         { label: 'Our Team', href: '/about#our-team' },
       ]
-    },
-    {
-      label: 'Focus Areas',
-      href: '/focus-areas',
-      dropdown: null
     },
     {
       label: 'Resources',
@@ -80,6 +87,21 @@ const Navbar = () => {
     },
   ];
 
+  // Dynamic Focus Areas menu item
+  const focusAreasMenuItem = {
+    label: 'Focus Areas',
+    href: '/focus-areas',
+    dropdown: focusAreas.length > 0 ? [
+      ...focusAreas.map(area => ({
+        label: area.title,
+        href: `/focus-areas/${area.slug}`
+      })),
+      { label: 'View All', href: '/focus-areas' }
+    ] : [
+      { label: 'View All', href: '/focus-areas' }
+    ]
+  };
+
   // Dynamic Fellowships menu item with cohorts
   const fellowshipsMenuItem = {
     label: 'Fellowships',
@@ -95,7 +117,7 @@ const Navbar = () => {
     ]
   };
 
-  const allMenuItems = [...menuItems, fellowshipsMenuItem];
+  const allMenuItems = [...menuItems.slice(0, 1), focusAreasMenuItem, ...menuItems.slice(1), fellowshipsMenuItem];
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
