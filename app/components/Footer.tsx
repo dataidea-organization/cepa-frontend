@@ -116,7 +116,7 @@ const Footer = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white"
               >
                 {isSubmitting ? 'Subscribing...' : 'Subscribe'}
               </Button>

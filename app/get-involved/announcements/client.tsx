@@ -198,7 +198,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                       
                       <div className="flex flex-wrap gap-3">
                         <Link href={`/get-involved/announcements/${announcement.slug}`}>
-                          <Button className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium flex items-center gap-2">
+                          <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center gap-2">
                             Read More
                             <ArrowRight className="w-4 h-4" />
                           </Button>
@@ -206,7 +206,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                         
                         {announcement.external_link && (
                           <a href={announcement.external_link} target="_blank" rel="noopener noreferrer">
-                            <Button variant="outline" className="border-blue-600/30 text-blue-900 hover:bg-blue-600/10 backdrop-blur-sm flex items-center gap-2">
+                            <Button variant="outline" className="border-[#800020] text-white hover:bg-[#800020]/10 backdrop-blur-sm flex items-center gap-2">
                               External Link
                               <ExternalLink className="w-4 h-4" />
                             </Button>
@@ -242,7 +242,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                       setSelectedType('All');
                       setSelectedPriority('All');
                     }}
-                    className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium"
+                    className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium"
                   >
                     Clear Filters
                   </Button>
@@ -281,7 +281,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved">
                 Explore More Ways to Get Involved
               </Link>

@@ -196,7 +196,7 @@ const Events: React.FC = () => {
                         {event.location}
                       </div>
                       <p className="text-sm text-white/80 mb-4 line-clamp-2">{event.description}</p>
-                      <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                      <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                         <Link href={`/resources/events-and-activities/${event.slug}`} className="text-black">
                           Learn More
                         </Link>
@@ -254,7 +254,7 @@ const Events: React.FC = () => {
                       {event.location}
                     </div>
                     <p className="text-sm text-white/80 mb-4 line-clamp-2">{event.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       <Link href={`/resources/events-and-activities/${event.slug}`} className="text-white">
                         View Details
                       </Link>
@@ -277,12 +277,12 @@ const Events: React.FC = () => {
             Subscribe to our newsletter to receive updates about upcoming events, workshops, and opportunities to engage with CEPA's work.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved#newsletter">
                 Subscribe to Updates
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/contact">
                 Contact Us
               </Link>

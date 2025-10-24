@@ -105,7 +105,7 @@ export default function CohortDetailPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Cohort Not Found</h2>
           <p className="text-gray-600 mb-6">{error || "The cohort you're looking for doesn't exist."}</p>
-          <Button className="bg-red-900/20 hover:bg-red-900/30 text-red-900 border-0 backdrop-blur-sm" asChild>
+          <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020]" asChild>
             <Link href="/get-involved/fellowships">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Fellowships
@@ -120,7 +120,7 @@ export default function CohortDetailPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Button className="bg-red-900/20 hover:bg-red-900/30 text-red-900 border-0 backdrop-blur-sm" asChild>
+        <Button className="bg-[#800020]/20 hover:bg-[#800020]/30 text-white border border-[#800020] backdrop-blur-sm" asChild>
           <Link href="/get-involved/fellowships">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Fellowships
@@ -500,10 +500,10 @@ export default function CohortDetailPage() {
               Learn more about our fellowship programs and how to apply.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-red-900/20 hover:bg-red-900/30 text-red-900 border-0 backdrop-blur-sm" size="lg" asChild>
+              <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020]" size="lg" asChild>
                 <Link href="/contact">Contact Us</Link>
               </Button>
-              <Button className="bg-red-900/10 hover:bg-red-900/20 text-red-900 border border-red-900/30 backdrop-blur-sm" size="lg" asChild>
+              <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020]" size="lg" asChild>
                 <Link href="/get-involved/fellowships">View All Cohorts</Link>
               </Button>
             </div>

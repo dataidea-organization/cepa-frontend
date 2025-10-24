@@ -43,7 +43,7 @@ export default function GetInvolvedPage() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="lg"
-                  className="bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-900 border border-yellow-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
+                  className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] font-medium px-8 py-3 rounded-md transition-all duration-200"
                 >
                   Explore Opportunities
                 </Button>
@@ -51,7 +51,7 @@ export default function GetInvolvedPage() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="lg"
-                  className="bg-green-500/20 hover:bg-green-500/30 text-green-900 border border-green-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
+                  className="bg-[#800020]/20 hover:bg-[#800020]/30 text-white border border-[#800020] backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
                 >
                   Learn More
                 </Button>
@@ -96,7 +96,7 @@ export default function GetInvolvedPage() {
                     Join our team of dedicated professionals working on governance and policy research.
                   </p>
                   <Link href="/get-involved/career">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       View Positions
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -119,7 +119,7 @@ export default function GetInvolvedPage() {
                     Join our fellowship programs and work with leading experts on governance and policy research.
                   </p>
                   <Link href="/get-involved/fellowships">
-                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       View Programs
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -142,7 +142,7 @@ export default function GetInvolvedPage() {
                     Join our community of governance professionals and get access to exclusive resources and networking opportunities.
                   </p>
                   <Link href="/get-involved/membership">
-                    <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       Join Now
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -165,7 +165,7 @@ export default function GetInvolvedPage() {
                     Have questions or want to discuss partnership opportunities? We'd love to hear from you.
                   </p>
                   <Link href="/get-involved/contact">
-                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       Get in Touch
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -188,7 +188,7 @@ export default function GetInvolvedPage() {
                     Stay updated with the latest news, events, and important announcements from CEPA.
                   </p>
                   <Link href="/get-involved/announcements">
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       View Updates
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -211,7 +211,7 @@ export default function GetInvolvedPage() {
                     Support our mission to strengthen governance and promote democracy across Uganda and East Africa.
                   </p>
                   <Link href="/get-involved/donate">
-                    <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2">
                       Support Us
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -333,7 +333,7 @@ export default function GetInvolvedPage() {
                 <Link href="/get-involved/career">
                   <Button
                     size="lg"
-                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
+                    className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] font-medium px-8 py-3 rounded-md transition-all duration-200"
                   >
                     Explore Careers
                   </Button>
@@ -343,7 +343,7 @@ export default function GetInvolvedPage() {
                 <Link href="/get-involved/contact">
                   <Button
                     size="lg"
-                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
+                    className="bg-[#800020]/20 hover:bg-[#800020]/30 text-white border border-[#800020] backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
                   >
                     Contact Us
                   </Button>

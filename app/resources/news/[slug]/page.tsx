@@ -61,7 +61,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
           <p className="text-muted-foreground mb-8">
             {error || "The requested news article could not be found."}
           </p>
-          <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+          <Button asChild className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
             <Link href="/resources/news">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to News
@@ -196,7 +196,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200 mb-8">
+            <Button asChild className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200 mb-8">
               <Link href="/resources/news">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to News
@@ -220,7 +220,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                   Published on {article.date}
                 </span>
               </div>
-              <Button asChild className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+              <Button asChild className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
                 <Link href="/resources/news">
                   View All News
                 </Link>
@@ -261,7 +261,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                       <p className="text-sm text-white/90 mb-3">
                         {relatedArticle.date}
                       </p>
-                      <Button asChild size="sm" className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium py-1 px-3 rounded-md transition-all duration-200">
+                      <Button asChild size="sm" className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] font-medium py-1 px-3 rounded-md transition-all duration-200">
                         <Link href={`/resources/news/${relatedArticle.slug}`}>
                           Read More
                         </Link>

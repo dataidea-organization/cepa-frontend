@@ -192,7 +192,7 @@ const Videos: React.FC = () => {
                   variant={category === selectedCategory ? "default" : "outline"}
                   className={`px-6 py-2 text-sm font-medium transition-colors ${
                     selectedCategory === category
-                      ? "bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
+                      ? "bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90"
                       : "bg-secondary/20 text-secondary border border-secondary/30 hover:bg-secondary/30"
                   }`}
                   onClick={() => setSelectedCategory(category)}
@@ -269,7 +269,7 @@ const Videos: React.FC = () => {
                     </span>
                     <Button 
                       size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90"
                       onClick={() => openVideoModal(video)}
                     >
                       Watch Video
@@ -289,7 +289,7 @@ const Videos: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <Button size="lg" className="shadow-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+            <Button size="lg" className="shadow-lg bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
               Load More Videos
             </Button>
           </motion.div>
@@ -324,7 +324,7 @@ const Videos: React.FC = () => {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <a 
                 href="https://www.youtube.com/@CEPAUganda" 
                 target="_blank" 

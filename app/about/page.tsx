@@ -84,10 +84,10 @@ const About: React.FC = () => {
                 </div>
               </div>
               
-              <div 
+              <div
                 className="mt-8"
               >
-                <Button asChild size="lg" className="shadow-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+                <Button asChild size="lg" className="shadow-lg bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                   <a href="/get-involved">Join Our Mission</a>
                 </Button>
               </div>
@@ -716,10 +716,10 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          <div 
+          <div
             className="text-center mt-12"
           >
-            <Button asChild size="lg" className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
               <Link href="/get-involved/career">
                 Join Our Team
               </Link>
@@ -741,15 +741,15 @@ const About: React.FC = () => {
           >
             Whether through research, advocacy, or direct engagement, there are many ways to contribute to our mission of strengthening democratic governance and promoting transparency in Uganda.
           </p>
-          <div 
+          <div
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved/donate">
                 Support Us
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020]/20 text-white border border-[#800020] hover:bg-[#800020]/30 shadow-lg backdrop-blur-sm">
               <Link href="/get-involved/career">
                 Explore Careers
               </Link>

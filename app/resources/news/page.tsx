@@ -171,7 +171,7 @@ const News: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h3>
                     <p className="text-sm text-white/90 mb-3">{formatDate(article.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{article.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       <Link href={`/resources/news/${article.slug}`} className="text-black">
                         Read More
                       </Link>
@@ -224,7 +224,7 @@ const News: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h3>
                     <p className="text-sm text-white/90 mb-3">{formatDate(article.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{article.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       <Link href={`/resources/news/${article.slug}`} className="text-black">
                         Read More
                       </Link>

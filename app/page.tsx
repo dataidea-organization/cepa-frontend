@@ -93,12 +93,12 @@ const Home: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-secondary/20 text-secondary border border-secondary/30 hover:bg-secondary/30">
+              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                 <Link href="/about">
                   Learn More About Us
                 </Link>
               </Button>
-              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-accent/20 text-accent border border-accent/30 hover:bg-accent/30">
+              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                 <Link href="/get-involved">
                   Get Involved
                 </Link>
@@ -320,7 +320,7 @@ const Home: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-bold text-foreground">Latest News</h3>
-              <Button asChild variant="outline" className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm">
+              <Button asChild variant="outline" className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020]">
                 <Link href="/resources/news">View All News</Link>
               </Button>
             </div>
@@ -392,7 +392,7 @@ const Home: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-bold text-foreground">Latest Analysis</h3>
-              <Button asChild variant="outline" className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm">
+              <Button asChild variant="outline" className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020]">
                 <Link href="/resources/blog">View All Analysis</Link>
               </Button>
             </div>
@@ -464,7 +464,7 @@ const Home: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-bold text-foreground">Latest Publications</h3>
-              <Button asChild variant="outline" className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm">
+              <Button asChild variant="outline" className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020]">
                 <Link href="/resources/publications">View All Publications</Link>
               </Button>
             </div>
@@ -520,11 +520,11 @@ const Home: React.FC = () => {
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                       <h3 className="text-lg font-bold mb-2 line-clamp-2">{item.title}</h3>
                       <p className="text-sm text-white/90 line-clamp-3 mb-3">{item.description}</p>
-                      <Link 
-                        href={item.pdf} 
-                        target="_blank" 
+                      <Link
+                        href={item.pdf}
+                        target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-blue-600/20 hover:bg-blue-600/30 text-white border border-blue-600/30 backdrop-blur-sm font-medium py-1 px-3 rounded-md transition-all duration-200 text-xs inline-block"
+                        className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020] font-medium py-1 px-3 rounded-md transition-all duration-200 text-xs inline-block"
                       >
                         Download PDF
                       </Link>
@@ -565,12 +565,12 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved/donate">
                 Support Us
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved/career">
                 Explore Careers
               </Link>

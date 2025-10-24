@@ -122,7 +122,7 @@ const CareerClient: React.FC<CareerClientProps> = ({ opportunities }) => {
                         {opportunity.description}
                       </p>
                       <Link href={`/get-involved/career/${opportunity.slug}`} className="w-full">
-                        <Button className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium flex items-center justify-center gap-2">
+                        <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center justify-center gap-2">
                           View Details
                           <ArrowRight className="w-4 h-4" />
                         </Button>
@@ -218,12 +218,12 @@ const CareerClient: React.FC<CareerClientProps> = ({ opportunities }) => {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved">
                 Get Involved
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/about">
                 Learn About CEPA
               </Link>

@@ -173,7 +173,7 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                         rel="noopener noreferrer"
                         className="inline-block"
                       >
-                        <Button className="bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium flex items-center gap-2">
+                        <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center gap-2">
                           Learn More
                           <ExternalLink className="w-4 h-4" />
                         </Button>
@@ -210,12 +210,12 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                     </div>
                   )}
                   <div className="pt-4 border-t">
-                    <Button variant="outline" className="w-full border-blue-600/30 text-blue-900 hover:bg-blue-600/10 backdrop-blur-sm mb-3" asChild>
+                    <Button variant="outline" className="w-full border-[#800020] text-white hover:bg-[#800020]/10 backdrop-blur-sm mb-3" asChild>
                       <Link href="/get-involved/announcements">
                         View All Announcements
                       </Link>
                     </Button>
-                    <Button variant="outline" className="w-full border-blue-600/30 text-blue-900 hover:bg-blue-600/10 backdrop-blur-sm" asChild>
+                    <Button variant="outline" className="w-full border-[#800020] text-white hover:bg-[#800020]/10 backdrop-blur-sm" asChild>
                       <Link href="/get-involved">
                         Explore Get Involved
                       </Link>

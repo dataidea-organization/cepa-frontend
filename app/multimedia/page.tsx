@@ -82,7 +82,7 @@ const Multimedia: React.FC = () => {
                       <span className="text-sm text-gray-500">{item.date}</span>
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">{item.title}</h3>
-                    <Button variant="outline" size="sm" className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+                    <Button variant="outline" size="sm" className="w-full bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       {category.id === 'gallery' ? 'View Gallery' : 'Watch/Listen'}
                     </Button>
                   </Card>
@@ -162,12 +162,12 @@ const Multimedia: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/resources#newsletters">
-              <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+              <Button size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
                 Subscribe to Newsletter
               </Button>
             </Link>
             <Link href="/get-involved">
-              <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+              <Button size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
                 Get Involved
               </Button>
             </Link>

@@ -150,15 +150,6 @@ const Podcasts: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-wrap gap-4"
             >
-              <Badge className="bg-primary/20 text-primary border border-primary/30 px-4 py-2 text-sm rounded-md">
-                Policy Analysis
-              </Badge>
-              <Badge className="bg-secondary/20 text-secondary border border-secondary/30 px-4 py-2 text-sm rounded-md">
-                Expert Interviews
-              </Badge>
-              <Badge className="bg-accent/20 text-accent border border-accent/30 px-4 py-2 text-sm rounded-md">
-                Public Discourse
-              </Badge>
             </motion.div>
           </div>
         </div>
@@ -186,8 +177,8 @@ const Podcasts: React.FC = () => {
                 variant={category === 'All' ? 'default' : 'secondary'}
                 className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
                   selectedCategory === category
-                    ? 'bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30'
-                    : 'bg-secondary/20 text-secondary border border-secondary/30 hover:bg-secondary/30'
+                    ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                    : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
                 }`}
                 onClick={() => setSelectedCategory(category)}
               >
@@ -242,9 +233,14 @@ const Podcasts: React.FC = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-2 line-clamp-2">{podcast.title}</h3>
                 <p className="text-white/90 text-sm mb-3 line-clamp-2">{podcast.description}</p>
+                {podcast.guest && (
+                  <p className="text-white/80 text-xs mb-2 italic">
+                    <span className="font-semibold">Guest:</span> {podcast.guest}
+                  </p>
+                )}
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/70">{new Date(podcast.date).toLocaleDateString()}</span>
-                  <Button size="sm" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 rounded-md px-4 py-2" onClick={() => openPodcastModal(podcast)}>
+                  <Button size="sm" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 rounded-md px-4 py-2" onClick={() => openPodcastModal(podcast)}>
                     Play Now
                   </Button>
                 </div>
@@ -284,10 +280,10 @@ const Podcasts: React.FC = () => {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               Subscribe on YouTube
             </Button>
-            <Button size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               Follow on Social Media
             </Button>
           </motion.div>

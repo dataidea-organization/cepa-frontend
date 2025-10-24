@@ -85,13 +85,13 @@ const Navbar = () => {
     label: 'Fellowships',
     href: '/get-involved/fellowships',
     dropdown: cohorts.length > 0 ? [
-      { label: 'All Fellowships', href: '/get-involved/fellowships' },
       ...cohorts.map(cohort => ({
         label: cohort.name,
         href: `/get-involved/fellowships/cohorts/${cohort.slug}`
-      }))
+      })),
+      { label: 'Apply Now', href: '/get-involved/career' }
     ] : [
-      { label: 'All Fellowships', href: '/get-involved/fellowships' }
+      { label: 'Apply Now', href: '/get-involved/career' }
     ]
   };
 
@@ -100,18 +100,18 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <img 
-              src="/CEPA-LOGO.png" 
-              alt="CEPA Logo" 
-              className="h-30 w-auto"
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <img
+              src="/CEPA-LOGO.png"
+              alt="CEPA Logo"
+              className="h-20 w-auto"
             />
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
             {allMenuItems.map((item) => {
               if (item.dropdown) {
                 return (
@@ -145,7 +145,14 @@ const Navbar = () => {
                 );
               }
             })}
-            
+
+            {/* Parliament Watch Link */}
+            <Button variant="ghost" asChild className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200">
+              <a href="https://parliamentwatch.ug" target="_blank" rel="noopener noreferrer">
+                Parliament Watch
+              </a>
+            </Button>
+
             {/* Support Us Button */}
             <Button asChild className="bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
               <Link href="/get-involved/donate">
@@ -197,7 +204,18 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
-              
+
+              {/* Mobile Parliament Watch Link */}
+              <a
+                href="https://parliamentwatch.ug"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
+                onClick={() => setActiveDropdown(null)}
+              >
+                Parliament Watch
+              </a>
+
               {/* Mobile Support Us Button */}
               <div className="px-3 py-2">
                 <Button asChild className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">

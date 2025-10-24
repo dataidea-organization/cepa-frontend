@@ -160,7 +160,7 @@ const Blog: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
                     <p className="text-sm text-white/90 mb-3">{formatDate(post.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{post.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       <Link href={`/resources/blog/${post.slug}`} className="text-black">
                         Read More
                       </Link>
@@ -206,7 +206,7 @@ const Blog: React.FC = () => {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
                     <p className="text-sm text-white/90 mb-3">{formatDate(post.date)}</p>
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{post.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                       <Link href={`/resources/blog/${post.slug}`} className="text-black">
                         Read More
                       </Link>
@@ -229,12 +229,12 @@ const Blog: React.FC = () => {
             Subscribe to our newsletter to receive the latest policy analysis, research insights, and expert commentary directly to your inbox.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved#newsletter">
                 Subscribe to Newsletter
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/resources">
                 Browse All Resources
               </Link>

@@ -303,14 +303,14 @@ const Publications: React.FC = () => {
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{publication.description}</p>
                     <div className="flex gap-2">
                       {publication.pdf && (
-                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                        <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                           <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
                             Download PDF
                           </a>
                         </Button>
                       )}
                       {publication.url && (
-                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                        <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                           <a href={publication.url} target="_blank" rel="noopener noreferrer">
                             View Online
                           </a>
@@ -380,14 +380,14 @@ const Publications: React.FC = () => {
                     <p className="text-sm text-white/80 mb-4 line-clamp-3">{publication.description}</p>
                     <div className="flex gap-2">
                       {publication.pdf && (
-                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                        <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                           <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
                             Download PDF
                           </a>
                         </Button>
                       )}
                       {publication.url && (
-                        <Button asChild size="sm" variant="outline" className="bg-white/20 text-white border border-white/30 hover:bg-white/30">
+                        <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
                           <a href={publication.url} target="_blank" rel="noopener noreferrer">
                             View Online
                           </a>
@@ -431,12 +431,12 @@ const Publications: React.FC = () => {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved#newsletter">
                 Subscribe to Newsletter
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/resources">
                 Browse All Resources
               </Link>

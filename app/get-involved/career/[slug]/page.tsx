@@ -171,13 +171,13 @@ const CareerDetailPage = async ({ params }: PageProps) => {
                     <p className="text-lg text-red-600 font-semibold">{formatDate(opportunity.deadline)}</p>
                   </div>
                   <div className="pt-4 border-t">
-                    <Button className="w-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-900 border border-blue-600/30 backdrop-blur-sm font-medium mb-3" asChild>
+                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium mb-3" asChild>
                       <a href="#apply" className="flex items-center justify-center">
                         Apply Now
                         <ExternalLink className="w-4 h-4 ml-2" />
                       </a>
                     </Button>
-                    <Button variant="outline" className="w-full border-blue-600/30 text-blue-900 hover:bg-blue-600/10 backdrop-blur-sm" asChild>
+                    <Button variant="outline" className="w-full border-[#800020] text-white hover:bg-[#800020]/10 backdrop-blur-sm" asChild>
                       <Link href="/get-involved/career">
                         View All Opportunities
                       </Link>
