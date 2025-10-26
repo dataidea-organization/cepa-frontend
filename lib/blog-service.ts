@@ -72,6 +72,24 @@ export class BlogService {
     return posts.filter(post => post.id !== currentPostId).slice(0, limit);
   }
 
+  static async getCategories(): Promise<string[]> {
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/blog/categories/', {
+        next: { revalidate: 300 }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch blog categories');
+      }
+
+      const categories = await response.json();
+      return categories;
+    } catch (error) {
+      console.error('Error fetching blog categories:', error);
+      return [];
+    }
+  }
+
   static clearCache(): void {
     blogPostsCache = null;
     cacheTimestamp = null;

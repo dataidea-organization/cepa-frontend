@@ -9,27 +9,43 @@ import { BlogService, BlogPost } from "@/lib/blog-service";
 
 const Blog: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchBlogPosts = async () => {
+    const fetchData = async () => {
       try {
-        const posts = await BlogService.getAllBlogPosts();
+        setLoading(true);
+
+        // Fetch blog posts and categories in parallel
+        const [posts, cats] = await Promise.all([
+          BlogService.getAllBlogPosts(),
+          BlogService.getCategories()
+        ]);
+
         setBlogPosts(posts);
+        setCategories(['All', ...cats.filter((cat: string) => cat)]);
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching blog posts:', err);
+        console.error('Error fetching blog data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlogPosts();
+    fetchData();
   }, []);
 
+  // Filter blog posts by selected category
+  const filteredPosts = selectedCategory === "All"
+    ? blogPosts
+    : blogPosts.filter(post => post.category === selectedCategory);
+
   // Only use fetched blog posts from API
-  const postsToDisplay = blogPosts;
+  const postsToDisplay = filteredPosts;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -118,6 +134,41 @@ const Blog: React.FC = () => {
               In-depth analysis, policy insights, and expert commentary on governance, development, and public policy issues in Uganda and beyond.
             </motion.p>
           </div>
+        </div>
+      </section>
+
+      {/* Category Filters */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Badge
+                  variant={category === 'All' ? 'default' : 'secondary'}
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Badge>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 

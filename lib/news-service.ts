@@ -72,6 +72,24 @@ export class NewsService {
     return news.filter(article => article.id !== currentArticleId).slice(0, limit);
   }
 
+  static async getCategories(): Promise<string[]> {
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/categories/', {
+        next: { revalidate: 600 }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch news categories');
+      }
+
+      const categories = await response.json();
+      return categories;
+    } catch (error) {
+      console.error('Error fetching news categories:', error);
+      return [];
+    }
+  }
+
   static clearCache(): void {
     newsCache = null;
     cacheTimestamp = null;

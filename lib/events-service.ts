@@ -87,6 +87,24 @@ export class EventsService {
     return events.filter(event => event.id !== currentEventId).slice(0, limit);
   }
 
+  static async getCategories(): Promise<string[]> {
+    try {
+      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/events/categories/', {
+        next: { revalidate: 600 }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch event categories');
+      }
+
+      const categories = await response.json();
+      return categories;
+    } catch (error) {
+      console.error('Error fetching event categories:', error);
+      return [];
+    }
+  }
+
   static clearCache(): void {
     eventsCache = null;
     cacheTimestamp = null;

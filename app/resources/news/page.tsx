@@ -9,27 +9,43 @@ import { NewsService, NewsArticle } from "@/lib/news-service";
 
 const News: React.FC = () => {
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchNewsArticles = async () => {
+    const fetchData = async () => {
       try {
-        const news = await NewsService.getAllNews();
+        setLoading(true);
+
+        // Fetch news articles and categories in parallel
+        const [news, cats] = await Promise.all([
+          NewsService.getAllNews(),
+          NewsService.getCategories()
+        ]);
+
         setNewsArticles(news);
+        setCategories(['All', ...cats.filter((cat: string) => cat)]);
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching news articles:', err);
+        console.error('Error fetching news data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNewsArticles();
+    fetchData();
   }, []);
 
+  // Filter news articles by selected category
+  const filteredArticles = selectedCategory === "All"
+    ? newsArticles
+    : newsArticles.filter(article => article.category === selectedCategory);
+
   // Only use fetched news articles from API
-  const articlesToDisplay = newsArticles;
+  const articlesToDisplay = filteredArticles;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -116,6 +132,41 @@ const News: React.FC = () => {
               Stay informed with the latest news, updates, and insights from CEPA's work in policy analysis, governance, and advocacy across Uganda.
             </motion.p>
           </div>
+        </div>
+      </section>
+
+      {/* Category Filters */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Badge
+                  variant={category === 'All' ? 'default' : 'secondary'}
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Badge>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 

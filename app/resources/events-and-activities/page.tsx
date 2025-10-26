@@ -10,27 +10,43 @@ import { EventsService, Event } from "@/lib/events-service";
 
 const Events: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchData = async () => {
       try {
-        const eventsData = await EventsService.getAllEvents();
+        setLoading(true);
+
+        // Fetch events and categories in parallel
+        const [eventsData, cats] = await Promise.all([
+          EventsService.getAllEvents(),
+          EventsService.getCategories()
+        ]);
+
         setEvents(eventsData);
+        setCategories(['All', ...cats.filter((cat: string) => cat)]);
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching events:', err);
+        console.error('Error fetching events data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchData();
   }, []);
 
+  // Filter events by selected category
+  const filteredEvents = selectedCategory === "All"
+    ? events
+    : events.filter(event => event.category === selectedCategory);
+
   // Only use fetched events from API
-  const eventsToDisplay = events;
+  const eventsToDisplay = filteredEvents;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -142,6 +158,41 @@ const Events: React.FC = () => {
               Join CEPA at conferences, workshops, seminars, and training programs that advance policy analysis, governance, and civic engagement across Uganda and East Africa.
             </motion.p>
           </div>
+        </div>
+      </section>
+
+      {/* Category Filters */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Badge
+                  variant={category === 'All' ? 'default' : 'secondary'}
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Badge>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
