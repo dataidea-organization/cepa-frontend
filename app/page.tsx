@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
+import { ArrowRight } from 'lucide-react';
 
 const Home: React.FC = () => {
   const heroImages = [
@@ -21,6 +23,8 @@ const Home: React.FC = () => {
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [focusAreas, setFocusAreas] = useState<FocusAreaListItem[]>([]);
+  const [loadingFocusAreas, setLoadingFocusAreas] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,6 +33,22 @@ const Home: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [heroImages.length]);
+
+  useEffect(() => {
+    async function fetchFocusAreas() {
+      try {
+        setLoadingFocusAreas(true);
+        const data = await FocusAreaService.getActiveFocusAreas();
+        setFocusAreas(data);
+      } catch (error) {
+        console.error("Error fetching focus areas:", error);
+      } finally {
+        setLoadingFocusAreas(false);
+      }
+    }
+
+    fetchFocusAreas();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -199,7 +219,7 @@ const Home: React.FC = () => {
       {/* Focus Areas */}
       <section className="py-20 bg-gradient-to-br from-blue-50 via-yellow-50 to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -213,82 +233,69 @@ const Home: React.FC = () => {
               We work across multiple domains to create positive change in Uganda's governance landscape through evidence-based research and advocacy.
             </p>
           </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {[
-              {
-                title: "Parliament Watch",
-                description: "Monitoring parliamentary proceedings and ensuring accountability in legislative processes.",
-                image: "/focus-areas/parliament-watch.jpg",
-                color: "blue"
-              },
-              {
-                title: "Democracy & Governance",
-                description: "Strengthening democratic institutions and promoting good governance practices.",
-                image: "/focus-areas/democracy.jpg",
-                color: "yellow"
-              },
-              {
-                title: "Transparency & Accountability",
-                description: "Advocating for open government and holding leaders accountable to citizens.",
-                image: "/focus-areas/transparency.jpg",
-                color: "green"
-              },
-              {
-                title: "Human Rights",
-                description: "Protecting and promoting fundamental human rights and freedoms.",
-                image: "/focus-areas/human-rights.jpg",
-                color: "red"
-              },
-              {
-                title: "Public Health & Safety",
-                description: "Improving public health outcomes and road safety across Uganda.",
-                image: "/focus-areas/health.jpg",
-                color: "blue"
-              },
-              {
-                title: "Climate Justice",
-                description: "Addressing climate change impacts and promoting environmental sustainability.",
-                image: "/focus-areas/climate.jpg",
-                color: "green"
-              }
-            ].map((area, index) => {
-              const colorClasses = {
-                blue: "border-primary",
-                yellow: "border-secondary", 
-                green: "border-accent",
-                red: "border-destructive"
-              };
-              
-              return (
+
+          {loadingFocusAreas ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground">Loading focus areas...</p>
+            </div>
+          ) : focusAreas.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground">No focus areas available at the moment.</p>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {focusAreas.map((area, index) => (
                 <motion.div
-                  key={index}
+                  key={area.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
                   <Card className="relative h-80 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                      style={{ backgroundImage: `url(${area.image})` }}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-110"
+                      style={{ backgroundImage: area.image_url ? `url(${area.image_url})` : `url(/hero/focus-areas-hero.jpg)` }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                       <h3 className="text-xl font-bold mb-2">{area.title}</h3>
-                      <p className="text-sm text-white/90">{area.description}</p>
+                      <p className="text-sm text-white/90 mb-4 line-clamp-2">{area.overview_summary}</p>
+                      <Button
+                        asChild
+                        className="w-full bg-[#800020] hover:bg-[#600018] text-white border-none"
+                      >
+                        <Link href={`/focus-areas/${area.slug}`}>
+                          View Details
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
                     </div>
                   </Card>
                 </motion.div>
-              );
-            })}
-          </motion.div>
+              ))}
+            </motion.div>
+          )}
+
+          {focusAreas.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mt-12"
+            >
+              <Button asChild size="lg" variant="outline" className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020]">
+                <Link href="/focus-areas">View All Focus Areas</Link>
+              </Button>
+            </motion.div>
+          )}
         </div>
       </section>
 

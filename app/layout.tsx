@@ -26,18 +26,8 @@ export const metadata: Metadata = {
   keywords: "policy analysis, Uganda, parliamentary democracy, governance, transparency, accountability, human rights, think tank",
   authors: [{ name: "Centre for Policy Analysis" }],
   icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" }
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
-    ],
-    other: [
-      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" }
-    ]
+    icon: "/CEPA-LOGO.png",
+    apple: "/CEPA-LOGO.png",
   },
   manifest: "/site.webmanifest",
   openGraph: {
@@ -47,7 +37,7 @@ export const metadata: Metadata = {
     locale: "en_UG",
     images: [
       {
-        url: "/android-chrome-512x512.png",
+        url: "/CEPA-LOGO.png",
         width: 512,
         height: 512,
         alt: "CEPA Logo"
@@ -58,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CEPA - Centre for Policy Analysis",
     description: "Leading think tank in Uganda focused on policy analysis and governance",
-    images: ["/android-chrome-512x512.png"]
+    images: ["/CEPA-LOGO.png"]
   }
 };
 

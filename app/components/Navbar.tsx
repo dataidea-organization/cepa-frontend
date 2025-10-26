@@ -126,9 +126,9 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <img
-              src="/CEPA-LOGO.png"
+              src="/CEPA-logo.png"
               alt="CEPA Logo"
-              className="h-20 w-auto"
+              className="h-12 w-auto"
             />
           </Link>
 

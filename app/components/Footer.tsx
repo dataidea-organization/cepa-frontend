@@ -42,11 +42,11 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
-            <div className="flex items-center mb-4">
+            <div className="flex items-center bg-white p-3">
               <img 
-                src="/CEPA-LOGO.png" 
+                src="/CEPA-logo.png"
                 alt="CEPA Logo" 
-                className="h-30 w-auto"
+                className="w-auto"
               />
             </div>
             <p className="text-gray-400">
