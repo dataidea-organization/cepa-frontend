@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -86,10 +87,12 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[500px] overflow-hidden">
-        <img
-          src={focusArea.image || "/focus-areas/default.jpg"}
+        <Image
+          src={focusArea.image_url || "/hero/focus-areas-hero.jpg"}
           alt={focusArea.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -113,7 +116,7 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
                 {focusArea.title}
               </h1>
               <p className="text-xl md:text-2xl text-white/90 max-w-4xl">
-                {focusArea.description}
+                {focusArea.overview_summary}
               </p>
             </motion.div>
           </div>

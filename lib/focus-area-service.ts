@@ -37,8 +37,8 @@ interface FocusArea {
   id: string;
   slug: string;
   title: string;
-  description: string;
   image?: string;
+  image_url?: string;
   overview_summary: string;
   status: string;
   start_date: string;
@@ -56,8 +56,9 @@ interface FocusAreaListItem {
   id: string;
   slug: string;
   title: string;
-  description: string;
+  overview_summary: string;
   image?: string;
+  image_url?: string;
   status: string;
   order: number;
 }

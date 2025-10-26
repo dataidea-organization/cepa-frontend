@@ -466,6 +466,7 @@ export default function CohortDetailPage() {
                     >
                       <Image
                         src={image.image}
+                        //src={"https://cepa-backend-production.up.railway.app/media/cohorts/gallery/democracy.jpg"}
                         alt={image.caption || "Gallery image"}
                         fill
                         className="object-cover transition-transform group-hover:scale-110"

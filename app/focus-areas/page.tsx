@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
@@ -34,10 +35,12 @@ const FocusAreas: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-96 overflow-hidden">
-        <img
+        <Image
           src="/hero/focus-areas-hero.jpg"
           alt="Our Focus Areas - CEPA"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -90,12 +93,12 @@ const FocusAreas: React.FC = () => {
                   <Card className="relative h-[400px] overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                     <div
                       className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-110"
-                      style={{ backgroundImage: area.image ? `url(${area.image})` : `url(/focus-areas/default.jpg)` }}
+                      style={{ backgroundImage: area.image_url ? `url(${area.image_url})` : `url(/hero/focus-areas-hero.jpg)` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                       <h3 className="text-2xl font-bold mb-3">{area.title}</h3>
-                      <p className="text-sm text-white/90 mb-6 line-clamp-3">{area.description}</p>
+                      <p className="text-sm text-white/90 mb-6 line-clamp-3">{area.overview_summary}</p>
                       <Button
                         asChild
                         className="w-full bg-[#800020] hover:bg-[#600018] text-white border-none"
