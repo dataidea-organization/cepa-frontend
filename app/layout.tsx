@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     locale: "en_UG",
     images: [
       {
-        url: "/CEPA-LOGO.png",
+        url: "/CEPA-logo.png",
         width: 512,
         height: 512,
         alt: "CEPA Logo"
