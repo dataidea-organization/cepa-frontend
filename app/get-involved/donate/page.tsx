@@ -6,74 +6,76 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Heart, 
-  CreditCard, 
-  Smartphone, 
-  Building2, 
-  Users, 
-  BookOpen, 
-  Shield, 
+import {
+  Heart,
+  CreditCard,
+  Smartphone,
+  Building2,
+  Users,
+  BookOpen,
+  Shield,
   Globe,
   ArrowRight,
   Check,
   Star,
   Gift
 } from "lucide-react";
+import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function DonatePage() {
-  const donationAmounts = [50000, 100000, 250000, 500000, 1000000];
-  const impactAreas = [
-    {
-      icon: Building2,
-      title: "Democracy & Governance",
-      description: "Support research and advocacy for stronger democratic institutions",
-      impact: "Your donation helps fund policy research, civic education, and governance reforms"
-    },
-    {
-      icon: Users,
-      title: "Youth Development",
-      description: "Empower young people to engage in policy and governance",
-      impact: "Funds youth parliament programs, leadership training, and civic engagement initiatives"
-    },
-    {
-      icon: BookOpen,
-      title: "Research & Publications",
-      description: "Advance evidence-based policy research and analysis",
-      impact: "Support publication of policy briefs, research reports, and academic papers"
-    },
-    {
-      icon: Shield,
-      title: "Human Rights Advocacy",
-      description: "Protect and promote human rights across Uganda",
-      impact: "Fund legal aid, rights monitoring, and advocacy campaigns"
-    },
-    {
-      icon: Globe,
-      title: "Regional Impact",
-      description: "Extend CEPA's influence across East Africa",
-      impact: "Support regional policy initiatives and cross-border collaboration"
+  const [focusAreas, setFocusAreas] = useState<FocusAreaListItem[]>([]);
+  const [loadingFocusAreas, setLoadingFocusAreas] = useState(true);
+
+  useEffect(() => {
+    async function fetchFocusAreas() {
+      try {
+        setLoadingFocusAreas(true);
+        const data = await FocusAreaService.getActiveFocusAreas();
+        setFocusAreas(data);
+      } catch (error) {
+        console.error("Error fetching focus areas:", error);
+      } finally {
+        setLoadingFocusAreas(false);
+      }
     }
-  ];
+
+    fetchFocusAreas();
+  }, []);
+
+  const donationAmounts = [50000, 100000, 250000, 500000, 1000000];
+
+  const colorMap: Record<string, { bg: string; text: string }> = {
+    blue: { bg: "bg-blue-100", text: "text-blue-600" },
+    yellow: { bg: "bg-yellow-100", text: "text-yellow-600" },
+    green: { bg: "bg-green-100", text: "text-green-600" }
+  };
 
   const paymentMethods = [
     {
       icon: CreditCard,
       title: "Bank Transfer",
       description: "Direct bank transfer to CEPA account",
-      details: "Account: 1234567890\nBank: Centenary Bank\nBranch: Kampala"
+      details: "Contact us to receive our bank account details for direct transfers",
+      color: "blue",
+      showContactButton: true
     },
     {
       icon: Smartphone,
       title: "Mobile Money",
       description: "Quick and secure mobile payments",
-      details: "MTN: 0772 123 456\nAirtel: 0756 789 012\nEquity: 0789 456 123"
+      details: "MTN: 0772 123 456\nAirtel: 0756 789 012\nEquity: 0789 456 123",
+      color: "yellow",
+      showContactButton: false
     },
     {
       icon: Building2,
       title: "Corporate Partnership",
       description: "Long-term partnership opportunities",
-      details: "Contact us for corporate sponsorship and partnership programs"
+      details: "Contact us for corporate sponsorship and partnership programs",
+      color: "green",
+      showContactButton: true
     }
   ];
 
@@ -141,14 +143,25 @@ export default function DonatePage() {
               >
                 <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 h-full">
                   <CardContent className="p-6 text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <method.icon className="w-8 h-8 text-blue-600" />
+                    <div className={`w-16 h-16 ${colorMap[method.color].bg} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                      <method.icon className={`w-8 h-8 ${colorMap[method.color].text}`} />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-3">{method.title}</h3>
                     <p className="text-gray-600 mb-4">{method.description}</p>
-                    <div className="bg-gray-50 p-3 rounded-md">
+                    <div className="bg-gray-50 p-3 rounded-md mb-4">
                       <p className="text-sm text-gray-700 whitespace-pre-line">{method.details}</p>
                     </div>
+                    {method.showContactButton && (
+                      <Button
+                        asChild
+                        className="w-full bg-[#800020] hover:bg-[#600018] text-white border-none"
+                      >
+                        <Link href="/get-involved/contact">
+                          Contact Us
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -158,7 +171,7 @@ export default function DonatePage() {
       </section>
 
 
-      {/* Impact Areas Section */}
+      {/* Impact Areas Section - Focus Areas */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-green-50">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -172,37 +185,54 @@ export default function DonatePage() {
             <p className="text-lg text-gray-600">Support specific areas of CEPA's work</p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {impactAreas.map((area, index) => (
-              <motion.div
-                key={area.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 h-full">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                      <area.icon className="w-8 h-8 text-blue-600" />
+          {loadingFocusAreas ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground">Loading focus areas...</p>
+            </div>
+          ) : focusAreas.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground">No focus areas available at the moment.</p>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {focusAreas.map((area, index) => (
+                <motion.div
+                  key={area.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="relative h-80 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-110"
+                      style={{ backgroundImage: area.image_url ? `url(${area.image_url})` : `url(/hero/focus-areas-hero.jpg)` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                      <h3 className="text-xl font-bold mb-2">{area.title}</h3>
+                      <p className="text-sm text-white/90 mb-4 line-clamp-2">{area.overview_summary}</p>
+                      <Button
+                        asChild
+                        className="w-full bg-[#800020] hover:bg-[#600018] text-white border-none"
+                      >
+                        <Link href={`/focus-areas/${area.slug}`}>
+                          View Details
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">{area.title}</h3>
-                    <p className="text-gray-600 mb-4">{area.description}</p>
-                    <div className="bg-green-50 p-3 rounded-md">
-                      <p className="text-sm text-green-800 font-medium">{area.impact}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </section>
       
@@ -236,7 +266,7 @@ export default function DonatePage() {
           >
             <Button
               size="lg"
-              className="bg-white/20 text-white border border-white/30 hover:bg-white/30 shadow-lg cursor-pointer"
+              className="bg-[#800020] hover:bg-[#600018] text-white border-none shadow-lg cursor-pointer"
               onClick={() => {
                 window.location.href = '/get-involved/contact';
               }}

@@ -29,19 +29,38 @@ interface PublicationsApiResponse {
 
 const Publications: React.FC = () => {
   const [publications, setPublications] = useState<Publication[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPublications = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch publications from backend API
-        const response = await fetch('https://cepa-backend-production.up.railway.app/resources/publications/?page_size=100');
-        if (!response.ok) {
+        setLoading(true);
+
+        // Fetch publications and categories in parallel
+        const [publicationsResponse, categoriesResponse] = await Promise.all([
+          fetch('https://cepa-backend-production.up.railway.app/resources/publications/?page_size=100'),
+          fetch('https://cepa-backend-production.up.railway.app/resources/publications/categories/')
+        ]);
+
+        if (!publicationsResponse.ok) {
           throw new Error('Failed to fetch publications');
         }
-        const data: PublicationsApiResponse = await response.json();
-        setPublications(data.results);
+
+        const publicationsData: PublicationsApiResponse = await publicationsResponse.json();
+        setPublications(publicationsData.results);
+
+        // Set categories with "All" at the beginning
+        if (categoriesResponse.ok) {
+          const categoriesData = await categoriesResponse.json();
+          setCategories(['All', ...categoriesData.filter((cat: string) => cat)]);
+        } else {
+          setCategories(['All']);
+        }
+
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error('Error fetching publications:', err);
@@ -50,7 +69,7 @@ const Publications: React.FC = () => {
       }
     };
 
-    fetchPublications();
+    fetchData();
   }, []);
 
   // Fallback publications in case API fails
@@ -170,6 +189,11 @@ const Publications: React.FC = () => {
   // Use API data if available, otherwise use fallback
   const publicationsToDisplay = publications.length > 0 ? publications : fallbackPublications;
 
+  // Filter publications by selected category
+  const filteredPublications = selectedCategory === "All"
+    ? publicationsToDisplay
+    : publicationsToDisplay.filter(pub => pub.category === selectedCategory);
+
   // Format date for display
   const formatDate = (dateString: string) => {
     try {
@@ -248,10 +272,45 @@ const Publications: React.FC = () => {
         </div>
       </section>
 
+      {/* Category Filters */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Badge
+                  variant={category === 'All' ? 'default' : 'secondary'}
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Badge>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Featured Publications */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -266,14 +325,14 @@ const Publications: React.FC = () => {
             </p>
           </motion.div>
           
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {publicationsToDisplay.filter(pub => pub.featured).map((publication, index) => (
+            {filteredPublications.filter(pub => pub.featured).map((publication, index) => (
               <motion.div
                 key={publication.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -343,14 +402,14 @@ const Publications: React.FC = () => {
             </p>
           </motion.div>
           
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {publicationsToDisplay.map((publication, index) => (
+            {filteredPublications.map((publication, index) => (
               <motion.div
                 key={publication.id}
                 initial={{ opacity: 0, y: 30 }}

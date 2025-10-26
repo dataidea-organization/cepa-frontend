@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,63 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 const About: React.FC = () => {
+  const [counts, setCounts] = useState({
+    years: 0,
+    reports: 0,
+    stakeholders: 0,
+    partners: 0,
+  });
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+
+          // Animate years (10)
+          let yearsCount = 0;
+          const yearsInterval = setInterval(() => {
+            yearsCount += 1;
+            setCounts(prev => ({ ...prev, years: yearsCount }));
+            if (yearsCount >= 10) clearInterval(yearsInterval);
+          }, 100);
+
+          // Animate reports (50)
+          let reportsCount = 0;
+          const reportsInterval = setInterval(() => {
+            reportsCount += 2;
+            setCounts(prev => ({ ...prev, reports: Math.min(reportsCount, 50) }));
+            if (reportsCount >= 50) clearInterval(reportsInterval);
+          }, 40);
+
+          // Animate stakeholders (100)
+          let stakeholdersCount = 0;
+          const stakeholdersInterval = setInterval(() => {
+            stakeholdersCount += 4;
+            setCounts(prev => ({ ...prev, stakeholders: Math.min(stakeholdersCount, 100) }));
+            if (stakeholdersCount >= 100) clearInterval(stakeholdersInterval);
+          }, 30);
+
+          // Animate partners (15)
+          let partnersCount = 0;
+          const partnersInterval = setInterval(() => {
+            partnersCount += 1;
+            setCounts(prev => ({ ...prev, partners: partnersCount }));
+            if (partnersCount >= 15) clearInterval(partnersInterval);
+          }, 80);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -93,34 +150,35 @@ const About: React.FC = () => {
               </div>
             </div>
             
-            <div 
+            <div
+              ref={statsRef}
               className="grid grid-cols-2 gap-6"
             >
               <div
               >
                 <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-primary mb-2">10+</div>
+                  <div className="text-3xl font-bold text-primary mb-2">{counts.years}+</div>
                   <div className="text-sm text-muted-foreground">Years of Impact</div>
                 </Card>
               </div>
               <div
               >
                 <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-secondary mb-2">50+</div>
+                  <div className="text-3xl font-bold text-secondary mb-2">{counts.reports}+</div>
                   <div className="text-sm text-muted-foreground">Policy Reports</div>
                 </Card>
               </div>
               <div
               >
                 <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-accent mb-2">100+</div>
+                  <div className="text-3xl font-bold text-accent mb-2">{counts.stakeholders}+</div>
                   <div className="text-sm text-muted-foreground">Stakeholders Engaged</div>
                 </Card>
               </div>
               <div
               >
                 <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-destructive mb-2">15+</div>
+                  <div className="text-3xl font-bold text-destructive mb-2">{counts.partners}+</div>
                   <div className="text-sm text-muted-foreground">Partner Organizations</div>
                 </Card>
               </div>
