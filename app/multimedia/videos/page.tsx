@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
@@ -173,7 +174,7 @@ const Videos: React.FC = () => {
           </motion.div>
 
           {/* Category Filter */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -188,17 +189,17 @@ const Videos: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Button
-                  variant={category === selectedCategory ? "default" : "outline"}
-                  className={`px-6 py-2 text-sm font-medium transition-colors ${
+                <Badge
+                  variant={category === 'All' ? 'default' : 'secondary'}
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
                     selectedCategory === category
-                      ? "bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90"
-                      : "bg-secondary/20 text-secondary border border-secondary/30 hover:bg-secondary/30"
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
                   }`}
                   onClick={() => setSelectedCategory(category)}
                 >
                   {category}
-                </Button>
+                </Badge>
               </motion.div>
             ))}
           </motion.div>
