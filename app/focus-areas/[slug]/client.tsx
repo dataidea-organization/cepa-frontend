@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle, Target, Users, Calendar, TrendingUp } from "lucide-react";
+import { ArrowLeft, CheckCircle, Target, Users, Calendar, TrendingUp, FileText, Download } from "lucide-react";
 import { FocusAreaService, FocusArea } from "@/lib/focus-area-service";
 
 interface FocusAreaDetailClientProps {
@@ -45,7 +45,8 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
     { id: "overview", label: "Overview", icon: Target },
     { id: "outcomes", label: "Outcomes", icon: TrendingUp },
     { id: "partners", label: "Partners", icon: Users },
-    { id: "timeline", label: "Timeline", icon: Calendar }
+    { id: "timeline", label: "Timeline", icon: Calendar },
+    { id: "resources", label: "Resources", icon: FileText }
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -309,6 +310,60 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
               </Card>
             </motion.div>
           </section>
+
+          {/* Resources Section */}
+          {focusArea.resources && focusArea.resources.length > 0 && (
+            <section id="resources" className="mb-16 scroll-mt-32">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl font-bold mb-8 text-foreground">Resources</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {focusArea.resources.map((resource, index) => {
+                    // Extract file extension from the file name
+                    const fileExtension = resource.name.split('.').pop()?.toUpperCase() || 'FILE';
+
+                    return (
+                      <motion.div
+                        key={resource.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                      >
+                        <Card className="p-6 h-full bg-white/40 border border-white/50 backdrop-blur-sm hover:shadow-lg transition-all hover:scale-105">
+                          <a
+                            href={resource.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col h-full"
+                          >
+                            <div className="flex items-start justify-between mb-4">
+                              <FileText className="h-10 w-10 text-[#800020] flex-shrink-0" />
+                              <Badge className="bg-[#800020] text-white hover:bg-[#800020]">
+                                {fileExtension}
+                              </Badge>
+                            </div>
+                            <h3 className="text-lg font-bold text-foreground mb-3 flex-grow">
+                              {resource.name}
+                            </h3>
+                            <div className="flex items-center gap-2 text-sm text-[#800020] font-medium">
+                              <Download className="h-4 w-4" />
+                              <span>Download</span>
+                            </div>
+                          </a>
+                        </Card>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </section>
+          )}
         </div>
       </div>
 

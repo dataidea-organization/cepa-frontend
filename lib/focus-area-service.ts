@@ -33,6 +33,14 @@ interface FocusAreaMilestone {
   order: number;
 }
 
+interface FocusAreaResource {
+  id: string;
+  name: string;
+  file: string;
+  file_url: string;
+  order: number;
+}
+
 interface FocusArea {
   id: string;
   slug: string;
@@ -48,6 +56,7 @@ interface FocusArea {
   outcomes: FocusAreaOutcome[];
   partners: FocusAreaPartner[];
   milestones: FocusAreaMilestone[];
+  resources: FocusAreaResource[];
   created_at: string;
   updated_at: string;
 }
@@ -182,5 +191,6 @@ export type {
   FocusAreaOutcome,
   FocusAreaPartner,
   FocusAreaMilestone,
+  FocusAreaResource,
   FocusAreaApiResponse
 };
