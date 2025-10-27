@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
@@ -28,6 +29,7 @@ interface GalleryGroup {
 
 const Gallery: React.FC = () => {
   const [galleryGroups, setGalleryGroups] = useState<GalleryGroup[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<string>("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,10 +84,15 @@ const Gallery: React.FC = () => {
     );
   }
 
-  // Use backend data or show empty state
-  const displayGalleryGroups = galleryGroups.length > 0 ? galleryGroups : [];
+  // Filter gallery groups based on selection
+  const filteredGroups = selectedGroup === "All"
+    ? galleryGroups
+    : galleryGroups.filter(group => group.id === selectedGroup);
 
-  if (displayGalleryGroups.length === 0) {
+  // Use backend data or show empty state
+  const displayGalleryGroups = filteredGroups;
+
+  if (!loading && galleryGroups.length === 0) {
     return (
       <div className="min-h-screen">
         {/* Hero Section */}
@@ -157,7 +164,7 @@ const Gallery: React.FC = () => {
       {/* Gallery Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -171,80 +178,107 @@ const Gallery: React.FC = () => {
               A visual journey through CEPA's activities, events, and impact in Uganda's governance and policy landscape.
             </p>
           </motion.div>
-          
-          <div className="space-y-16">
-            {displayGalleryGroups.map((group, groupIndex) => (
-              <motion.div 
-                key={group.id} 
-                className="space-y-8"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: groupIndex * 0.2 }}
+
+          {/* Gallery Group Filters */}
+          {galleryGroups.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="flex flex-wrap justify-center gap-4 mb-12"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                {/* Group Title */}
-                <motion.div 
-                  className="text-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
+                <Badge
+                  variant="default"
+                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                    selectedGroup === "All"
+                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                  }`}
+                  onClick={() => setSelectedGroup("All")}
+                >
+                  All
+                </Badge>
+              </motion.div>
+              {galleryGroups.map((group, index) => (
+                <motion.div
+                  key={group.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+                  <Badge
+                    variant="secondary"
+                    className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                      selectedGroup === group.id
+                        ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
+                        : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
+                    }`}
+                    onClick={() => setSelectedGroup(group.id)}
+                  >
                     {group.title}
-                  </h3>
-                  {group.description && (
-                    <p className="text-muted-foreground mb-4 max-w-2xl mx-auto">
-                      {group.description}
-                    </p>
-                  )}
-                  <div className="w-24 h-1 mx-auto bg-gradient-to-r from-primary via-secondary to-accent rounded-full"></div>
+                  </Badge>
                 </motion.div>
+              ))}
+            </motion.div>
+          )}
 
-                {/* Group Images Grid */}
-                <motion.div 
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  viewport={{ once: true }}
-                >
-                  {group.images && group.images.length > 0 ? (
-                    group.images.map((image, imageIndex) => {
-                    return (
-                      <motion.div
-                        key={image.id}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: imageIndex * 0.1 }}
-                        viewport={{ once: true }}
+          {displayGalleryGroups.length === 0 && selectedGroup !== "All" ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-muted-foreground mb-4">No images found in this gallery group.</p>
+              <Button onClick={() => setSelectedGroup("All")} className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
+                View All Galleries
+              </Button>
+            </div>
+          ) : displayGalleryGroups.every(group => !group.images || group.images.length === 0) ? (
+            <motion.div
+              className="text-center py-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <p className="text-xl text-muted-foreground">No images available for this gallery.</p>
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {displayGalleryGroups.map((group) => (
+                group.images && group.images.length > 0 ? (
+                  group.images.map((image, imageIndex) => (
+                    <motion.div
+                      key={image.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: imageIndex * 0.05 }}
+                      viewport={{ once: true }}
+                    >
+                      <Card
+                        className="relative h-64 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm cursor-pointer"
                       >
-                        <Card 
-                          className="relative h-64 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm"
-                        >
-                        <div 
-                          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style={{ backgroundImage: `url(${image.image || '/gallery/default-image.jpg'})` }}
+                        <div
+                          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-110"
+                          style={{ backgroundImage: `url(${image.image || '/gallery/default-image.jpg'})` }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                            <h3 className="text-sm font-semibold mb-1 line-clamp-1">
-                              {image.alt_text || image.caption || 'Gallery Image'}
-                            </h3>
+                          <h3 className="text-sm font-semibold mb-1 line-clamp-2">
+                            {image.alt_text || image.caption || 'Gallery Image'}
+                          </h3>
                         </div>
                       </Card>
-                      </motion.div>
-                    );
-                    })
-                  ) : (
-                    <div className="col-span-full text-center py-8">
-                      <p className="text-muted-foreground">No images available for this gallery group.</p>
-                    </div>
-                  )}
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
+                    </motion.div>
+                  ))
+                ) : null
+              )).flat().filter(Boolean)}
+            </div>
+          )}
         </div>
       </section>
 
