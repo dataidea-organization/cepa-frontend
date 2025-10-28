@@ -395,12 +395,12 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-white text-[#800020] hover:bg-white/90">
+            <Button asChild size="lg" className="bg-[#800020] text-white hover:bg-[#800020]/90">
               <Link href="/focus-areas">
                 View All Focus Areas
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10">
+            <Button asChild size="lg" className="bg-[#800020] text-white hover:bg-[#800020]/90">
               <Link href="/get-involved/contact">
                 Contact Us
               </Link>
