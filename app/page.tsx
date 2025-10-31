@@ -564,14 +564,14 @@ const Home: React.FC = () => {
           >
             Whether through research, advocacy, or direct engagement, there are many ways to contribute to our mission of strengthening democratic governance and promoting transparency in Uganda.
           </motion.p>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
+            <Button asChild size="lg" className="bg-green-800 text-white border border-green-800 hover:bg-green-900 shadow-lg">
               <Link href="/get-involved/donate">
                 Support Us
               </Link>

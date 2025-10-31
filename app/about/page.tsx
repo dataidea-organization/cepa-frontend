@@ -479,10 +479,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Chemonges M. Timothy</h3>
                     <p className="text-white/90 font-semibold mb-4">Executive Director</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://www.linkedin.com/in/timothy-chemonges-1a47a4173/?originalSubdomain=ug" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -507,10 +507,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Angella Hilda Kemirembe</h3>
                     <p className="text-white/90 font-semibold mb-4">Communication Manager</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://ug.linkedin.com/in/angella-hilda-kemirembe-35111a9b" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -535,10 +535,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Joseph Tahinduka</h3>
                     <p className="text-white/90 font-semibold mb-4">Programmes Officer</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://www.linkedin.com/in/tahinduka-joseph-8ba5401b5/" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -563,10 +563,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Rebecca Karagwa</h3>
                     <p className="text-white/90 font-semibold mb-4">Programmes Associate</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://www.linkedin.com/in/rebecca-karagwa-10a7b3133/" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -591,10 +591,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Thembo Kahungu Misairi</h3>
                     <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="#" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -619,10 +619,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Prisca Wanyenya</h3>
                     <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="#" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -647,10 +647,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Dominic Ochola</h3>
                     <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://www.linkedin.com/in/dominic-ochola" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -675,10 +675,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Rashid Kasule</h3>
                     <p className="text-white/90 font-semibold mb-4">Production Lead</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="#" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -703,10 +703,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Timothy Ainebyoona</h3>
                     <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="http://www.LinkedIn.com/in/timothy-ainebyoona-31906a216" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -731,10 +731,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Faith Uwizeye</h3>
                     <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="#" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -759,10 +759,10 @@ const About: React.FC = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold mb-1 text-white">Fraide Solomon</h3>
                     <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button 
-                      asChild 
-                      size="sm" 
-                      className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:text-white transition-all"
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
                     >
                       <a href="https://www.linkedin.com/in/fraide-solomon-101491311" target="_blank" rel="noopener noreferrer">
                         See Profile
@@ -802,12 +802,12 @@ const About: React.FC = () => {
           <div
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
+            <Button asChild size="lg" className="bg-green-800 text-white border border-green-800 hover:bg-green-900 shadow-lg">
               <Link href="/get-involved/donate">
                 Support Us
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-[#800020]/20 text-white border border-[#800020] hover:bg-[#800020]/30 shadow-lg backdrop-blur-sm">
+            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
               <Link href="/get-involved/career">
                 Explore Careers
               </Link>
