@@ -176,7 +176,7 @@ const Navbar = () => {
             </Button>
 
             {/* Support Us Button */}
-            <Button asChild className="bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+            <Button asChild className="bg-green-800 hover:bg-green-900 text-white font-medium py-2 px-4 rounded-md transition-all duration-200">
               <Link href="/get-involved/donate">
                 Support Us
               </Link>
@@ -240,7 +240,7 @@ const Navbar = () => {
 
               {/* Mobile Support Us Button */}
               <div className="px-3 py-2">
-                <Button asChild className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-700 border border-green-500/30 backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
+                <Button asChild className="w-full bg-green-800 hover:bg-green-900 text-white font-medium py-2 px-4 rounded-md transition-all duration-200">
                   <Link href="/get-involved/donate" onClick={() => setActiveDropdown(null)}>
                     Support Us
                   </Link>

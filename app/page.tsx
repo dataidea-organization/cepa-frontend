@@ -19,7 +19,6 @@ const Home: React.FC = () => {
     { src: "/hero/videos-hero.jpg", alt: "Videos" },
     { src: "/hero/news-hero.jpg", alt: "News" },
     { src: "/hero/blog-hero.jpg", alt: "Blog" },
-    { src: "/hero/home-hero.jpg", alt: "CEPA - Centre for Policy Analysis" },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -107,20 +106,20 @@ const Home: React.FC = () => {
             >
               Advancing parliamentary democracy, governance, and human rights in Uganda through evidence-based policy research and analysis.
             </motion.p>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
-                <Link href="/about">
-                  Learn More About Us
+              <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-green-800 text-white border border-green-800 hover:bg-green-900">
+                <Link href="/get-involved">
+                  Get Involved
                 </Link>
               </Button>
               <Button asChild size="lg" className="shadow-lg text-lg px-8 py-6 bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
-                <Link href="/get-involved">
-                  Get Involved
+                <Link href="/about">
+                  Learn More About Us
                 </Link>
               </Button>
             </motion.div>
