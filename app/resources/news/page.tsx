@@ -26,7 +26,8 @@ const News: React.FC = () => {
         ]);
 
         setNewsArticles(news);
-        setCategories(['All', ...cats.filter((cat: string) => cat)]);
+        const uniqueCategories = [...new Set(cats.filter((cat: string) => cat))];
+        setCategories(['All', ...uniqueCategories]);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -170,72 +171,6 @@ const News: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured News */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Featured News
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Latest updates and breaking news from CEPA's advocacy and research work.
-            </p>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {articlesToDisplay.filter(article => article.featured).map((article, index) => {
-              const themeColors = ["border-primary", "border-secondary", "border-accent", "border-destructive"];
-              const currentColor = themeColors[index % 4];
-              
-              return (
-                <motion.div
-                  key={article.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${article.image || '/news/default-news.jpg'})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <Badge className={`${getCategoryColor(article.category)} text-xs`}>
-                      {article.category}
-                    </Badge>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{formatDate(article.date)}</p>
-                    <p className="text-sm text-white/80 mb-4 line-clamp-3">{article.description}</p>
-                    <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
-                      <Link href={`/resources/news/${article.slug}`} className="text-black">
-                        Read More
-                      </Link>
-                    </Button>
-                  </div>
-                </Card>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </section>
-
       {/* All News */}
       <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -247,7 +182,7 @@ const News: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              All News
+              {selectedCategory === "All" ? "All News" : `${selectedCategory} News`}
             </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
               Complete collection of news articles, updates, and announcements from CEPA.

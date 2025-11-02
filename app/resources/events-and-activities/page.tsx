@@ -27,7 +27,8 @@ const Events: React.FC = () => {
         ]);
 
         setEvents(eventsData);
-        setCategories(['All', ...cats.filter((cat: string) => cat)]);
+        const uniqueCategories = [...new Set(cats.filter((cat: string) => cat))];
+        setCategories(['All', ...uniqueCategories]);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -208,7 +209,7 @@ const Events: React.FC = () => {
               className="text-center mb-16"
             >
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                Upcoming Events
+                {selectedCategory === "All" ? "Upcoming Events" : `Upcoming ${selectedCategory} Events`}
               </h2>
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
                 Don't miss these important upcoming events and opportunities to engage with CEPA's work.
@@ -266,7 +267,7 @@ const Events: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Past Events
+              {selectedCategory === "All" ? "Past Events" : `Past ${selectedCategory} Events`}
             </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
               Explore our recent events, workshops, and conferences that have shaped policy discourse and civic engagement.
