@@ -120,15 +120,13 @@ export default function CohortDetailPage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[500px] overflow-hidden">
-        {cohort.hero_image && (
-          <Image
-            src={cohort.hero_image}
-            alt={cohort.name}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
+        <Image
+          src="/hero/gallery-hero.jpg"
+          alt={cohort.name}
+          fill
+          className="object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="max-w-7xl mx-auto">

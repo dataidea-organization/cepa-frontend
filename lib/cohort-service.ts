@@ -50,7 +50,6 @@ export interface CohortGalleryImage {
 
 export interface CohortDetail extends Cohort {
   overview: string;
-  hero_image?: string;
   fellows: Fellow[];
   projects: CohortProject[];
   events: CohortEvent[];
