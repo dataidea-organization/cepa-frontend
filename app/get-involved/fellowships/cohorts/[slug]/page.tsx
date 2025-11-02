@@ -117,78 +117,75 @@ export default function CohortDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Back Button */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Button className="bg-[#800020]/20 hover:bg-[#800020]/30 text-white border border-[#800020] backdrop-blur-sm" asChild>
-          <Link href="/get-involved/fellowships">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Fellowships
-          </Link>
-        </Button>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-8">
-        {/* Side Navigation - Desktop Only */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
-          <div className="sticky top-24">
-            <nav className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-4 space-y-2">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider px-4 mb-4">
-                On This Page
-              </h3>
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-md transition-all ${
-                      activeSection === item.id
-                        ? "bg-red-900/80 text-white shadow-md"
-                        : "text-gray-700 hover:bg-red-900/10"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <div className="flex-1 min-w-0">
-          {/* Hero Section */}
-          <section className="relative py-12">
-            {cohort.hero_image && (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[500px] overflow-hidden">
+        {cohort.hero_image && (
+          <Image
+            src={cohort.hero_image}
+            alt={cohort.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-8">
+          <div className="max-w-7xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-8"
-            >
-              <Image
-                src={cohort.hero_image}
-                alt={cohort.name}
-                fill
-                className="object-cover"
-              />
-            </motion.div>
-            )}
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5 }}
             >
-              <Badge className="mb-4">{cohort.year}</Badge>
-              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+              <Button
+                asChild
+                variant="ghost"
+                className="text-white hover:text-white/80 mb-6"
+              >
+                <Link href="/get-involved/fellowships">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Fellowships
+                </Link>
+              </Button>
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
                 {cohort.name}
               </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl">
+                {cohort.year} Cohort
+              </p>
             </motion.div>
-          </section>
+          </div>
+        </div>
+      </section>
 
+      {/* Section Navigation Bar */}
+      <div className="sticky top-24 z-40 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex space-x-2 overflow-x-auto py-4">
+            {menuItems.map((section) => {
+              const Icon = section.icon;
+              return (
+                <button
+                  key={section.id}
+                  onClick={() => scrollToSection(section.id)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap ${
+                    activeSection === section.id
+                      ? "bg-[#800020] text-white shadow-md"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  {section.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="bg-muted/50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Overview Section */}
           <section id="overview" className="py-8">
             <motion.div
