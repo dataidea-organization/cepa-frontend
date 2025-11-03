@@ -281,20 +281,6 @@ const Home: React.FC = () => {
               ))}
             </motion.div>
           )}
-
-          {focusAreas.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mt-12"
-            >
-              <Button asChild size="lg" variant="outline" className="bg-[#800020]/90 hover:bg-[#800020] text-white border border-[#800020]">
-                <Link href="/focus-areas">View All Focus Areas</Link>
-              </Button>
-            </motion.div>
-          )}
         </div>
       </section>
 
