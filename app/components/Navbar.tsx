@@ -14,6 +14,7 @@ import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [expandedMobileItems, setExpandedMobileItems] = useState<Set<string>>(new Set());
   const [cohorts, setCohorts] = useState<Cohort[]>([]);
   const [focusAreas, setFocusAreas] = useState<FocusAreaListItem[]>([]);
 
@@ -119,6 +120,16 @@ const Navbar = () => {
 
   const allMenuItems = [...menuItems.slice(0, 1), focusAreasMenuItem, ...menuItems.slice(1), fellowshipsMenuItem];
 
+  const toggleMobileDropdown = (itemLabel: string) => {
+    const newExpanded = new Set(expandedMobileItems);
+    if (newExpanded.has(itemLabel)) {
+      newExpanded.delete(itemLabel);
+    } else {
+      newExpanded.add(itemLabel);
+    }
+    setExpandedMobileItems(newExpanded);
+  };
+
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,14 +214,35 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
               {allMenuItems.map((item) => (
                 <div key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
-                    onClick={() => setActiveDropdown(null)}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.dropdown && (
+                  <div className="flex items-center justify-between">
+                    <Link
+                      href={item.href}
+                      className="flex-1 block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
+                      onClick={() => !item.dropdown && setActiveDropdown(null)}
+                    >
+                      {item.label}
+                    </Link>
+                    {item.dropdown && (
+                      <button
+                        onClick={() => toggleMobileDropdown(item.label)}
+                        className="px-3 py-2 text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                        aria-expanded={expandedMobileItems.has(item.label)}
+                        aria-label={`Toggle ${item.label} menu`}
+                      >
+                        <svg
+                          className={`h-5 w-5 transition-transform duration-200 ${
+                            expandedMobileItems.has(item.label) ? 'transform rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  {item.dropdown && expandedMobileItems.has(item.label) && (
                     <div className="pl-6 space-y-1">
                       {item.dropdown.map((dropdownItem) => (
                         <Link
