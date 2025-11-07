@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Bell, Calendar, AlertCircle, ExternalLink, ArrowRight, Filter } from "lucide-react";
+import { Bell, Calendar, AlertCircle, ExternalLink, ArrowRight } from "lucide-react";
 import { Announcement } from "@/lib/announcement-service";
 
 interface AnnouncementsClientProps {
@@ -15,11 +15,6 @@ interface AnnouncementsClientProps {
 }
 
 const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements }) => {
-  const [selectedType, setSelectedType] = useState<string>('All');
-  const [selectedPriority, setSelectedPriority] = useState<string>('All');
-
-  const types = ['All', 'General', 'Event', 'Program', 'Partnership', 'Achievement', 'Policy', 'Urgent'];
-  const priorities = ['All', 'low', 'medium', 'high', 'urgent'];
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -70,55 +65,8 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
     return daysUntilExpiry <= 7 && daysUntilExpiry >= 0;
   };
 
-  const filteredAnnouncements = announcements.filter(announcement => {
-    const typeMatch = selectedType === 'All' || announcement.type === selectedType;
-    const priorityMatch = selectedPriority === 'All' || announcement.priority === selectedPriority;
-    return typeMatch && priorityMatch;
-  });
-
   return (
     <>
-      {/* Filters Section */}
-      <section className="py-8 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-muted-foreground" />
-              <span className="font-semibold">Filter by:</span>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm text-muted-foreground">Type</label>
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="px-4 py-2 border rounded-md bg-white/20 border-white/30 backdrop-blur-sm"
-                >
-                  {types.map((type) => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="flex flex-col gap-2">
-                <label className="text-sm text-muted-foreground">Priority</label>
-                <select
-                  value={selectedPriority}
-                  onChange={(e) => setSelectedPriority(e.target.value)}
-                  className="px-4 py-2 border rounded-md bg-white/20 border-white/30 backdrop-blur-sm"
-                >
-                  {priorities.map((priority) => (
-                    <option key={priority} value={priority}>
-                      {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Announcements Section */}
       <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -134,15 +82,15 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
               Current Announcements
             </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              {filteredAnnouncements.length > 0 
-                ? `Showing ${filteredAnnouncements.length} announcement${filteredAnnouncements.length !== 1 ? 's' : ''}`
-                : "No announcements match your filters"}
+              {announcements.length > 0
+                ? `Showing ${announcements.length} announcement${announcements.length !== 1 ? 's' : ''}`
+                : "No announcements available"}
             </p>
           </motion.div>
 
-          {filteredAnnouncements.length > 0 ? (
+          {announcements.length > 0 ? (
             <div className="space-y-6">
-              {filteredAnnouncements.map((announcement, index) => (
+              {announcements.map((announcement, index) => (
                 <motion.div
                   key={announcement.id}
                   initial={{ opacity: 0, y: 50 }}
@@ -232,21 +180,8 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                   No Announcements Found
                 </h3>
                 <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                  {selectedType !== 'All' || selectedPriority !== 'All' 
-                    ? "Try adjusting your filters to see more announcements."
-                    : "There are no active announcements at this time. Please check back later for updates."}
+                  There are no announcements at this time. Please check back later for updates.
                 </p>
-                {(selectedType !== 'All' || selectedPriority !== 'All') && (
-                  <Button 
-                    onClick={() => {
-                      setSelectedType('All');
-                      setSelectedPriority('All');
-                    }}
-                    className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium"
-                  >
-                    Clear Filters
-                  </Button>
-                )}
               </Card>
             </motion.div>
           )}

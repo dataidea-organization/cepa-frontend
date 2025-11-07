@@ -8,7 +8,7 @@ const AnnouncementsPage = async () => {
   let hasError = false;
 
   try {
-    announcements = await AnnouncementService.getActiveAnnouncements();
+    announcements = await AnnouncementService.getAllAnnouncements();
   } catch (error) {
     console.error("Failed to fetch announcements:", error);
     hasError = true;

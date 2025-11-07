@@ -66,36 +66,6 @@ export class AnnouncementService {
     return announcements.find(announcement => announcement.slug === slug) || null;
   }
 
-  static async getFeaturedAnnouncements(): Promise<Announcement[]> {
-    const announcements = await this.fetchAnnouncements();
-    return announcements.filter(announcement => announcement.featured && announcement.is_active);
-  }
-
-  static async getActiveAnnouncements(): Promise<Announcement[]> {
-    const announcements = await this.fetchAnnouncements();
-    const today = new Date();
-    return announcements.filter(announcement => {
-      if (!announcement.is_active) return false;
-      if (!announcement.expiry_date) return true;
-      return new Date(announcement.expiry_date) >= today;
-    });
-  }
-
-  static async getUrgentAnnouncements(): Promise<Announcement[]> {
-    const announcements = await this.fetchAnnouncements();
-    const today = new Date();
-    return announcements.filter(announcement => {
-      if (announcement.priority !== 'urgent' || !announcement.is_active) return false;
-      if (!announcement.expiry_date) return true;
-      return new Date(announcement.expiry_date) >= today;
-    });
-  }
-
-  static async getAnnouncementsByType(type: Announcement['type']): Promise<Announcement[]> {
-    const announcements = await this.fetchAnnouncements();
-    return announcements.filter(announcement => announcement.type === type && announcement.is_active);
-  }
-
   static clearCache(): void {
     announcementCache = null;
     cacheTimestamp = null;
