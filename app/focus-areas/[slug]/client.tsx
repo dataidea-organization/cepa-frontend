@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle, Target, Users, Calendar, TrendingUp, FileText, Download } from "lucide-react";
+import { ArrowLeft, CheckCircle, Target, Calendar, TrendingUp, FileText, Download } from "lucide-react";
 import { FocusAreaService, FocusArea } from "@/lib/focus-area-service";
 
 interface FocusAreaDetailClientProps {
@@ -44,7 +44,7 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
   const sections = [
     { id: "overview", label: "Overview", icon: Target },
     { id: "outcomes", label: "Outcomes", icon: TrendingUp },
-    { id: "partners", label: "Partners", icon: Users },
+    { id: "partners", label: "Partners", icon: FileText },
     { id: "timeline", label: "Timeline", icon: Calendar },
     { id: "resources", label: "Resources", icon: FileText }
   ];
@@ -250,16 +250,24 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <Card className="p-6 h-full bg-white/40 border border-white/50 backdrop-blur-sm hover:shadow-lg transition-shadow">
-                      <div className="flex items-start gap-4">
-                        <Users className="h-8 w-8 text-blue-600 flex-shrink-0" />
-                        <div>
-                          <h3 className="text-lg font-bold mb-2 text-foreground">{partner.name}</h3>
-                          <Badge className="mb-3 bg-blue-100 text-blue-800 hover:bg-blue-100">
-                            {partner.type}
-                          </Badge>
-                          <p className="text-sm text-muted-foreground">{partner.role}</p>
+                    <Card className="p-6 h-full bg-white/40 border border-white/50 backdrop-blur-sm hover:shadow-lg transition-shadow flex flex-col">
+                      {partner.logo ? (
+                        <div className="mb-4 flex justify-center">
+                          <Image
+                            src={partner.logo}
+                            alt={`${partner.name} logo`}
+                            width={100}
+                            height={100}
+                            className="object-contain max-h-24"
+                          />
                         </div>
+                      ) : null}
+                      <div className="flex-grow">
+                        <h3 className="text-lg font-bold mb-2 text-foreground">{partner.name}</h3>
+                        <Badge className="mb-3 bg-blue-100 text-blue-800 hover:bg-blue-100">
+                          {partner.type}
+                        </Badge>
+                        <p className="text-sm text-muted-foreground">{partner.role}</p>
                       </div>
                     </Card>
                   </motion.div>

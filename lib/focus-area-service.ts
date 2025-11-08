@@ -24,6 +24,7 @@ interface FocusAreaPartner {
   type: string;
   role: string;
   order: number;
+  logo?: string;
 }
 
 interface FocusAreaMilestone {
