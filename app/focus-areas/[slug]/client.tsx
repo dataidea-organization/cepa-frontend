@@ -352,9 +352,6 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
                           >
                             <div className="flex items-start justify-between mb-4">
                               <FileText className="h-10 w-10 text-[#800020] flex-shrink-0" />
-                              <Badge className="bg-[#800020] text-white hover:bg-[#800020]">
-                                {fileExtension}
-                              </Badge>
                             </div>
                             <h3 className="text-lg font-bold text-foreground mb-3 flex-grow">
                               {resource.name}
