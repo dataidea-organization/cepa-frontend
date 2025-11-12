@@ -3,57 +3,66 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import SlidingPartnersCarousel from "@/components/SlidingPartnersCarousel";
+import { AboutService, AboutPageData } from "@/lib/about-service";
 
 const About: React.FC = () => {
-  const [counts, setCounts] = useState({
-    years: 0,
-    reports: 0,
-    stakeholders: 0,
-    partners: 0,
-  });
+  const [aboutData, setAboutData] = useState<AboutPageData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [counts, setCounts] = useState<Record<number, number>>({});
   const [hasAnimated, setHasAnimated] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
+  // Fetch about page data
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await AboutService.getAboutPageData();
+        setAboutData(data);
+
+        // Initialize counts for animation
+        const initialCounts: Record<number, number> = {};
+        data.stats.forEach((stat) => {
+          initialCounts[stat.id] = 0;
+        });
+        setCounts(initialCounts);
+      } catch (error) {
+        console.error('Error fetching about data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Animate stats
+  useEffect(() => {
+    if (!aboutData || hasAnimated || !aboutData.stats.length) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated) {
           setHasAnimated(true);
 
-          // Animate years (10)
-          let yearsCount = 0;
-          const yearsInterval = setInterval(() => {
-            yearsCount += 1;
-            setCounts(prev => ({ ...prev, years: yearsCount }));
-            if (yearsCount >= 10) clearInterval(yearsInterval);
-          }, 100);
+          // Animate each stat card
+          aboutData.stats.forEach((stat) => {
+            const targetValue = stat.value;
+            const duration = 2000; // 2 seconds
+            const steps = 50;
+            const increment = targetValue / steps;
+            const stepDuration = duration / steps;
+            let currentValue = 0;
 
-          // Animate reports (50)
-          let reportsCount = 0;
-          const reportsInterval = setInterval(() => {
-            reportsCount += 2;
-            setCounts(prev => ({ ...prev, reports: Math.min(reportsCount, 50) }));
-            if (reportsCount >= 50) clearInterval(reportsInterval);
-          }, 40);
-
-          // Animate stakeholders (100)
-          let stakeholdersCount = 0;
-          const stakeholdersInterval = setInterval(() => {
-            stakeholdersCount += 4;
-            setCounts(prev => ({ ...prev, stakeholders: Math.min(stakeholdersCount, 100) }));
-            if (stakeholdersCount >= 100) clearInterval(stakeholdersInterval);
-          }, 30);
-
-          // Animate partners (15)
-          let partnersCount = 0;
-          const partnersInterval = setInterval(() => {
-            partnersCount += 1;
-            setCounts(prev => ({ ...prev, partners: partnersCount }));
-            if (partnersCount >= 15) clearInterval(partnersInterval);
-          }, 80);
+            const interval = setInterval(() => {
+              currentValue += increment;
+              if (currentValue >= targetValue) {
+                currentValue = targetValue;
+                clearInterval(interval);
+              }
+              setCounts(prev => ({ ...prev, [stat.id]: Math.floor(currentValue) }));
+            }, stepDuration);
+          });
         }
       },
       { threshold: 0.3 }
@@ -64,252 +73,180 @@ const About: React.FC = () => {
     }
 
     return () => observer.disconnect();
-  }, [hasAnimated]);
+  }, [aboutData, hasAnimated]);
+
+  if (loading || !aboutData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { hero, who_we_are, stats, our_story, what_sets_us_apart, call_to_action, team, partners } = aboutData;
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-96 overflow-hidden">
-        <img 
-          src="/hero/about-hero.jpg" 
-          alt="About CEPA - Centre for Policy Analysis"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-8">
-          <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              About CEPA
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto">
-              The Centre for Policy Analysis (CEPA) is a leading think tank in Uganda dedicated to shaping public policy and strengthening democratic governance through high-quality research, collaboration, and citizen engagement.
-            </p>
+      {hero && (
+        <section className="relative h-96 overflow-hidden">
+          <img
+            src={hero.hero_image_url || "/hero/about-hero.jpg"}
+            alt={hero.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-8">
+            <div className="max-w-7xl mx-auto text-center">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+                {hero.title}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto">
+                {hero.description}
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Who We Are */}
-      <section id="who-we-are" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Who We Are
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              The Centre for Policy Analysis (CEPA) is a leading think tank in Uganda dedicated to shaping public policy and strengthening democratic governance through high-quality research, collaboration, and citizen engagement.
-            </p>
-          </div>
-          
-          <div 
-            className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16"
-          >
-            <div
-            >
-              <div className="space-y-6">
-                <div 
-                  className="flex items-start space-x-4"
-                >
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">🔬</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">Evidence-Based Research</h3>
-                    <p className="text-muted-foreground">We conduct rigorous, independent research to inform policy decisions and strengthen democratic governance in Uganda.</p>
-                  </div>
-                </div>
-                
-                <div 
-                  className="flex items-start space-x-4"
-                >
-                  <div className="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">🤝</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">Collaborative Approach</h3>
-                    <p className="text-muted-foreground">We work closely with parliamentarians, government officials, civil society, and citizens to drive meaningful reforms.</p>
-                  </div>
-                </div>
-                
-                <div 
-                  className="flex items-start space-x-4"
-                >
-                  <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">🏛️</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">Parliament Watch Uganda</h3>
-                    <p className="text-muted-foreground">Our flagship program empowers stakeholders to engage with legislative processes and promote transparency.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div
-                className="mt-8"
-              >
-                <Button asChild size="lg" className="shadow-lg bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
-                  <a href="/get-involved">Join Our Mission</a>
-                </Button>
-              </div>
+      {who_we_are && (
+        <section id="who-we-are" className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                {who_we_are.title}
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+                {who_we_are.description}
+              </p>
             </div>
-            
-            <div
-              ref={statsRef}
-              className="grid grid-cols-2 gap-6"
-            >
-              <div
-              >
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-primary mb-2">{counts.years}+</div>
-                  <div className="text-sm text-muted-foreground">Years of Impact</div>
-                </Card>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
+              <div>
+                <div className="space-y-6">
+                  {who_we_are.features.map((feature, index) => (
+                    <div key={feature.id} className="flex items-start space-x-4">
+                      <div className={`flex-shrink-0 w-12 h-12 ${
+                        index === 0 ? 'bg-primary/10' :
+                        index === 1 ? 'bg-secondary/10' :
+                        'bg-accent/10'
+                      } rounded-lg flex items-center justify-center`}>
+                        <span className="text-2xl">{feature.icon}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
+                        <p className="text-muted-foreground">{feature.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8">
+                  <Button asChild size="lg" className="shadow-lg bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
+                    <a href="/get-involved">Join Our Mission</a>
+                  </Button>
+                </div>
               </div>
-              <div
-              >
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-secondary mb-2">{counts.reports}+</div>
-                  <div className="text-sm text-muted-foreground">Policy Reports</div>
-                </Card>
-              </div>
-              <div
-              >
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-accent mb-2">{counts.stakeholders}+</div>
-                  <div className="text-sm text-muted-foreground">Stakeholders Engaged</div>
-                </Card>
-              </div>
-              <div
-              >
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                  <div className="text-3xl font-bold text-destructive mb-2">{counts.partners}+</div>
-                  <div className="text-sm text-muted-foreground">Partner Organizations</div>
-                </Card>
+
+              <div ref={statsRef} className="grid grid-cols-2 gap-6">
+                {stats.map((stat, index) => (
+                  <div key={stat.id}>
+                    <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                      <div className={`text-3xl font-bold mb-2 ${
+                        index === 0 ? 'text-primary' :
+                        index === 1 ? 'text-secondary' :
+                        index === 2 ? 'text-accent' :
+                        'text-destructive'
+                      }`}>
+                        {counts[stat.id] || 0}+
+                      </div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </Card>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Our Story */}
-      <section id="story" className="py-16 bg-gradient-to-br from-blue-50 via-yellow-50 to-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div 
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              Our Story
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              CEPA was established with a vision to create a more transparent, accountable, and democratic Uganda through rigorous policy research and advocacy.
-            </p>
-          </div>
-          
-          <div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            <div
-              className="h-full"
-            >
-              <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm h-full flex flex-col">
-                <CardHeader>
-                  <div className="text-4xl mb-4">🎯</div>
-                  <CardTitle className="text-xl">Our Vision</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-center">
-                  <CardDescription className="text-base">
-                    To build a democratic society where governance systems and public institutions are transparent, accountable, and responsive to the needs of all citizens.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+      {our_story && (
+        <section id="story" className="py-16 bg-gradient-to-br from-blue-50 via-yellow-50 to-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                {our_story.title}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                {our_story.description}
+              </p>
             </div>
-            
-            <div
-              className="h-full"
-            >
-              <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm h-full flex flex-col">
-                <CardHeader>
-                  <div className="text-4xl mb-4">⚖️</div>
-                  <CardTitle className="text-xl">Our Mission</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-center">
-                  <CardDescription className="text-base">
-                    To shape public policy and strengthen democratic governance by delivering high-quality research, fostering collaboration, and empowering citizens to engage meaningfully with decision-making processes.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-            
-            <div
-              className="h-full"
-            >
-              <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm h-full flex flex-col">
-                <CardHeader>
-                  <div className="text-4xl mb-4">🌟</div>
-                  <CardTitle className="text-xl">Our Values</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-center">
-                  <CardDescription className="text-base">
-                    Integrity, independence, excellence, and commitment to democratic principles guide all our work and interactions.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {our_story.cards.map((card) => (
+                <div key={card.id} className="h-full">
+                  <Card className="p-6 text-center hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm h-full flex flex-col">
+                    <CardHeader>
+                      <div className="text-4xl mb-4">{card.icon}</div>
+                      <CardTitle className="text-xl">{card.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 flex flex-col justify-center">
+                      <CardDescription className="text-base">
+                        {card.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* What Sets CEPA Apart */}
-      <section id="what-sets-cepa-apart" className="py-16 bg-muted/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div 
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              What Sets CEPA Apart
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              CEPA distinguishes itself through innovative approaches and collaborative methodologies that drive meaningful change in Uganda's governance landscape.
-            </p>
-          </div>
-          
-          <div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
-          >
-            <div
-            >
-              <Card className="p-6 hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-primary">A Unique Consortium Model</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    CEPA integrates the expertise and resources of various partner organizations, creating a robust platform for multi-disciplinary approaches to governance challenges.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+      {what_sets_us_apart && (
+        <section id="what-sets-cepa-apart" className="py-16 bg-muted/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                {what_sets_us_apart.title}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                {what_sets_us_apart.description}
+              </p>
             </div>
-            
-            <div
-            >
-              <Card className="p-6 hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-secondary">Thought Leadership and Innovation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    We pioneer new methodologies and approaches to policy analysis, setting standards for evidence-based governance research in Uganda and beyond.
-                  </CardDescription>
-                </CardContent>
-              </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {what_sets_us_apart.cards.map((card, index) => (
+                <div key={card.id}>
+                  <Card className="p-6 hover:shadow-lg transition-shadow bg-white/20 border border-white/30 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className={`text-xl ${index === 0 ? 'text-primary' : 'text-secondary'}`}>
+                        {card.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-base">
+                        {card.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Our Partners */}
       <section id="our-partners" className="py-20 bg-gradient-to-br from-blue-50 via-yellow-50 to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Our Partners
             </h2>
@@ -318,11 +255,9 @@ const About: React.FC = () => {
             </p>
           </div>
 
-          <SlidingPartnersCarousel />
+          <SlidingPartnersCarousel partners={partners || []} />
 
-          <div
-            className="text-center mt-12"
-          >
+          <div className="text-center mt-12">
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Our partnerships enable us to leverage diverse expertise, resources, and networks to create meaningful impact in Uganda's governance landscape.
             </p>
@@ -333,9 +268,7 @@ const About: React.FC = () => {
       {/* Our Team */}
       <section id="our-team" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div 
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Our Team
             </h2>
@@ -343,322 +276,46 @@ const About: React.FC = () => {
               Meet the dedicated professionals who drive CEPA's mission of strengthening democratic governance and promoting evidence-based policy analysis in Uganda.
             </p>
           </div>
-          
-          <div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {/* Executive Director */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/timothy-chemonges.jpg" 
-                    alt="Chemonges M. Timothy"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Chemonges M. Timothy</h3>
-                    <p className="text-white/90 font-semibold mb-4">Executive Director</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://www.linkedin.com/in/timothy-chemonges-1a47a4173/?originalSubdomain=ug" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
 
-            {/* Communication Manager */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/angella-kemirembe.jpg" 
-                    alt="Angella Hilda Kemirembe"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Angella Hilda Kemirembe</h3>
-                    <p className="text-white/90 font-semibold mb-4">Communication Manager</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://ug.linkedin.com/in/angella-hilda-kemirembe-35111a9b" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {team && team.length > 0 ? (
+              team.map((member) => (
+                <div key={member.id}>
+                  <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
+                    <div className="relative h-80 w-full">
+                      <img
+                        src={member.profile_image_url || '/team-images/default-avatar.jpg'}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h3 className="text-xl font-bold mb-1 text-white">{member.name}</h3>
+                        <p className="text-white/90 font-semibold mb-4">{member.role}</p>
+                        {member.linkedin_url && member.linkedin_url !== '#' && (
+                          <Button
+                            asChild
+                            size="sm"
+                            className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
+                          >
+                            <a href={member.linkedin_url} target="_blank" rel="noopener noreferrer">
+                              See Profile
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-              </Card>
-            </div>
-
-            {/* Programmes Officer */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/joseph-tahinduka.jpg" 
-                    alt="Joseph Tahinduka"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Joseph Tahinduka</h3>
-                    <p className="text-white/90 font-semibold mb-4">Programmes Officer</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://www.linkedin.com/in/tahinduka-joseph-8ba5401b5/" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Programmes Associate - Rebecca */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/rebecca-karagwa.jpg" 
-                    alt="Rebecca Karagwa"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Rebecca Karagwa</h3>
-                    <p className="text-white/90 font-semibold mb-4">Programmes Associate</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://www.linkedin.com/in/rebecca-karagwa-10a7b3133/" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Programme Associate - Thembo */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/thembo-misairi.jpg" 
-                    alt="Thembo Kahungu Misairi"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Thembo Kahungu Misairi</h3>
-                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="#" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Programme Associate - Prisca */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/prisca-wanyenya.jpg" 
-                    alt="Prisca Wanyenya"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Prisca Wanyenya</h3>
-                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="#" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Programme Associate - Dominic */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/dominic-ochola.jpg" 
-                    alt="Dominic Ochola"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Dominic Ochola</h3>
-                    <p className="text-white/90 font-semibold mb-4">Programme Associate</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://www.linkedin.com/in/dominic-ochola" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Production Lead - Rashid */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/rashid-kasule.jpg" 
-                    alt="Rashid Kasule"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Rashid Kasule</h3>
-                    <p className="text-white/90 font-semibold mb-4">Production Lead</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="#" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Volunteer - Timothy */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/timothy-ainebyoona.jpg" 
-                    alt="Timothy Ainebyoona"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Timothy Ainebyoona</h3>
-                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="http://www.LinkedIn.com/in/timothy-ainebyoona-31906a216" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Volunteer - Faith */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/faith-uwizeye.jpg" 
-                    alt="Faith Uwizeye"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Faith Uwizeye</h3>
-                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="#" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Volunteer - Fraide */}
-            <div
-            >
-              <Card className="relative overflow-hidden text-center hover:shadow-lg transition-all duration-300 bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 p-0">
-                <div className="relative h-80 w-full">
-                  <img 
-                    src="/team-images/fraide-solomon.jpg" 
-                    alt="Fraide Solomon"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-xl font-bold mb-1 text-white">Fraide Solomon</h3>
-                    <p className="text-white/90 font-semibold mb-4">Volunteer</p>
-                    <Button
-                      asChild
-                      size="sm"
-                      className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 transition-all"
-                    >
-                      <a href="https://www.linkedin.com/in/fraide-solomon-101491311" target="_blank" rel="noopener noreferrer">
-                        See Profile
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-8">
+                <p className="text-muted-foreground">No team members found</p>
+              </div>
+            )}
           </div>
 
-          <div
-            className="text-center mt-12"
-          >
+          <div className="text-center mt-12">
             <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
               <Link href="/get-involved/career">
                 Join Our Team
@@ -669,34 +326,30 @@ const About: React.FC = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20" style={{background: 'linear-gradient(to right, rgb(30 64 175), rgb(245 158 11), rgb(16 185 129), rgb(239 68 68))'}}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
-          >
-            Join Us in Building a Better Uganda
-          </h2>
-          <p 
-            className="text-xl text-white/90 mb-12 max-w-4xl mx-auto"
-          >
-            Whether through research, advocacy, or direct engagement, there are many ways to contribute to our mission of strengthening democratic governance and promoting transparency in Uganda.
-          </p>
-          <div
-            className="flex flex-col sm:flex-row gap-6 justify-center"
-          >
-            <Button asChild size="lg" className="bg-green-800 text-white border border-green-800 hover:bg-green-900 shadow-lg">
-              <Link href="/get-involved/donate">
-                Support Us
-              </Link>
-            </Button>
-            <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
-              <Link href="/get-involved/career">
-                Explore Careers
-              </Link>
-            </Button>
+      {call_to_action && (
+        <section className="py-20" style={{background: 'linear-gradient(to right, rgb(30 64 175), rgb(245 158 11), rgb(16 185 129), rgb(239 68 68))'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              {call_to_action.title}
+            </h2>
+            <p className="text-xl text-white/90 mb-12 max-w-4xl mx-auto">
+              {call_to_action.description}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button asChild size="lg" className="bg-green-800 text-white border border-green-800 hover:bg-green-900 shadow-lg">
+                <Link href="/get-involved/donate">
+                  Support Us
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90 shadow-lg">
+                <Link href="/get-involved/career">
+                  Explore Careers
+                </Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };
