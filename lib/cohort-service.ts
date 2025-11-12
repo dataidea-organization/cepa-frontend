@@ -4,6 +4,8 @@ export interface Cohort {
   id: string;
   name: string;
   year: number;
+  image?: string;
+  image_url?: string;
   slug: string;
   is_active: boolean;
 }
@@ -13,6 +15,7 @@ export interface Fellow {
   name: string;
   bio: string;
   profile_image?: string;
+  profile_image_url?: string;
   position?: string;
   linkedin_url?: string;
   twitter_url?: string;
@@ -25,6 +28,7 @@ export interface CohortProject {
   title: string;
   description: string;
   image?: string;
+  image_url?: string;
   project_url?: string;
   created_at: string;
   updated_at: string;
@@ -43,6 +47,7 @@ export interface CohortEvent {
 export interface CohortGalleryImage {
   id: string;
   image: string;
+  image_url?: string;
   caption?: string;
   created_at: string;
   updated_at: string;

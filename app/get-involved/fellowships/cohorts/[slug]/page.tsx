@@ -121,7 +121,7 @@ export default function CohortDetailPage() {
       {/* Hero Section */}
       <section className="relative h-[500px] overflow-hidden">
         <Image
-          src="/hero/gallery-hero.jpg"
+          src={cohort.image_url || "/hero/gallery-hero.jpg"}
           alt={cohort.name}
           fill
           className="object-cover"
@@ -223,10 +223,10 @@ export default function CohortDetailPage() {
                   >
                     <Card className="h-96 hover:shadow-lg transition-shadow overflow-hidden p-0 border-0">
                       <div className="relative h-full w-full group">
-                        {fellow.profile_image ? (
+                        {fellow.profile_image_url ? (
                           <div className="relative w-full h-full">
                             <Image
-                              src={fellow.profile_image}
+                              src={fellow.profile_image_url}
                               alt={fellow.name}
                               fill
                               className="object-cover"
@@ -344,10 +344,10 @@ export default function CohortDetailPage() {
                     >
                       <Card className="h-full bg-white/60 backdrop-blur-sm border-0 shadow-md hover:shadow-xl transition-shadow">
                         <CardContent className="p-6">
-                          {project.image && (
+                          {project.image_url && (
                             <div className="relative w-full h-48 rounded-lg overflow-hidden mb-4">
                               <Image
-                                src={project.image}
+                                src={project.image_url}
                                 alt={project.title}
                                 fill
                                 className="object-cover"
@@ -460,8 +460,7 @@ export default function CohortDetailPage() {
                       className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
                     >
                       <Image
-                        src={image.image}
-                        //src={"https://cepa-backend-production.up.railway.app/media/cohorts/gallery/democracy.jpg"}
+                        src={image.image_url || image.image}
                         alt={image.caption || "Gallery image"}
                         fill
                         className="object-cover transition-transform group-hover:scale-110"
