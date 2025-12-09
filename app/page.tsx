@@ -7,10 +7,11 @@ import { Separator } from '@/components/ui/separator';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
+import { HeroSlideService, HeroSlide } from '@/lib/hero-slide-service';
 import { ArrowRight } from 'lucide-react';
 
 const Home: React.FC = () => {
-  const heroImages = [
+  const defaultHeroImages = [
     { src: "/hero/about-hero.jpg", alt: "About CEPA" },
     { src: "/hero/focus-areas-hero.jpg", alt: "Focus Areas" },
     { src: "/hero/publications-hero.jpg", alt: "Publications" },
@@ -21,9 +22,12 @@ const Home: React.FC = () => {
     { src: "/hero/blog-hero.jpg", alt: "Blog" },
   ];
 
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
+  const [heroImages, setHeroImages] = useState(defaultHeroImages);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [focusAreas, setFocusAreas] = useState<FocusAreaListItem[]>([]);
   const [loadingFocusAreas, setLoadingFocusAreas] = useState(true);
+  const [loadingHeroSlides, setLoadingHeroSlides] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,6 +36,31 @@ const Home: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [heroImages.length]);
+
+  useEffect(() => {
+    async function fetchHeroSlides() {
+      try {
+        setLoadingHeroSlides(true);
+        const slides = await HeroSlideService.getActiveHeroSlides();
+        if (slides && slides.length > 0) {
+          setHeroSlides(slides);
+          // Convert hero slides to the format expected by the UI
+          const formattedSlides = slides.map(slide => ({
+            src: slide.image_url,
+            alt: slide.title
+          }));
+          setHeroImages(formattedSlides);
+        }
+      } catch (error) {
+        console.error("Error fetching hero slides:", error);
+        // Keep default images on error
+      } finally {
+        setLoadingHeroSlides(false);
+      }
+    }
+
+    fetchHeroSlides();
+  }, []);
 
   useEffect(() => {
     async function fetchFocusAreas() {

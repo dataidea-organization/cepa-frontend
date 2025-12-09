@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Gabarito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,6 +63,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${gabarito.variable} antialiased`}
       >
+        <GoogleAnalytics />
         <Navbar />
         <main>{children}</main>
         <Footer />
