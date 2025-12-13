@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Facebook, Youtube, Linkedin, Twitter } from "lucide-react";
 
 interface ContactFormData {
   name: string;
@@ -38,7 +38,7 @@ export default function ContactPage() {
     message: '',
     inquiry_type: 'general'
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -119,7 +119,7 @@ export default function ContactPage() {
             >
               <Card className="p-8 bg-white/80 backdrop-blur-sm border border-white/30">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
-                
+
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-blue-100 p-3 rounded-lg">
@@ -152,6 +152,32 @@ export default function ContactPage() {
                       <p className="text-gray-600"><a href="mailto:info@cepa.or.ug">info@cepa.or.ug</a></p>
                     </div>
                   </div>
+
+                  <div className="pt-6 border-t">
+                    <h3 className="font-semibold text-gray-900 mb-4">Connect with Us</h3>
+                    <div className="flex gap-4">
+                      <a href="https://x.com/centre4policy" target="_blank" rel="noopener noreferrer"
+                        className="p-2 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-colors duration-300">
+                        <Twitter className="w-5 h-5" />
+                        <span className="sr-only">Twitter</span>
+                      </a>
+                      <a href="https://www.linkedin.com/company/centre_for_policy_analysis" target="_blank" rel="noopener noreferrer"
+                        className="p-2 bg-gray-100 rounded-full hover:bg-[#0077b5] hover:text-white transition-colors duration-300">
+                        <Linkedin className="w-5 h-5" />
+                        <span className="sr-only">LinkedIn</span>
+                      </a>
+                      <a href="https://www.facebook.com/cepa.or.ug" target="_blank" rel="noopener noreferrer"
+                        className="p-2 bg-gray-100 rounded-full hover:bg-[#1877F2] hover:text-white transition-colors duration-300">
+                        <Facebook className="w-5 h-5" />
+                        <span className="sr-only">Facebook</span>
+                      </a>
+                      <a href="https://www.youtube.com/@Centre4PolicyAnalysis" target="_blank" rel="noopener noreferrer"
+                        className="p-2 bg-gray-100 rounded-full hover:bg-[#FF0000] hover:text-white transition-colors duration-300">
+                        <Youtube className="w-5 h-5" />
+                        <span className="sr-only">YouTube</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </Card>
             </motion.div>
@@ -165,7 +191,7 @@ export default function ContactPage() {
             >
               <Card className="p-8 bg-white/80 backdrop-blur-sm border border-white/30">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-                
+
                 {submitStatus === 'success' && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
