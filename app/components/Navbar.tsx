@@ -61,6 +61,7 @@ const Navbar = () => {
         { label: 'News', href: '/resources/news' },
         { label: 'Blogs', href: '/resources/blog' },
         { label: 'Events and Activities', href: '/resources/events-and-activities' },
+        { label: 'Chat Assistant', href: '/resources/chat' },
         // { label: 'Policy Briefs', href: '/resources/policy-briefs' },
         // { label: 'Annual Reports', href: '/resources/annual-reports' },
         // { label: 'Articles', href: '/resources/articles' },
