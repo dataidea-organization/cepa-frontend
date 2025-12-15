@@ -15,6 +15,8 @@ interface Publication {
   category: string;
   url?: string;
   pdf?: string;
+  image?: string;
+  image_url?: string;
   featured: boolean;
   created_at: string;
   updated_at: string;
@@ -344,7 +346,7 @@ const Publications: React.FC = () => {
                 <Card className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(/publications/default-publications.jpg)` }}
+                    style={{ backgroundImage: `url(${publication.image_url || '/publications/default-publications.jpg'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute top-4 left-4">
