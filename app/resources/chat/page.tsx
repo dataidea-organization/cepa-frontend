@@ -79,7 +79,7 @@ export default function ChatPage() {
       // Replace temp message with real user message
       setMessages((prev) => {
         const filtered = prev.filter((m) => m.id !== tempUserMessage.id);
-        return [
+        const newMessages = [
           ...filtered,
           {
             id: response.user_message_id,
@@ -98,6 +98,8 @@ export default function ChatPage() {
             created_at: response.timestamp,
           },
         ];
+        // Keep only the latest 5 message pairs (10 messages)
+        return newMessages.slice(-10);
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');

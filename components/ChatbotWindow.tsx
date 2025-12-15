@@ -35,6 +35,28 @@ export default function ChatbotWindow() {
     }
   }, [isOpen, isMinimized]);
 
+  // Load session messages when chatbot opens
+  useEffect(() => {
+    const loadSession = async () => {
+      const savedSessionId = localStorage.getItem('chatbot_session_id');
+      if (savedSessionId && isOpen) {
+        try {
+          const session = await chatbotService.getSession(savedSessionId);
+          setSessionId(savedSessionId);
+          // Backend already limits to latest 5 message pairs (10 messages)
+          setMessages(session.messages || []);
+        } catch (err) {
+          console.error('Error loading session:', err);
+          localStorage.removeItem('chatbot_session_id');
+        }
+      }
+    };
+
+    if (isOpen) {
+      loadSession();
+    }
+  }, [isOpen]);
+
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
@@ -58,12 +80,13 @@ export default function ChatbotWindow() {
       // Update session ID if this was a new session
       if (!sessionId) {
         setSessionId(response.session_id);
+        localStorage.setItem('chatbot_session_id', response.session_id);
       }
 
       // Replace temp message with real user message
       setMessages((prev) => {
         const filtered = prev.filter((m) => m.id !== tempUserMessage.id);
-        return [
+        const newMessages = [
           ...filtered,
           {
             id: response.user_message_id,
@@ -82,6 +105,8 @@ export default function ChatbotWindow() {
             created_at: response.timestamp,
           },
         ];
+        // Keep only the latest 5 message pairs (10 messages)
+        return newMessages.slice(-10);
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
