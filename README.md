@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CEPA Frontend
 
-## Getting Started
+## About
 
-First, run the development server:
+The CEPA (Centre for Policy Analysis) frontend is a modern web application that serves as the public-facing website for CEPA, a leading think tank in Uganda. The organization focuses on parliamentary democracy, governance, transparency, accountability, and human rights through evidence-based research and policy advocacy.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Home Page**: Dynamic hero slides, mission statement, and focus area highlights
+- **About**: Organization information, team members, and partners
+- **Focus Areas**: Detailed pages for each policy focus area with activities and resources
+- **Resources**: 
+  - Blog posts with detailed article pages
+  - News articles and updates
+  - Publications and policy documents
+  - Events and activities calendar
+- **Multimedia**: 
+  - Photo gallery
+  - Video library
+  - Podcasts
+- **Get Involved**: 
+  - Announcements
+  - Career opportunities
+  - Fellowship programs and cohorts
+  - Contact form
+  - Donation page
+  - Membership information
+- **Interactive Chatbot**: AI-powered chatbot for user inquiries
+- **Responsive Design**: Mobile-first, fully responsive interface
+- **Modern UI**: Smooth animations and transitions with Framer Motion
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technology Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS 4
+- **UI Components**: Radix UI
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
