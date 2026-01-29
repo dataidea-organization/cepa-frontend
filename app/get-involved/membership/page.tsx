@@ -161,18 +161,20 @@ export default function MembershipPage() {
             >
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
+                  asChild
                   size="lg"
                   className="bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-900 border border-yellow-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
                 >
-                  Join Now
+                  <Link href="/get-involved/contact">Join Now</Link>
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
+                  asChild
                   size="lg"
                   className="bg-green-500/20 hover:bg-green-500/30 text-green-900 border border-green-500/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
                 >
-                  Learn More
+                  <Link href="/get-involved/contact">Learn More</Link>
                 </Button>
               </motion.div>
             </motion.div>
