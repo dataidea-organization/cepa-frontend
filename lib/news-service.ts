@@ -1,3 +1,14 @@
+const NEWS_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
+
+export interface NewsComment {
+  id: string;
+  article: string;
+  author_name: string;
+  author_email: string;
+  body: string;
+  created_at: string;
+}
+
 interface NewsArticle {
   id: string;
   title: string;
@@ -8,6 +19,7 @@ interface NewsArticle {
   slug: string;
   featured: boolean;
   content?: string;
+  views_count?: number;
   created_at: string;
   updated_at: string;
 }
@@ -32,7 +44,7 @@ export class NewsService {
     }
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/?page_size=100', {
+      const response = await fetch(`${NEWS_API_BASE}/news/?page_size=100`, {
         next: { revalidate: 600 } // Revalidate every 10 minutes
       });
       
@@ -74,7 +86,7 @@ export class NewsService {
 
   static async getCategories(): Promise<string[]> {
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/news/categories/', {
+      const response = await fetch(`${NEWS_API_BASE}/news/categories/`, {
         next: { revalidate: 600 }
       });
 
@@ -93,6 +105,37 @@ export class NewsService {
   static clearCache(): void {
     newsCache = null;
     cacheTimestamp = null;
+  }
+
+  static async incrementView(articleId: string): Promise<{ views_count: number }> {
+    const response = await fetch(`${NEWS_API_BASE}/news/${articleId}/increment_view/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) throw new Error("Failed to increment view");
+    return response.json();
+  }
+
+  static async getComments(articleId: string): Promise<NewsComment[]> {
+    const response = await fetch(`${NEWS_API_BASE}/news/${articleId}/comments/`);
+    if (!response.ok) throw new Error("Failed to fetch comments");
+    return response.json();
+  }
+
+  static async postComment(
+    articleId: string,
+    data: { author_name: string; author_email: string; body: string }
+  ): Promise<NewsComment> {
+    const response = await fetch(`${NEWS_API_BASE}/news/${articleId}/comments/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.detail || err.body?.[0] || "Failed to post comment");
+    }
+    return response.json();
   }
 }
 

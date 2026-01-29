@@ -1,10 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Tag } from "lucide-react";
-import { NewsService, NewsArticle } from "@/lib/news-service";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Calendar, Tag, Eye, MessageCircle } from "lucide-react";
+import { NewsService, NewsArticle, NewsComment } from "@/lib/news-service";
 
 interface NewsDetailPageProps {
   params: {
@@ -15,25 +19,42 @@ interface NewsDetailPageProps {
 const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
+  const [comments, setComments] = useState<NewsComment[]>([]);
+  const [viewsCount, setViewsCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const viewIncremented = useRef(false);
+  const [commentForm, setCommentForm] = useState({ author_name: "", author_email: "", body: "" });
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
+  const [commentError, setCommentError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        // Fetch the specific article by slug
         const foundArticle = await NewsService.getNewsBySlug(params.slug);
         if (foundArticle) {
           setArticle(foundArticle);
-          // Fetch related articles
+          setViewsCount(foundArticle.views_count ?? 0);
           const related = await NewsService.getRelatedNews(foundArticle.id, 3);
           setRelatedArticles(related);
+          try {
+            const commentList = await NewsService.getComments(foundArticle.id);
+            setComments(commentList);
+          } catch {
+            setComments([]);
+          }
+          if (!viewIncremented.current) {
+            viewIncremented.current = true;
+            NewsService.incrementView(foundArticle.id)
+              .then((res) => setViewsCount(res.views_count))
+              .catch(() => {});
+          }
         } else {
-          setError('Article not found');
+          setError("Article not found");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching article:', err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching article:", err);
       } finally {
         setLoading(false);
       }
@@ -176,7 +197,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-4 flex-wrap">
               <Badge className={`${getCategoryColor(article.category)} text-sm`}>
                 {article.category}
               </Badge>
@@ -184,6 +205,12 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                 <Calendar className="w-4 h-4 mr-2" />
                 {article.date}
               </div>
+              {viewsCount !== null && (
+                <div className="flex items-center text-white/80 text-sm">
+                  <Eye className="w-4 h-4 mr-2" />
+                  {viewsCount} {viewsCount === 1 ? "view" : "views"}
+                </div>
+              )}
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
               {article.title}
@@ -210,8 +237,8 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
           />
           
           <div className="mt-12 pt-8 border-t border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
                 <Badge className={`${getCategoryColor(article.category)} text-sm`}>
                   <Tag className="w-3 h-3 mr-1" />
                   {article.category}
@@ -219,14 +246,110 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ params }) => {
                 <span className="text-sm text-muted-foreground">
                   Published on {article.date}
                 </span>
+                {viewsCount !== null && (
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Eye className="w-4 h-4" />
+                    {viewsCount} {viewsCount === 1 ? "view" : "views"}
+                  </span>
+                )}
               </div>
               <Button asChild className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium py-2 px-4 rounded-md transition-all duration-200">
-                <Link href="/resources/news">
-                  View All News
-                </Link>
+                <Link href="/resources/news">View All News</Link>
               </Button>
             </div>
           </div>
+
+          <section className="mt-16 pt-8 border-t border-border">
+            <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <MessageCircle className="w-6 h-6" />
+              Comments {comments.length > 0 && `(${comments.length})`}
+            </h2>
+            <div className="space-y-6">
+              {comments.map((c) => (
+                <Card key={c.id} className="bg-muted/30 border border-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-foreground">{c.author_name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {new Date(c.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                    <p className="text-muted-foreground text-sm whitespace-pre-wrap">{c.body}</p>
+                  </CardContent>
+                </Card>
+              ))}
+              {comments.length === 0 && !commentSubmitting && (
+                <p className="text-muted-foreground">No comments yet. Be the first to comment.</p>
+              )}
+            </div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Leave a comment</h3>
+              <form
+                className="space-y-4 max-w-xl"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setCommentError(null);
+                  if (!commentForm.author_name.trim() || !commentForm.author_email.trim() || !commentForm.body.trim()) {
+                    setCommentError("Name, email, and comment are required.");
+                    return;
+                  }
+                  setCommentSubmitting(true);
+                  try {
+                    const newComment = await NewsService.postComment(article.id, commentForm);
+                    setComments((prev) => [newComment, ...prev]);
+                    setCommentForm({ author_name: "", author_email: "", body: "" });
+                  } catch (err) {
+                    setCommentError(err instanceof Error ? err.message : "Failed to post comment.");
+                  } finally {
+                    setCommentSubmitting(false);
+                  }
+                }}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="news-comment-name">Name</Label>
+                    <Input
+                      id="news-comment-name"
+                      value={commentForm.author_name}
+                      onChange={(e) => setCommentForm((f) => ({ ...f, author_name: e.target.value }))}
+                      placeholder="Your name"
+                      className="rounded-md"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="news-comment-email">Email</Label>
+                    <Input
+                      id="news-comment-email"
+                      type="email"
+                      value={commentForm.author_email}
+                      onChange={(e) => setCommentForm((f) => ({ ...f, author_email: e.target.value }))}
+                      placeholder="your@email.com"
+                      className="rounded-md"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="news-comment-body">Comment</Label>
+                  <Textarea
+                    id="news-comment-body"
+                    value={commentForm.body}
+                    onChange={(e) => setCommentForm((f) => ({ ...f, body: e.target.value }))}
+                    placeholder="Write your comment..."
+                    rows={4}
+                    className="rounded-md"
+                  />
+                </div>
+                {commentError && <p className="text-sm text-destructive">{commentError}</p>}
+                <Button
+                  type="submit"
+                  disabled={commentSubmitting}
+                  className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] rounded-md"
+                >
+                  {commentSubmitting ? "Posting..." : "Post comment"}
+                </Button>
+              </form>
+            </div>
+          </section>
         </div>
       </section>
 

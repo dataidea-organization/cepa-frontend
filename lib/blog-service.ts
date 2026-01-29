@@ -1,3 +1,14 @@
+const BLOG_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
+
+export interface BlogComment {
+  id: string;
+  post: string;
+  author_name: string;
+  author_email: string;
+  body: string;
+  created_at: string;
+}
+
 interface BlogPost {
   id: string;
   title: string;
@@ -8,6 +19,7 @@ interface BlogPost {
   slug: string;
   featured: boolean;
   content?: string;
+  views_count?: number;
   created_at: string;
   updated_at: string;
 }
@@ -32,7 +44,7 @@ export class BlogService {
     }
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/blog/?page_size=100', {
+      const response = await fetch(`${BLOG_API_BASE}/blog/?page_size=100`, {
         next: { revalidate: 300 } // Revalidate every 5 minutes
       });
       
@@ -74,7 +86,7 @@ export class BlogService {
 
   static async getCategories(): Promise<string[]> {
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/blog/categories/', {
+      const response = await fetch(`${BLOG_API_BASE}/blog/categories/`, {
         next: { revalidate: 300 }
       });
 
@@ -93,6 +105,37 @@ export class BlogService {
   static clearCache(): void {
     blogPostsCache = null;
     cacheTimestamp = null;
+  }
+
+  static async incrementView(postId: string): Promise<{ views_count: number }> {
+    const response = await fetch(`${BLOG_API_BASE}/blog/${postId}/increment_view/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) throw new Error("Failed to increment view");
+    return response.json();
+  }
+
+  static async getComments(postId: string): Promise<BlogComment[]> {
+    const response = await fetch(`${BLOG_API_BASE}/blog/${postId}/comments/`);
+    if (!response.ok) throw new Error("Failed to fetch comments");
+    return response.json();
+  }
+
+  static async postComment(
+    postId: string,
+    data: { author_name: string; author_email: string; body: string }
+  ): Promise<BlogComment> {
+    const response = await fetch(`${BLOG_API_BASE}/blog/${postId}/comments/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.detail || err.body?.[0] || "Failed to post comment");
+    }
+    return response.json();
   }
 }
 
