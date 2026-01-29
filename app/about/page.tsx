@@ -286,7 +286,7 @@ const About: React.FC = () => {
                       <img
                         src={member.profile_image_url || '/team-images/default-avatar.jpg'}
                         alt={member.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-[50%_20%]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
