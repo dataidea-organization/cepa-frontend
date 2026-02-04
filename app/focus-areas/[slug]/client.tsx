@@ -116,9 +116,6 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
                 {focusArea.title}
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 max-w-4xl">
-                {focusArea.overview_summary}
-              </p>
             </motion.div>
           </div>
         </div>
