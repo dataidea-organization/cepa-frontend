@@ -263,7 +263,7 @@ const Navbar = () => {
 
               {/* Mobile Parliament Watch Link */}
               <a
-                href="https://parliamentwatch.ug"
+                href="https://www.parliamentwatch.ug"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
