@@ -137,7 +137,7 @@ export default function PollsPage() {
           title="Polls"
           subtitle="X (Twitter) polls and platform polls. Have your say on parliamentary and governance issues."
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-8">
           <Link
             href="/citizens-voice"
             className="inline-flex items-center gap-2 text-sm font-medium hover:underline mb-6"

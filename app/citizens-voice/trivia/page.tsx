@@ -96,7 +96,7 @@ function TriviaPageContent() {
           title="Trivia"
           subtitle="Test your knowledge with our trivia quizzes on parliamentary and governance topics."
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-8">
           <Link
             href="/citizens-voice"
             className="inline-flex items-center gap-2 text-sm font-medium hover:underline mb-6"
@@ -585,7 +585,7 @@ function TriviaPageFallback() {
           title="Trivia"
           subtitle="Test your knowledge with our trivia quizzes on parliamentary and governance topics."
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-8">
           <div className="flex items-center justify-center py-12">
             <span
               className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-t-transparent"

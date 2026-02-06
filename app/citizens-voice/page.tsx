@@ -87,7 +87,7 @@ export default function CitizensVoicePage() {
           badge="Your voice matters"
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-8">
           {/* Quick links to Polls & Trivia - alternating bg */}
           <section className="mb-10 bg-white rounded-xl shadow-md border border-gray-200 p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Participate</h2>
