@@ -1,4 +1,4 @@
-const API_BASE = 'https://cepa-backend-production.up.railway.app/api'
+const API_BASE = 'https://cepa-backend-production.up.railway.app/'
 
 // Feedback
 export interface FeedbackSubmission {
