@@ -81,6 +81,7 @@ const Navbar = () => {
       label: 'Get Involved',
       href: '/get-involved',
       dropdown: [
+        { label: 'Citizens Voice', href: '/citizens-voice' },
         { label: 'Careers & Internships', href: '/get-involved/career' },
         { label: 'Announcements', href: '/get-involved/announcements' },
         { label: 'Contact Us', href: '/get-involved/contact' },
