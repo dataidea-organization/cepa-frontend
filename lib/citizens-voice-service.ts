@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/"
+const API_BASE = 'https://cepa-backend-production.up.railway.app/api' || "http://localhost:8000/api"
 
 // Feedback
 export interface FeedbackSubmission {
