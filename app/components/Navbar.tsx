@@ -183,7 +183,7 @@ const Navbar = () => {
 
             {/* Parliament Watch Link */}
             <Button variant="ghost" asChild className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200">
-              <a href="https://parliamentwatch.ug" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.parliamentwatch.ug" target="_blank" rel="noopener noreferrer">
                 Parliament Watch
               </a>
             </Button>
