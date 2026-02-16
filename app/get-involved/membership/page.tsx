@@ -341,18 +341,20 @@ export default function MembershipPage() {
                       ))}
                     </ul>
                     
-                    <Button 
-                      className={`w-full font-medium py-3 px-6 rounded-md transition-colors duration-200 flex items-center justify-center gap-2 ${
-                        tier.isPopular 
-                          ? 'bg-green-600 hover:bg-green-700 text-white' 
-                          : tier.isRecommended
-                          ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
-                          : 'bg-blue-600 hover:bg-blue-700 text-white'
-                      }`}
-                    >
-                      {tier.price === "Free" ? "Join Free" : "Join Now"}
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
+                    <Link href="/get-involved/contact">
+                      <Button
+                        className={`w-full font-medium py-3 px-6 rounded-md transition-colors duration-200 flex items-center justify-center gap-2 ${
+                          tier.isPopular
+                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                            : tier.isRecommended
+                            ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                            : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        }`}
+                      >
+                        {tier.price === "Free" ? "Join Free" : "Join Now"}
+                        <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -520,12 +522,14 @@ export default function MembershipPage() {
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="lg"
-                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
-                >
-                  Start Free Membership
-                </Button>
+                <Link href="/get-involved/contact">
+                  <Button
+                    size="lg"
+                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium px-8 py-3 rounded-md transition-all duration-200"
+                  >
+                    Start Free Membership
+                  </Button>
+                </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link href="/get-involved/contact">
