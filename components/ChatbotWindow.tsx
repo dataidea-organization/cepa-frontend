@@ -84,28 +84,25 @@ export default function ChatbotWindow() {
       }
 
       // Replace temp message with real user message
+      const userMsg: ChatMessage = {
+        id: response.user_message_id,
+        message_type: 'user',
+        content: userMessage,
+        created_at: response.timestamp,
+      };
+      const assistantMsg: ChatMessage = {
+        id: response.assistant_message_id,
+        message_type: 'assistant',
+        content: response.answer,
+        created_at: response.timestamp,
+        ...(response.source_document_name != null && { source_document_name: response.source_document_name }),
+        ...(response.source_document_url != null && { source_document_url: response.source_document_url }),
+        ...(response.source_document_type != null && { source_document_type: response.source_document_type }),
+        ...(response.confidence != null && { confidence: response.confidence }),
+      };
       setMessages((prev) => {
         const filtered = prev.filter((m) => m.id !== tempUserMessage.id);
-        const newMessages = [
-          ...filtered,
-          {
-            id: response.user_message_id,
-            message_type: 'user',
-            content: userMessage,
-            created_at: response.timestamp,
-          },
-          {
-            id: response.assistant_message_id,
-            message_type: 'assistant',
-            content: response.answer,
-            source_document_name: response.source_document_name,
-            source_document_url: response.source_document_url,
-            source_document_type: response.source_document_type,
-            confidence: response.confidence,
-            created_at: response.timestamp,
-          },
-        ];
-        // Keep only the latest 5 message pairs (10 messages)
+        const newMessages: ChatMessage[] = [...filtered, userMsg, assistantMsg];
         return newMessages.slice(-10);
       });
     } catch (err) {
