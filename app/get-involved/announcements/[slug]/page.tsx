@@ -10,17 +10,18 @@ import { AnnouncementService, Announcement } from "@/lib/announcement-service";
 import AnnouncementDetailClient from "./client";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const AnnouncementDetailPage = async ({ params }: PageProps) => {
+  const { slug } = await params;
   let announcement: Announcement | null = null;
   let relatedAnnouncements: Announcement[] = [];
 
   try {
-    announcement = await AnnouncementService.getAnnouncementBySlug(params.slug);
+    announcement = await AnnouncementService.getAnnouncementBySlug(slug);
     
     if (!announcement) {
       notFound();

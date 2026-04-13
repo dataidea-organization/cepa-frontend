@@ -9,17 +9,18 @@ import { CareerService, CareerOpportunity } from "@/lib/career-service";
 import CareerDetailClient from "./client";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const CareerDetailPage = async ({ params }: PageProps) => {
+  const { slug } = await params;
   let opportunity: CareerOpportunity | null = null;
   let relatedOpportunities: CareerOpportunity[] = [];
 
   try {
-    opportunity = await CareerService.getOpportunityBySlug(params.slug);
+    opportunity = await CareerService.getOpportunityBySlug(slug);
     
     if (!opportunity) {
       notFound();

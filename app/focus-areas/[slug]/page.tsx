@@ -1,11 +1,12 @@
 import FocusAreaDetailClient from "./client";
 
 interface FocusAreaDetailProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function FocusAreaDetail({ params }: FocusAreaDetailProps) {
-  return <FocusAreaDetailClient slug={params.slug} />;
+export default async function FocusAreaDetail({ params }: FocusAreaDetailProps) {
+  const { slug } = await params;
+  return <FocusAreaDetailClient slug={slug} />;
 }
