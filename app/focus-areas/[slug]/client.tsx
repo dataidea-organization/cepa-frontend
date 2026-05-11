@@ -24,7 +24,6 @@ declare global {
 }
 
 const CHATBASE_SCRIPT_ID = "wZIMoXz9At8n7v_XjGCSX";
-const CHATBASE_BUBBLES_ID = "chatbase-message-bubbles";
 
 const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) => {
   const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
@@ -62,37 +61,6 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
       }) as ChatbaseFunction;
     }
 
-    const getChatbaseBottomOffset = () =>
-      window.innerWidth < 768 ? "10rem" : "11rem";
-
-    const applyChatbasePosition = () => {
-      const messageBubbles = document.getElementById(CHATBASE_BUBBLES_ID);
-
-      if (!messageBubbles) {
-        return;
-      }
-
-      messageBubbles.style.bottom = getChatbaseBottomOffset();
-      messageBubbles.style.right = "1.5rem";
-    };
-
-    const positionObserver = new MutationObserver(() => {
-      applyChatbasePosition();
-    });
-
-    positionObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    const handleResize = () => {
-      applyChatbasePosition();
-    };
-
-    const positionTimeout = window.setTimeout(() => {
-      applyChatbasePosition();
-    }, 1200);
-
     const injectScript = () => {
       if (document.getElementById(CHATBASE_SCRIPT_ID)) {
         return;
@@ -103,29 +71,18 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
       script.id = CHATBASE_SCRIPT_ID;
       script.setAttribute("domain", "www.chatbase.co");
       document.body.appendChild(script);
-
-      applyChatbasePosition();
     };
 
     if (document.readyState === "complete") {
       injectScript();
-      window.addEventListener("resize", handleResize);
 
-      return () => {
-        window.clearTimeout(positionTimeout);
-        window.removeEventListener("resize", handleResize);
-        positionObserver.disconnect();
-      };
+      return;
     }
 
     window.addEventListener("load", injectScript);
-    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.clearTimeout(positionTimeout);
       window.removeEventListener("load", injectScript);
-      window.removeEventListener("resize", handleResize);
-      positionObserver.disconnect();
     };
   }, [slug]);
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { X, Send, Minimize2, MessageCircle, AlertTriangle } from 'lucide-react';
 import { chatbotService, ChatMessage, ChatResponse } from '@/lib/chatbot-service';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 export default function ChatbotWindow() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -121,9 +122,12 @@ export default function ChatbotWindow() {
     }
   };
 
+  const shouldOffsetChatbot = pathname === '/focus-areas/road-safety-advocacy';
+  const chatbotPositionClass = shouldOffsetChatbot ? 'bottom-28 md:bottom-32' : 'bottom-6';
+
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+      <div className={cn('fixed right-6 z-50 flex flex-col gap-3', chatbotPositionClass)}>
         {/* WhatsApp Button */}
         <a
           href="https://wa.me/256706040460"
@@ -151,7 +155,8 @@ export default function ChatbotWindow() {
   return (
     <div
       className={cn(
-        'fixed bottom-6 right-6 z-50 bg-white rounded-lg shadow-2xl flex flex-col transition-all duration-300',
+        'fixed right-6 z-50 bg-white rounded-lg shadow-2xl flex flex-col transition-all duration-300',
+        chatbotPositionClass,
         isMinimized ? 'w-80 h-14' : 'w-96 h-[600px]'
       )}
     >
