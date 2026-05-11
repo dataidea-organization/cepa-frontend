@@ -13,11 +13,75 @@ interface FocusAreaDetailClientProps {
   slug: string;
 }
 
+type ChatbaseFunction = ((...args: unknown[]) => void) & {
+  q?: unknown[][];
+};
+
+declare global {
+  interface Window {
+    chatbase?: ChatbaseFunction;
+  }
+}
+
 const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) => {
   const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>("overview");
+
+  useEffect(() => {
+    if (slug !== "road-safety-advocacy") {
+      return;
+    }
+
+    const chatbaseWindow = window as Window & {
+      chatbase?: ChatbaseFunction & {
+        getState?: () => string;
+      };
+    };
+
+    if (!chatbaseWindow.chatbase || chatbaseWindow.chatbase("getState") !== "initialized") {
+      const chatbase = ((...args: unknown[]) => {
+        if (!chatbase.q) {
+          chatbase.q = [];
+        }
+        chatbase.q.push(args);
+      }) as ChatbaseFunction;
+
+      chatbaseWindow.chatbase = new Proxy(chatbase, {
+        get(target, prop) {
+          if (prop === "q") {
+            return target.q;
+          }
+
+          return (...args: unknown[]) => target(prop, ...args);
+        },
+      }) as ChatbaseFunction;
+    }
+
+    const injectScript = () => {
+      if (document.getElementById("wZIMoXz9At8n7v_XjGCSX")) {
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://www.chatbase.co/embed.min.js";
+      script.id = "wZIMoXz9At8n7v_XjGCSX";
+      script.setAttribute("domain", "www.chatbase.co");
+      document.body.appendChild(script);
+    };
+
+    if (document.readyState === "complete") {
+      injectScript();
+      return;
+    }
+
+    window.addEventListener("load", injectScript);
+
+    return () => {
+      window.removeEventListener("load", injectScript);
+    };
+  }, [slug]);
 
   useEffect(() => {
     async function loadFocusArea() {
