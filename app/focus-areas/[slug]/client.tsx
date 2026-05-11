@@ -24,6 +24,7 @@ declare global {
 }
 
 const CHATBASE_SCRIPT_ID = "wZIMoXz9At8n7v_XjGCSX";
+const CHATBASE_BUBBLES_ID = "chatbase-message-bubbles";
 
 const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) => {
   const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
@@ -65,28 +66,14 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
       window.innerWidth < 768 ? "10rem" : "11rem";
 
     const applyChatbasePosition = () => {
-      const fixedElements = document.querySelectorAll<HTMLElement>(
-        'iframe[src*="chatbase.co"], div[id*="chatbase"], button[id*="chatbase"]'
-      );
+      const messageBubbles = document.getElementById(CHATBASE_BUBBLES_ID);
 
-      fixedElements.forEach((element) => {
-        const elementStyle = window.getComputedStyle(element);
+      if (!messageBubbles) {
+        return;
+      }
 
-        if (elementStyle.position === "fixed" || element.tagName === "IFRAME") {
-          element.style.bottom = getChatbaseBottomOffset();
-          element.style.right = "1.5rem";
-        }
-
-        const parentElement = element.parentElement;
-        if (!parentElement) {
-          return;
-        }
-
-        if (window.getComputedStyle(parentElement).position === "fixed") {
-          parentElement.style.bottom = getChatbaseBottomOffset();
-          parentElement.style.right = "1.5rem";
-        }
-      });
+      messageBubbles.style.bottom = getChatbaseBottomOffset();
+      messageBubbles.style.right = "1.5rem";
     };
 
     const positionObserver = new MutationObserver(() => {
