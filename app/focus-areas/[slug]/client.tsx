@@ -13,7 +13,7 @@ interface FocusAreaDetailClientProps {
   slug: string;
 }
 
-type ChatbaseFunction = ((...args: unknown[]) => void) & {
+type ChatbaseFunction = ((...args: unknown[]) => unknown) & {
   q?: unknown[][];
 };
 
@@ -22,6 +22,8 @@ declare global {
     chatbase?: ChatbaseFunction;
   }
 }
+
+const CHATBASE_SCRIPT_ID = "wZIMoXz9At8n7v_XjGCSX";
 
 const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) => {
   const [focusArea, setFocusArea] = useState<FocusArea | null>(null);
@@ -59,27 +61,84 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
       }) as ChatbaseFunction;
     }
 
+    const getChatbaseBottomOffset = () =>
+      window.innerWidth < 768 ? "10rem" : "11rem";
+
+    const applyChatbasePosition = () => {
+      const fixedElements = document.querySelectorAll<HTMLElement>(
+        'iframe[src*="chatbase.co"], div[id*="chatbase"], button[id*="chatbase"]'
+      );
+
+      fixedElements.forEach((element) => {
+        const elementStyle = window.getComputedStyle(element);
+
+        if (elementStyle.position === "fixed" || element.tagName === "IFRAME") {
+          element.style.bottom = getChatbaseBottomOffset();
+          element.style.right = "1.5rem";
+        }
+
+        const parentElement = element.parentElement;
+        if (!parentElement) {
+          return;
+        }
+
+        if (window.getComputedStyle(parentElement).position === "fixed") {
+          parentElement.style.bottom = getChatbaseBottomOffset();
+          parentElement.style.right = "1.5rem";
+        }
+      });
+    };
+
+    const positionObserver = new MutationObserver(() => {
+      applyChatbasePosition();
+    });
+
+    positionObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    const handleResize = () => {
+      applyChatbasePosition();
+    };
+
+    const positionTimeout = window.setTimeout(() => {
+      applyChatbasePosition();
+    }, 1200);
+
     const injectScript = () => {
-      if (document.getElementById("wZIMoXz9At8n7v_XjGCSX")) {
+      if (document.getElementById(CHATBASE_SCRIPT_ID)) {
         return;
       }
 
       const script = document.createElement("script");
       script.src = "https://www.chatbase.co/embed.min.js";
-      script.id = "wZIMoXz9At8n7v_XjGCSX";
+      script.id = CHATBASE_SCRIPT_ID;
       script.setAttribute("domain", "www.chatbase.co");
       document.body.appendChild(script);
+
+      applyChatbasePosition();
     };
 
     if (document.readyState === "complete") {
       injectScript();
-      return;
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.clearTimeout(positionTimeout);
+        window.removeEventListener("resize", handleResize);
+        positionObserver.disconnect();
+      };
     }
 
     window.addEventListener("load", injectScript);
+    window.addEventListener("resize", handleResize);
 
     return () => {
+      window.clearTimeout(positionTimeout);
       window.removeEventListener("load", injectScript);
+      window.removeEventListener("resize", handleResize);
+      positionObserver.disconnect();
     };
   }, [slug]);
 
