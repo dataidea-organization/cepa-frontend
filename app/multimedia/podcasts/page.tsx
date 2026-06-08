@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ContentSectionHeader } from "@/components/ContentSectionHeader";
 
 interface Podcast {
   id: string;
@@ -156,38 +158,20 @@ const Podcasts: React.FC = () => {
         </div>
       </div>
 
-      {/* Category Filters */}
       <section className="py-20 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          {categories.map((category, index) => (
-            <motion.div
-              key={category}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Badge
-                variant={category === 'All' ? 'default' : 'secondary'}
-                className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                    : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                }`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </Badge>
-            </motion.div>
-          ))}
-        </motion.div>
+        <ContentSectionHeader
+          title={selectedCategory === "All" ? "All Podcasts" : `${selectedCategory} Podcasts`}
+          description="Listen to conversations with thought leaders, policymakers, and experts shaping Uganda's future."
+          filter={
+            <FilterDropdown
+              label="Category"
+              value={selectedCategory}
+              options={categories}
+              onChange={setSelectedCategory}
+            />
+          }
+        />
 
         {/* Podcasts Grid */}
         <motion.div 

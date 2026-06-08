@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { BlogService } from "@/lib/blog-service";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { LoadMoreButton } from "@/components/LoadMoreButton";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ContentSectionHeader } from "@/components/ContentSectionHeader";
 
 const Blog: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -136,52 +138,21 @@ const Blog: React.FC = () => {
         </div>
       </section>
 
-      {/* Category Filters */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            {categories.map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Badge
-                  variant={category === 'All' ? 'default' : 'secondary'}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Badge>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* All Blog Posts */}
       <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {selectedCategory === "All" ? "All Blog Posts" : `${selectedCategory} Blog Posts`}
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Complete collection of policy analysis, research insights, and expert commentary from CEPA.
-            </p>
-          </div>
+          <ContentSectionHeader
+            title={selectedCategory === "All" ? "All Blog Posts" : `${selectedCategory} Blog Posts`}
+            description="Complete collection of policy analysis, research insights, and expert commentary from CEPA."
+            filter={
+              <FilterDropdown
+                label="Category"
+                value={selectedCategory}
+                options={categories}
+                onChange={setSelectedCategory}
+              />
+            }
+          />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {postsToDisplay.map((post, index) => {

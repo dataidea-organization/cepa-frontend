@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { EventsService } from "@/lib/events-service";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { LoadMoreButton } from "@/components/LoadMoreButton";
+import { FilterDropdown } from "@/components/FilterDropdown";
 
 const Events: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -184,38 +185,14 @@ const Events: React.FC = () => {
         </div>
       </section>
 
-      {/* Category Filters */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            {categories.map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Badge
-                  variant={category === 'All' ? 'default' : 'secondary'}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Badge>
-              </motion.div>
-            ))}
-          </motion.div>
+      <section className="py-6 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center sm:justify-end">
+          <FilterDropdown
+            label="Event category"
+            value={selectedCategory}
+            options={categories}
+            onChange={setSelectedCategory}
+          />
         </div>
       </section>
 

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ContentSectionHeader } from "@/components/ContentSectionHeader";
 
 interface Video {
   id: string;
@@ -159,51 +161,18 @@ const Videos: React.FC = () => {
       {/* Videos Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Our Video Collection
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Explore our video content covering policy analysis, governance discussions, and insights into Uganda's development landscape.
-            </p>
-          </motion.div>
-
-          {/* Category Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-4 mb-12"
-          >
-            {categories.map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Badge
-                  variant={category === 'All' ? 'default' : 'secondary'}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Badge>
-              </motion.div>
-            ))}
-          </motion.div>
+          <ContentSectionHeader
+            title={selectedCategory === "All" ? "Our Video Collection" : `${selectedCategory} Videos`}
+            description="Explore our video content covering policy analysis, governance discussions, and insights into Uganda's development landscape."
+            filter={
+              <FilterDropdown
+                label="Category"
+                value={selectedCategory}
+                options={categories}
+                onChange={setSelectedCategory}
+              />
+            }
+          />
 
           {/* Videos Grid */}
           <motion.div 

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ContentSectionHeader } from "@/components/ContentSectionHeader";
 
 interface GalleryImage {
   id: string;
@@ -164,71 +166,30 @@ const Gallery: React.FC = () => {
       {/* Gallery Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Our Photo Gallery
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              A visual journey through CEPA's activities, events, and impact in Uganda's governance and policy landscape.
-            </p>
-          </motion.div>
-
-          {/* Gallery Group Filters */}
-          {galleryGroups.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="flex flex-wrap justify-center gap-4 mb-12"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <Badge
-                  variant="default"
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                    selectedGroup === "All"
-                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                  }`}
-                  onClick={() => setSelectedGroup("All")}
-                >
-                  All
-                </Badge>
-              </motion.div>
-              {galleryGroups.map((group, index) => (
-                <motion.div
-                  key={group.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Badge
-                    variant="secondary"
-                    className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                      selectedGroup === group.id
-                        ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                        : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                    }`}
-                    onClick={() => setSelectedGroup(group.id)}
-                  >
-                    {group.title}
-                  </Badge>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
+          <ContentSectionHeader
+            title={
+              selectedGroup === "All"
+                ? "Our Photo Gallery"
+                : galleryGroups.find((group) => group.id === selectedGroup)?.title || "Photo Gallery"
+            }
+            description="A visual journey through CEPA's activities, events, and impact in Uganda's governance and policy landscape."
+            filter={
+              galleryGroups.length > 0 ? (
+                <FilterDropdown
+                  label="Album"
+                  value={selectedGroup}
+                  options={[
+                    { value: "All", label: "All Albums" },
+                    ...galleryGroups.map((group) => ({
+                      value: group.id,
+                      label: group.title,
+                    })),
+                  ]}
+                  onChange={setSelectedGroup}
+                />
+              ) : undefined
+            }
+          />
 
           {displayGalleryGroups.length === 0 && selectedGroup !== "All" ? (
             <div className="text-center py-16">

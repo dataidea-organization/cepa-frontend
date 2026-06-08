@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { PublicationService } from "@/lib/publication-service";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { LoadMoreButton } from "@/components/LoadMoreButton";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { ContentSectionHeader } from "@/components/ContentSectionHeader";
 
 const Publications: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
@@ -127,58 +129,21 @@ const Publications: React.FC = () => {
         </div>
       </section>
 
-      {/* Category Filters */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            {categories.map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Badge
-                  variant={category === 'All' ? 'default' : 'secondary'}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90'
-                      : 'bg-[#800020]/20 text-[#800020] border border-[#800020]/30 hover:bg-[#800020]/30'
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Badge>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* All Publications */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {selectedCategory === "All" ? "All Publications" : `${selectedCategory} Publications`}
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Complete collection of our research publications, policy briefs, and analytical reports.
-            </p>
-          </motion.div>
+          <ContentSectionHeader
+            title={selectedCategory === "All" ? "All Publications" : `${selectedCategory} Publications`}
+            description="Complete collection of our research publications, policy briefs, and analytical reports."
+            filter={
+              <FilterDropdown
+                label="Category"
+                value={selectedCategory}
+                options={categories}
+                onChange={setSelectedCategory}
+              />
+            }
+          />
           
           <motion.div
             initial={{ opacity: 0, y: 50 }}
