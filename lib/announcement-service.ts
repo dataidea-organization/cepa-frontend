@@ -23,33 +23,19 @@ interface AnnouncementApiResponse {
   results: Announcement[];
 }
 
-// Cache for announcements to avoid redundant API calls
-let announcementCache: Announcement[] | null = null;
-let cacheTimestamp: number | null = null;
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
-
 export class AnnouncementService {
   private static async fetchAnnouncements(): Promise<Announcement[]> {
-    // Check if we have valid cached data
-    if (announcementCache && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_DURATION) {
-      return announcementCache;
-    }
-
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/getinvolved/announcements/?page_size=100', {
-        next: { revalidate: 600 } // Revalidate every 10 minutes
-      });
-      
+      const response = await fetch(
+        'https://cepa-backend-production.up.railway.app/getinvolved/announcements/?page_size=100',
+        { cache: 'no-store' }
+      );
+
       if (!response.ok) {
         throw new Error('Failed to fetch announcements');
       }
-      
+
       const data: AnnouncementApiResponse = await response.json();
-      
-      // Update cache
-      announcementCache = data.results;
-      cacheTimestamp = Date.now();
-      
       return data.results;
     } catch (error) {
       console.error('Error fetching announcements:', error);
@@ -67,11 +53,8 @@ export class AnnouncementService {
   }
 
   static clearCache(): void {
-    announcementCache = null;
-    cacheTimestamp = null;
+    // No-op: caching disabled temporarily for live updates
   }
 }
 
 export type { Announcement, AnnouncementApiResponse };
-
-

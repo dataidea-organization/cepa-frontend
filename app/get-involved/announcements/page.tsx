@@ -4,6 +4,8 @@ import { AnnouncementService } from "@/lib/announcement-service";
 import { formatDisplayDate, isExpiringSoon } from "@/lib/date-utils";
 import AnnouncementsClient, { AnnouncementDisplay } from "./client";
 
+export const dynamic = 'force-dynamic';
+
 const AnnouncementsPage = async () => {
   let hasError = false;
   const today = new Date().toISOString().split("T")[0];

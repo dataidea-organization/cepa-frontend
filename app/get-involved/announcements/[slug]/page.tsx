@@ -16,6 +16,8 @@ interface PageProps {
   }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 const AnnouncementDetailPage = async ({ params }: PageProps) => {
   const { slug } = await params;
   let announcement: Announcement | null = null;
