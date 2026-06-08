@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, ArrowLeft, ExternalLink, Bell, AlertCircle } from "lucide-react";
 import { AnnouncementService, Announcement } from "@/lib/announcement-service";
+import { formatDisplayDate } from "@/lib/date-utils";
 import AnnouncementDetailClient from "./client";
 
 interface PageProps {
@@ -18,7 +19,7 @@ interface PageProps {
 const AnnouncementDetailPage = async ({ params }: PageProps) => {
   const { slug } = await params;
   let announcement: Announcement | null = null;
-  let relatedAnnouncements: Announcement[] = [];
+  let relatedAnnouncements: Array<Announcement & { formattedPublishedDate: string }> = [];
 
   try {
     announcement = await AnnouncementService.getAnnouncementBySlug(slug);
@@ -31,16 +32,15 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
     const allAnnouncements = await AnnouncementService.getActiveAnnouncements();
     relatedAnnouncements = allAnnouncements
       .filter(ann => ann.id !== announcement?.id && ann.type === announcement?.type)
-      .slice(0, 3);
+      .slice(0, 3)
+      .map((ann) => ({
+        ...ann,
+        formattedPublishedDate: formatDisplayDate(ann.published_date),
+      }));
   } catch (error) {
     console.error("Failed to fetch announcement:", error);
     notFound();
   }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -117,7 +117,7 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                   
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4 mr-2" />
-                    Published: {formatDate(announcement.published_date)}
+                    Published: {formatDisplayDate(announcement.published_date)}
                   </div>
                 </CardHeader>
                 
@@ -158,7 +158,7 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                         <div>
                           <h4 className="font-semibold text-orange-900 mb-1">Time-Sensitive Information</h4>
                           <p className="text-orange-800">
-                            This announcement is valid until <strong>{formatDate(announcement.expiry_date)}</strong>
+                            This announcement is valid until <strong>{formatDisplayDate(announcement.expiry_date)}</strong>
                           </p>
                         </div>
                       </div>
@@ -168,17 +168,16 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                   {/* External Link */}
                   {announcement.external_link && (
                     <div className="pt-6 border-t">
-                      <a 
-                        href={announcement.external_link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="inline-block"
-                      >
-                        <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center gap-2">
+                      <Button asChild className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium">
+                        <a
+                          href={announcement.external_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           Learn More
                           <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </a>
+                        </a>
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -202,12 +201,12 @@ const AnnouncementDetailPage = async ({ params }: PageProps) => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-muted-foreground mb-1">Published</p>
-                    <p className="text-lg">{formatDate(announcement.published_date)}</p>
+                    <p className="text-lg">{formatDisplayDate(announcement.published_date)}</p>
                   </div>
                   {announcement.expiry_date && (
                     <div>
                       <p className="text-sm font-semibold text-muted-foreground mb-1">Valid Until</p>
-                      <p className="text-lg text-orange-600 font-semibold">{formatDate(announcement.expiry_date)}</p>
+                      <p className="text-lg text-orange-600 font-semibold">{formatDisplayDate(announcement.expiry_date)}</p>
                     </div>
                   )}
                   <div className="pt-4 border-t">

@@ -2,15 +2,22 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Bell, Calendar, AlertCircle, ExternalLink, ArrowRight } from "lucide-react";
 import { Announcement } from "@/lib/announcement-service";
 
+export interface AnnouncementDisplay extends Announcement {
+  formattedPublishedDate: string;
+  formattedExpiryDate?: string;
+  expiringSoon: boolean;
+}
+
 interface AnnouncementsClientProps {
-  announcements: Announcement[];
+  announcements: AnnouncementDisplay[];
   hasError: boolean;
 }
 
@@ -52,19 +59,6 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
-  const isExpiringSoon = (expiryDate?: string) => {
-    if (!expiryDate) return false;
-    const expiry = new Date(expiryDate);
-    const today = new Date();
-    const daysUntilExpiry = Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    return daysUntilExpiry <= 7 && daysUntilExpiry >= 0;
-  };
-
   return (
     <>
 
@@ -89,7 +83,7 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
           </motion.div>
 
           {announcements.length > 0 ? (
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {announcements.map((announcement, index) => (
                 <motion.div
                   key={announcement.id}
@@ -97,68 +91,79 @@ const AnnouncementsClient: React.FC<AnnouncementsClientProps> = ({ announcements
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   viewport={{ once: true }}
-                  whileHover={{ scale: 1.01 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="h-full"
                 >
-                  <Card className="bg-white/20 border border-white/30 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
-                    <CardHeader>
-                      <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge className={`${getTypeColor(announcement.type)} backdrop-blur-sm border flex items-center gap-1`}>
-                            <Bell className="w-3 h-3" />
-                            {announcement.type}
-                          </Badge>
-                          <Badge className={`${getPriorityColor(announcement.priority)} backdrop-blur-sm border`}>
-                            {announcement.priority.toUpperCase()}
-                          </Badge>
-                          {announcement.featured && (
-                            <Badge className="bg-yellow-500/20 text-yellow-900 border-yellow-500/30 backdrop-blur-sm border">
-                              Featured
-                            </Badge>
-                          )}
-                          {isExpiringSoon(announcement.expiry_date) && (
-                            <Badge className="bg-orange-500/20 text-orange-900 border-orange-500/30 backdrop-blur-sm border flex items-center gap-1">
-                              <AlertCircle className="w-3 h-3" />
-                              Expiring Soon
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          {formatDate(announcement.published_date)}
-                        </div>
-                      </div>
-                      
-                      <CardTitle className="text-2xl">{announcement.title}</CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent className="space-y-4">
-                      <p className="text-muted-foreground">
-                        {announcement.summary}
-                      </p>
-                      
-                      {announcement.expiry_date && (
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <AlertCircle className="w-4 h-4 mr-2" />
-                          Valid until: {formatDate(announcement.expiry_date)}
+                  <Card className="h-full p-0 gap-0 bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col">
+                    {/* Image Section */}
+                    <div className="relative w-full h-44 flex-shrink-0 bg-gradient-to-br from-[#800020]/10 to-[#800020]/5">
+                      {announcement.image ? (
+                        <Image
+                          src={announcement.image}
+                          alt={announcement.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Bell className="w-12 h-12 text-[#800020]/30" />
                         </div>
                       )}
-                      
-                      <div className="flex flex-wrap gap-3">
-                        <Link href={`/get-involved/announcements/${announcement.slug}`}>
-                          <Button className="bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center gap-2">
-                            Read More
-                            <ArrowRight className="w-4 h-4" />
-                          </Button>
-                        </Link>
-                        
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                        <Badge className={`${getTypeColor(announcement.type)} backdrop-blur-sm border flex items-center gap-1 text-xs`}>
+                          <Bell className="w-3 h-3" />
+                          {announcement.type}
+                        </Badge>
+                        {announcement.featured && (
+                          <Badge className="bg-yellow-500/90 text-yellow-900 border-yellow-600 backdrop-blur-sm border text-xs">
+                            Featured
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content Section */}
+                    <CardContent className="flex-1 p-5 flex flex-col">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <Badge className={`${getPriorityColor(announcement.priority)} backdrop-blur-sm border text-xs`}>
+                          {announcement.priority.toUpperCase()}
+                        </Badge>
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <Calendar className="w-3.5 h-3.5 mr-1" />
+                          {announcement.formattedPublishedDate}
+                        </div>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                        {announcement.title}
+                      </h3>
+
+                      <p className="text-muted-foreground text-sm line-clamp-3 mb-3 flex-1">
+                        {announcement.summary}
+                      </p>
+
+                      {announcement.expiringSoon && announcement.formattedExpiryDate && (
+                        <div className="flex items-center text-xs text-orange-600 mb-3">
+                          <AlertCircle className="w-3.5 h-3.5 mr-1" />
+                          Expires: {announcement.formattedExpiryDate}
+                        </div>
+                      )}
+
+                      <div className="flex flex-col gap-2 mt-auto pt-2">
+                        <Button asChild className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white font-medium">
+                          <Link href={`/get-involved/announcements/${announcement.slug}`}>
+                            <ArrowRight className="w-4 h-4 mr-2" />
+                            Read Full Announcement
+                          </Link>
+                        </Button>
+
                         {announcement.external_link && (
-                          <a href={announcement.external_link} target="_blank" rel="noopener noreferrer">
-                            <Button variant="outline" className="border-[#800020] text-white hover:bg-[#800020]/10 backdrop-blur-sm flex items-center gap-2">
-                              External Link
-                              <ExternalLink className="w-4 h-4" />
-                            </Button>
-                          </a>
+                          <Button asChild variant="outline" className="w-full border-[#800020] text-[#800020] hover:bg-[#800020]/10 font-medium">
+                            <a href={announcement.external_link} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              Visit External Link
+                            </a>
+                          </Button>
                         )}
                       </div>
                     </CardContent>

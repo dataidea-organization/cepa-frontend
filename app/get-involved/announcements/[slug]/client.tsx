@@ -9,8 +9,12 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Bell } from "lucide-react";
 import { Announcement } from "@/lib/announcement-service";
 
+interface RelatedAnnouncement extends Announcement {
+  formattedPublishedDate: string;
+}
+
 interface AnnouncementDetailClientProps {
-  relatedAnnouncements: Announcement[];
+  relatedAnnouncements: RelatedAnnouncement[];
 }
 
 const AnnouncementDetailClient: React.FC<AnnouncementDetailClientProps> = ({ relatedAnnouncements }) => {
@@ -33,11 +37,6 @@ const AnnouncementDetailClient: React.FC<AnnouncementDetailClientProps> = ({ rel
       default:
         return 'bg-gray-500/20 text-gray-900 border-gray-500/30';
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   return (
@@ -80,18 +79,18 @@ const AnnouncementDetailClient: React.FC<AnnouncementDetailClientProps> = ({ rel
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Calendar className="w-4 h-4 mr-2" />
-                      {formatDate(announcement.published_date)}
+                      {announcement.formattedPublishedDate}
                     </div>
                   </div>
                   <p className="text-muted-foreground mb-6 line-clamp-3 flex-1">
                     {announcement.summary}
                   </p>
-                  <Link href={`/get-involved/announcements/${announcement.slug}`} className="w-full">
-                    <Button className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium flex items-center justify-center gap-2">
+                  <Button asChild className="w-full bg-[#800020] hover:bg-[#800020]/90 text-white border border-[#800020] backdrop-blur-sm font-medium">
+                    <Link href={`/get-involved/announcements/${announcement.slug}`}>
                       Read More
                       <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>

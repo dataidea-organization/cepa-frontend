@@ -1,14 +1,24 @@
 import React from "react";
 import Image from "next/image";
-import { AnnouncementService, Announcement } from "@/lib/announcement-service";
-import AnnouncementsClient from "./client";
+import { AnnouncementService } from "@/lib/announcement-service";
+import { formatDisplayDate, isExpiringSoon } from "@/lib/date-utils";
+import AnnouncementsClient, { AnnouncementDisplay } from "./client";
 
 const AnnouncementsPage = async () => {
-  let announcements: Announcement[] = [];
   let hasError = false;
+  const today = new Date().toISOString().split("T")[0];
+  let announcements: AnnouncementDisplay[] = [];
 
   try {
-    announcements = await AnnouncementService.getAllAnnouncements();
+    const data = await AnnouncementService.getAllAnnouncements();
+    announcements = data.map((announcement) => ({
+      ...announcement,
+      formattedPublishedDate: formatDisplayDate(announcement.published_date),
+      formattedExpiryDate: announcement.expiry_date
+        ? formatDisplayDate(announcement.expiry_date)
+        : undefined,
+      expiringSoon: isExpiringSoon(announcement.expiry_date, today),
+    }));
   } catch (error) {
     console.error("Failed to fetch announcements:", error);
     hasError = true;
