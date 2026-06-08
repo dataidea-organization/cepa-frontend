@@ -50,7 +50,8 @@ const Podcasts: React.FC = () => {
         const categoriesData = await categoriesResponse.json();
 
         setPodcasts(podcastsData.results || podcastsData);
-        setCategories(['All', ...categoriesData.filter((cat: string) => cat)]);
+        const uniqueCategories = [...new Set(categoriesData.filter((cat: string) => cat))];
+        setCategories(['All', ...uniqueCategories]);
         setError(null);
       } catch (err) {
         console.error('Error fetching podcasts:', err);

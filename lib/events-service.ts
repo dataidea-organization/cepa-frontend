@@ -1,3 +1,9 @@
+import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
+
+const EVENTS_API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/resources$/, "") ||
+  "https://cepa-backend-production.up.railway.app";
+
 interface Event {
   id: string;
   title: string;
@@ -17,12 +23,7 @@ interface Event {
   updated_at: string;
 }
 
-interface EventsApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Event[];
-}
+type EventsApiResponse = PaginatedResponse<Event>;
 
 // Cache for events to avoid redundant API calls
 let eventsCache: Event[] | null = null;
@@ -37,7 +38,7 @@ export class EventsService {
     }
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/events/?page_size=100', {
+      const response = await fetch(`${EVENTS_API_BASE}/resources/events/?page_size=100`, {
         next: { revalidate: 600 } // Revalidate every 10 minutes
       });
       
@@ -60,6 +61,23 @@ export class EventsService {
 
   static async getAllEvents(): Promise<Event[]> {
     return this.fetchEvents();
+  }
+
+  static async getEventsPage(
+    page: number = 1,
+    pageSize: number = PAGE_SIZE,
+    filters: { category?: string; status?: string } = {}
+  ): Promise<EventsApiResponse> {
+    const query = buildPageQuery(page, pageSize, filters);
+    const response = await fetch(`${EVENTS_API_BASE}/resources/events/?${query}`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch events");
+    }
+
+    return response.json();
   }
 
   static async getEventBySlug(slug: string): Promise<Event | null> {
@@ -89,7 +107,7 @@ export class EventsService {
 
   static async getCategories(): Promise<string[]> {
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/resources/events/categories/', {
+      const response = await fetch(`${EVENTS_API_BASE}/resources/events/categories/`, {
         next: { revalidate: 600 }
       });
 

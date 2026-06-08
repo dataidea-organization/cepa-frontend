@@ -1,3 +1,5 @@
+import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
+
 const NEWS_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
 
 export interface NewsComment {
@@ -24,12 +26,7 @@ interface NewsArticle {
   updated_at: string;
 }
 
-interface NewsApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: NewsArticle[];
-}
+type NewsApiResponse = PaginatedResponse<NewsArticle>;
 
 // Cache for news articles to avoid redundant API calls
 let newsCache: NewsArticle[] | null = null;
@@ -67,6 +64,23 @@ export class NewsService {
 
   static async getAllNews(): Promise<NewsArticle[]> {
     return this.fetchNews();
+  }
+
+  static async getNewsPage(
+    page: number = 1,
+    pageSize: number = PAGE_SIZE,
+    category?: string
+  ): Promise<NewsApiResponse> {
+    const query = buildPageQuery(page, pageSize, { category });
+    const response = await fetch(`${NEWS_API_BASE}/news/?${query}`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch news articles");
+    }
+
+    return response.json();
   }
 
   static async getNewsBySlug(slug: string): Promise<NewsArticle | null> {

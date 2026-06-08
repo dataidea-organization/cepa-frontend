@@ -1,3 +1,5 @@
+import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
+
 const BLOG_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
 
 export interface BlogComment {
@@ -24,12 +26,7 @@ interface BlogPost {
   updated_at: string;
 }
 
-interface BlogApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: BlogPost[];
-}
+type BlogApiResponse = PaginatedResponse<BlogPost>;
 
 // Cache for blog posts to avoid redundant API calls
 let blogPostsCache: BlogPost[] | null = null;
@@ -67,6 +64,23 @@ export class BlogService {
 
   static async getAllBlogPosts(): Promise<BlogPost[]> {
     return this.fetchBlogPosts();
+  }
+
+  static async getBlogPostsPage(
+    page: number = 1,
+    pageSize: number = PAGE_SIZE,
+    category?: string
+  ): Promise<BlogApiResponse> {
+    const query = buildPageQuery(page, pageSize, { category });
+    const response = await fetch(`${BLOG_API_BASE}/blog/?${query}`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch blog posts");
+    }
+
+    return response.json();
   }
 
   static async getBlogPostBySlug(slug: string): Promise<BlogPost | null> {

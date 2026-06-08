@@ -1,52 +1,50 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { NewsService, NewsArticle } from "@/lib/news-service";
+import { NewsService } from "@/lib/news-service";
+import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { LoadMoreButton } from "@/components/LoadMoreButton";
 
 const News: React.FC = () => {
-  const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const fetchPage = useCallback(
+    (page: number) =>
+      NewsService.getNewsPage(
+        page,
+        undefined,
+        selectedCategory === "All" ? undefined : selectedCategory
+      ),
+    [selectedCategory]
+  );
+
+  const {
+    items: articlesToDisplay,
+    hasMore,
+    loadMore,
+    visibleCount,
+    totalCount,
+    loading,
+    loadingMore,
+    error,
+  } = usePaginatedList({
+    fetchPage,
+    resetKey: selectedCategory,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch news articles and categories in parallel
-        const [news, cats] = await Promise.all([
-          NewsService.getAllNews(),
-          NewsService.getCategories()
-        ]);
-
-        setNewsArticles(news);
+    NewsService.getCategories()
+      .then((cats) => {
         const uniqueCategories = [...new Set(cats.filter((cat: string) => cat))];
-        setCategories(['All', ...uniqueCategories]);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching news data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+        setCategories(["All", ...uniqueCategories]);
+      })
+      .catch((err) => console.error("Error fetching news categories:", err));
   }, []);
-
-  // Filter news articles by selected category
-  const filteredArticles = selectedCategory === "All"
-    ? newsArticles
-    : newsArticles.filter(article => article.category === selectedCategory);
-
-  // Only use fetched news articles from API
-  const articlesToDisplay = filteredArticles;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -220,6 +218,14 @@ const News: React.FC = () => {
               );
             })}
           </div>
+
+          <LoadMoreButton
+            onClick={loadMore}
+            hasMore={hasMore}
+            visibleCount={visibleCount}
+            totalCount={totalCount}
+            loading={loadingMore}
+          />
         </div>
       </section>
 

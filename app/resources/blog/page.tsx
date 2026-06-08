@@ -1,52 +1,50 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { BlogService, BlogPost } from "@/lib/blog-service";
+import { BlogService } from "@/lib/blog-service";
+import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { LoadMoreButton } from "@/components/LoadMoreButton";
 
 const Blog: React.FC = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const fetchPage = useCallback(
+    (page: number) =>
+      BlogService.getBlogPostsPage(
+        page,
+        undefined,
+        selectedCategory === "All" ? undefined : selectedCategory
+      ),
+    [selectedCategory]
+  );
+
+  const {
+    items: postsToDisplay,
+    hasMore,
+    loadMore,
+    visibleCount,
+    totalCount,
+    loading,
+    loadingMore,
+    error,
+  } = usePaginatedList({
+    fetchPage,
+    resetKey: selectedCategory,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch blog posts and categories in parallel
-        const [posts, cats] = await Promise.all([
-          BlogService.getAllBlogPosts(),
-          BlogService.getCategories()
-        ]);
-
-        setBlogPosts(posts);
+    BlogService.getCategories()
+      .then((cats) => {
         const uniqueCategories = [...new Set(cats.filter((cat: string) => cat))];
-        setCategories(['All', ...uniqueCategories]);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching blog data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+        setCategories(["All", ...uniqueCategories]);
+      })
+      .catch((err) => console.error("Error fetching blog categories:", err));
   }, []);
-
-  // Filter blog posts by selected category
-  const filteredPosts = selectedCategory === "All"
-    ? blogPosts
-    : blogPosts.filter(post => post.category === selectedCategory);
-
-  // Only use fetched blog posts from API
-  const postsToDisplay = filteredPosts;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -216,6 +214,14 @@ const Blog: React.FC = () => {
               );
             })}
           </div>
+
+          <LoadMoreButton
+            onClick={loadMore}
+            hasMore={hasMore}
+            visibleCount={visibleCount}
+            totalCount={totalCount}
+            loading={loadingMore}
+          />
         </div>
       </section>
 

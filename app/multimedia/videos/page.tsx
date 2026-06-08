@@ -51,7 +51,8 @@ const Videos: React.FC = () => {
         const categoriesData = await categoriesResponse.json();
 
         setVideos(videosData.results || videosData);
-        setCategories(['All', ...categoriesData.filter((cat: string) => cat)]);
+        const uniqueCategories = [...new Set(categoriesData.filter((cat: string) => cat))];
+        setCategories(['All', ...uniqueCategories]);
         setError(null);
       } catch (err) {
         console.error('Error fetching videos:', err);

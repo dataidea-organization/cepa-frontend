@@ -1,53 +1,78 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Clock, Users } from "lucide-react";
+import { Calendar, MapPin, Clock } from "lucide-react";
 import { motion } from "framer-motion";
-import { EventsService, Event } from "@/lib/events-service";
+import { EventsService } from "@/lib/events-service";
+import { usePaginatedList } from "@/hooks/use-paginated-list";
+import { LoadMoreButton } from "@/components/LoadMoreButton";
 
 const Events: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const categoryFilter = selectedCategory === "All" ? undefined : selectedCategory;
+
+  const fetchUpcomingPage = useCallback(
+    (page: number) =>
+      EventsService.getEventsPage(page, undefined, {
+        status: "upcoming",
+        category: categoryFilter,
+      }),
+    [categoryFilter]
+  );
+
+  const fetchPastPage = useCallback(
+    (page: number) =>
+      EventsService.getEventsPage(page, undefined, {
+        status: "completed",
+        category: categoryFilter,
+      }),
+    [categoryFilter]
+  );
+
+  const {
+    items: visibleUpcomingEvents,
+    hasMore: hasMoreUpcoming,
+    loadMore: loadMoreUpcoming,
+    visibleCount: upcomingVisibleCount,
+    totalCount: upcomingTotalCount,
+    loading: loadingUpcoming,
+    loadingMore: loadingMoreUpcoming,
+    error: upcomingError,
+  } = usePaginatedList({
+    fetchPage: fetchUpcomingPage,
+    resetKey: `${selectedCategory}-upcoming`,
+  });
+
+  const {
+    items: visiblePastEvents,
+    hasMore: hasMorePast,
+    loadMore: loadMorePast,
+    visibleCount: pastVisibleCount,
+    totalCount: pastTotalCount,
+    loading: loadingPast,
+    loadingMore: loadingMorePast,
+    error: pastError,
+  } = usePaginatedList({
+    fetchPage: fetchPastPage,
+    resetKey: `${selectedCategory}-past`,
+  });
+
+  const loading = loadingUpcoming || loadingPast;
+  const error = upcomingError || pastError;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch events and categories in parallel
-        const [eventsData, cats] = await Promise.all([
-          EventsService.getAllEvents(),
-          EventsService.getCategories()
-        ]);
-
-        setEvents(eventsData);
+    EventsService.getCategories()
+      .then((cats) => {
         const uniqueCategories = [...new Set(cats.filter((cat: string) => cat))];
-        setCategories(['All', ...uniqueCategories]);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching events data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+        setCategories(["All", ...uniqueCategories]);
+      })
+      .catch((err) => console.error("Error fetching event categories:", err));
   }, []);
-
-  // Filter events by selected category
-  const filteredEvents = selectedCategory === "All"
-    ? events
-    : events.filter(event => event.category === selectedCategory);
-
-  // Only use fetched events from API
-  const eventsToDisplay = filteredEvents;
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -115,7 +140,7 @@ const Events: React.FC = () => {
     );
   }
 
-  if (!loading && eventsToDisplay.length === 0) {
+  if (!loading && visibleUpcomingEvents.length === 0 && visiblePastEvents.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -126,9 +151,6 @@ const Events: React.FC = () => {
       </div>
     );
   }
-
-  const upcomingEvents = eventsToDisplay.filter(event => event.status === "upcoming");
-  const pastEvents = eventsToDisplay.filter(event => event.status === "completed");
 
   return (
     <div className="min-h-screen">
@@ -198,7 +220,7 @@ const Events: React.FC = () => {
       </section>
 
       {/* Upcoming Events */}
-      {upcomingEvents.length > 0 && (
+      {visibleUpcomingEvents.length > 0 && (
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div 
@@ -217,7 +239,7 @@ const Events: React.FC = () => {
             </motion.div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {upcomingEvents.map((event, index) => {
+              {visibleUpcomingEvents.map((event, index) => {
                 return (
                   <Card key={event.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                     <div 
@@ -258,6 +280,14 @@ const Events: React.FC = () => {
                 );
               })}
             </div>
+
+            <LoadMoreButton
+              onClick={loadMoreUpcoming}
+              hasMore={hasMoreUpcoming}
+              visibleCount={upcomingVisibleCount}
+              totalCount={upcomingTotalCount}
+              loading={loadingMoreUpcoming}
+            />
           </div>
         </section>
       )}
@@ -275,7 +305,7 @@ const Events: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {pastEvents.map((event, index) => {
+            {visiblePastEvents.map((event, index) => {
               return (
                 <Card key={event.id} className="relative h-96 overflow-hidden hover:shadow-xl transition-all duration-300 group bg-white/20 border border-white/30 backdrop-blur-sm">
                   <div 
@@ -316,6 +346,14 @@ const Events: React.FC = () => {
               );
             })}
           </div>
+
+          <LoadMoreButton
+            onClick={loadMorePast}
+            hasMore={hasMorePast}
+            visibleCount={pastVisibleCount}
+            totalCount={pastTotalCount}
+            loading={loadingMorePast}
+          />
         </div>
       </section>
 
