@@ -1,18 +1,5 @@
 import { MetadataRoute } from 'next'
-
-function getSiteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL
-  if (configured && configured.trim().length > 0) {
-    return configured.trim().replace(/\/$/, '')
-  }
-
-  const vercelUrl = process.env.VERCEL_URL
-  if (vercelUrl && vercelUrl.trim().length > 0) {
-    return `https://${vercelUrl.trim().replace(/\/$/, '')}`
-  }
-
-  return 'https://cepa.or.ug'
-}
+import { getSiteUrl } from '@/lib/seo'
 
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = getSiteUrl()

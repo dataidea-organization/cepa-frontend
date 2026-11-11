@@ -11,18 +11,35 @@ export const SITE_DESCRIPTION =
  */
 export const DEFAULT_SHARE_IMAGE_PATH = "/hero/home-hero.jpg";
 
+/** Must match an entry in next.config.ts images.remotePatterns, plus default deviceSizes/qualities. */
+const OPTIMIZABLE_IMAGE_HOSTS = new Set(["admin.cepa.or.ug"]);
+const SHARE_IMAGE_WIDTH = 1200;
+const SHARE_IMAGE_QUALITY = 75;
+
+/** Canonical public origin. The apex domain (cepa.or.ug) redirects here. */
+export const PRODUCTION_SITE_URL = "https://www.cepa.or.ug";
+
+/**
+ * Public origin used for canonical URLs, og:url, share images, the sitemap and robots.txt.
+ *
+ * Do NOT fall back to VERCEL_URL for production: on Vercel it is the per-deployment host
+ * (e.g. cepa-frontend-xxxx.vercel.app), which sits behind deployment protection. Social
+ * crawlers cannot fetch images from it, and it must never appear in canonical URLs.
+ * Set NEXT_PUBLIC_SITE_URL to override (e.g. a staging domain).
+ */
 export function getSiteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL;
   if (configured && configured.trim().length > 0) {
     return configured.trim().replace(/\/+$/, "");
   }
 
+  // Preview deployments are self-contained, so let them reference themselves.
   const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl && vercelUrl.trim().length > 0) {
+  if (process.env.VERCEL_ENV === "preview" && vercelUrl && vercelUrl.trim().length > 0) {
     return `https://${vercelUrl.trim().replace(/\/+$/, "")}`;
   }
 
-  return "https://cepa.or.ug";
+  return PRODUCTION_SITE_URL;
 }
 
 /** Strip HTML tags/entities and collapse whitespace, then trim to a card-friendly length. */
@@ -67,6 +84,19 @@ export function toAbsoluteImageUrl(
       if (url.protocol === "http:" && !isLocal) {
         url.protocol = "https:";
       }
+
+      // Uploaded images can be several MB, and WhatsApp skips previews for images much
+      // over ~300-600KB. Route backend uploads through Next's image optimizer so crawlers
+      // get a ~1200px-wide, recompressed copy (host must be in images.remotePatterns).
+      if (OPTIMIZABLE_IMAGE_HOSTS.has(url.hostname) && url.pathname.startsWith("/media/")) {
+        const params = new URLSearchParams({
+          url: url.toString(),
+          w: String(SHARE_IMAGE_WIDTH),
+          q: String(SHARE_IMAGE_QUALITY),
+        });
+        return `${siteUrl}/_next/image?${params.toString()}`;
+      }
+
       return url.toString();
     } catch {
       return `${siteUrl}${DEFAULT_SHARE_IMAGE_PATH}`;
