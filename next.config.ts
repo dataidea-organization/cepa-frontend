@@ -10,6 +10,7 @@ const MEDIA_PROXY_TARGET = (
 const nextConfig: NextConfig = {
   eslint: {
     // Disable ESLint during builds to avoid blocking on style issues
+    // added small comment to test the build
     ignoreDuringBuilds: true,
   },
   typescript: {
