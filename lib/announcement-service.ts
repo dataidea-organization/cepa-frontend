@@ -27,7 +27,7 @@ export class AnnouncementService {
   private static async fetchAnnouncements(): Promise<Announcement[]> {
     try {
       const response = await fetch(
-        'https://cepa-backend-production.up.railway.app/getinvolved/announcements/?page_size=100',
+        'https://admin.cepa.or.ug/getinvolved/announcements/?page_size=100',
         { cache: 'no-store' }
       );
 

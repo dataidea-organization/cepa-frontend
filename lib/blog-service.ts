@@ -1,6 +1,6 @@
 import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
 
-const BLOG_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
+const BLOG_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://admin.cepa.or.ug/resources";
 
 export interface BlogComment {
   id: string;

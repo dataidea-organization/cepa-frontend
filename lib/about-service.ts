@@ -110,7 +110,7 @@ let cacheTimestamp: number | null = null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 
 export class AboutService {
-  private static readonly BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://cepa-backend-production.up.railway.app';
+  private static readonly BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://admin.cepa.or.ug';
 
   static async getAboutPageData(): Promise<AboutPageData> {
     // Check if we have valid cached data

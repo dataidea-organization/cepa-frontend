@@ -41,8 +41,8 @@ const Videos: React.FC = () => {
         
         // Fetch videos and categories in parallel
         const [videosResponse, categoriesResponse] = await Promise.all([
-          fetch('https://cepa-backend-production.up.railway.app/multimedia/videos/'),
-          fetch('https://cepa-backend-production.up.railway.app/multimedia/videos/categories/')
+          fetch('https://admin.cepa.or.ug/multimedia/videos/'),
+          fetch('https://admin.cepa.or.ug/multimedia/videos/categories/')
         ]);
 
         if (!videosResponse.ok || !categoriesResponse.ok) {

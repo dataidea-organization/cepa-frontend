@@ -1,7 +1,7 @@
 import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
 
 const PUBLICATIONS_API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://cepa-backend-production.up.railway.app/resources";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://admin.cepa.or.ug/resources";
 
 export interface Publication {
   id: string;

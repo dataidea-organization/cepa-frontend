@@ -2,7 +2,7 @@ import { buildPageQuery, PAGE_SIZE, PaginatedResponse } from "./pagination";
 
 const EVENTS_API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/resources$/, "") ||
-  "https://cepa-backend-production.up.railway.app";
+  "https://admin.cepa.or.ug";
 
 interface Event {
   id: string;

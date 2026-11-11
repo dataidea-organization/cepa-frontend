@@ -58,7 +58,7 @@ export default function ContactPage() {
     setErrorMessage('');
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/contact/', {
+      const response = await fetch('https://admin.cepa.or.ug/contact/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

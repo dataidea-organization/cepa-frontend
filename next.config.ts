@@ -13,13 +13,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cepa-backend-production.up.railway.app',
-        port: '',
-        pathname: '/media/**',
-      },
-      {
-        protocol: 'http',
-        hostname: 'cepa-backend-production.up.railway.app',
+        hostname: 'admin.cepa.or.ug',
         port: '',
         pathname: '/media/**',
       },

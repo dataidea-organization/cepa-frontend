@@ -16,7 +16,7 @@ const Footer = () => {
     setStatus('idle');
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/contact/newsletter/', {
+      const response = await fetch('https://admin.cepa.or.ug/contact/newsletter/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

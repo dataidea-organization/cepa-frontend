@@ -86,7 +86,7 @@ let focusAreaDetailCache: Map<string, FocusArea> = new Map();
 let cacheTimestamp: number | null = null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 
-const API_BASE_URL = 'https://cepa-backend-production.up.railway.app';
+const API_BASE_URL = 'https://admin.cepa.or.ug';
 
 export class FocusAreaService {
   private static async fetchFocusAreas(): Promise<FocusAreaListItem[]> {

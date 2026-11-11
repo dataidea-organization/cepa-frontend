@@ -193,7 +193,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://cepa-backend-production.up.railway.app'
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://admin.cepa.or.ug'
   const resourcesBase = process.env.NEXT_PUBLIC_API_BASE_URL || `${apiBase}/resources`
 
   const [

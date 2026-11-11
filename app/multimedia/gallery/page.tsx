@@ -41,7 +41,7 @@ const Gallery: React.FC = () => {
       try {
         setLoading(true);
         
-        const response = await fetch('https://cepa-backend-production.up.railway.app/multimedia/gallery-groups/');
+        const response = await fetch('https://admin.cepa.or.ug/multimedia/gallery-groups/');
 
         if (!response.ok) {
           throw new Error('Failed to fetch gallery data');

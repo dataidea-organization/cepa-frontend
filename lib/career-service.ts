@@ -38,7 +38,7 @@ export class CareerService {
     }
 
     try {
-      const response = await fetch('https://cepa-backend-production.up.railway.app/getinvolved/career/?page_size=100', {
+      const response = await fetch('https://admin.cepa.or.ug/getinvolved/career/?page_size=100', {
         next: { revalidate: 600 } // Revalidate every 10 minutes
       });
       
