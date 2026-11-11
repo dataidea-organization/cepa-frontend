@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   keywords: "policy analysis, Uganda, parliamentary democracy, governance, transparency, accountability, human rights, think tank",
   authors: [{ name: "Centre for Policy Analysis" }],
   icons: {
-    icon: "/CEPA-LOGO.png",
-    apple: "/CEPA-LOGO.png",
+    icon: "/CEPA-logo.png",
+    apple: "/CEPA-logo.png",
   },
   manifest: "/site.webmanifest",
   openGraph: {
