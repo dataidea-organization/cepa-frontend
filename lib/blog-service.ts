@@ -88,6 +88,23 @@ export class BlogService {
     return posts.find(post => post.slug === slug) || null;
   }
 
+  /**
+   * Fetch a single post through the by-slug endpoint instead of downloading the whole list
+   * (the list payload includes full article bodies and is over 2MB, so it cannot be
+   * data-cached). Use this for lightweight lookups such as page metadata.
+   */
+  static async getBlogPostBySlugDirect(slug: string): Promise<BlogPost | null> {
+    const response = await fetch(`${BLOG_API_BASE}/blog/slug/${encodeURIComponent(slug)}/`, {
+      next: { revalidate: 300 },
+      headers: { Accept: "application/json" },
+    });
+
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to fetch blog post");
+
+    return response.json();
+  }
+
   static async getFeaturedBlogPosts(): Promise<BlogPost[]> {
     const posts = await this.fetchBlogPosts();
     return posts.filter(post => post.featured);

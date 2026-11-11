@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { chatbotService, ChatMessage, ChatResponse, ChatSession } from '@/lib/chatbot-service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { toPublicDocumentUrl } from '@/lib/document-url';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -246,7 +247,7 @@ export default function ChatPage() {
                         </p>
                         {message.source_document_url && (
                           <a
-                            href={message.source_document_url}
+                            href={toPublicDocumentUrl(message.source_document_url)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-[#800020] hover:underline inline-flex items-center gap-1"

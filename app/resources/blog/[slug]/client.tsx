@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Calendar, Tag, Eye, MessageCircle } from "lucide-react";
 import { BlogService, BlogPost, BlogComment } from "@/lib/blog-service";
+import { rewriteMediaLinksInHtml } from "@/lib/document-url";
 
 interface BlogDetailPageProps {
   slug: string;
@@ -153,7 +154,7 @@ const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ slug }) => {
           
           <article 
             className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg"
-            dangerouslySetInnerHTML={{ __html: post.content || post.description }}
+            dangerouslySetInnerHTML={{ __html: rewriteMediaLinksInHtml(post.content || post.description) }}
           />
           
           <div className="mt-12 pt-8 border-t border-border">

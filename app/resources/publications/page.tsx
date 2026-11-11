@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { PublicationService } from "@/lib/publication-service";
+import { toPublicDocumentUrl } from "@/lib/document-url";
 import { usePaginatedList } from "@/hooks/use-paginated-list";
 import { LoadMoreButton } from "@/components/LoadMoreButton";
 import { FilterDropdown } from "@/components/FilterDropdown";
@@ -183,7 +184,7 @@ const Publications: React.FC = () => {
                     <div className="flex gap-2">
                       {publication.pdf && (
                         <Button asChild size="sm" variant="outline" className="bg-[#800020] text-white border border-[#800020] hover:bg-[#800020]/90">
-                          <a href={publication.pdf} target="_blank" rel="noopener noreferrer">
+                          <a href={toPublicDocumentUrl(publication.pdf)} target="_blank" rel="noopener noreferrer">
                             Download PDF
                           </a>
                         </Button>

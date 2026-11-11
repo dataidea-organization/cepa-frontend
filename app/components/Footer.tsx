@@ -42,11 +42,19 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
-            <div className="flex items-center bg-white p-3">
+            {/* White tile in light mode (the footer is dark and the logo text is black);
+                in dark mode the tile is removed and the light-text logo variant is used. */}
+            <div className="flex items-center logo-tile p-3">
               <img 
                 src="/CEPA-logo.png"
                 alt="CEPA Logo" 
-                className="w-auto"
+                className="w-auto dark:hidden"
+              />
+              <img
+                src="/CEPA-logo-dark.png"
+                alt="CEPA Logo"
+                loading="lazy"
+                className="hidden w-auto dark:block"
               />
             </div>
             <p className="text-gray-400">

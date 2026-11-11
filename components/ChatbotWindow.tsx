@@ -6,6 +6,7 @@ import { X, Send, Minimize2, MessageCircle, AlertTriangle } from 'lucide-react';
 import { chatbotService, ChatMessage, ChatResponse } from '@/lib/chatbot-service';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { toPublicDocumentUrl } from '@/lib/document-url';
 
 export default function ChatbotWindow() {
   const router = useRouter();
@@ -244,7 +245,7 @@ export default function ChatbotWindow() {
                         Source: {message.source_document_name}
                         {message.source_document_url && (
                           <a
-                            href={message.source_document_url}
+                            href={toPublicDocumentUrl(message.source_document_url)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="ml-1 text-[#800020] hover:underline"

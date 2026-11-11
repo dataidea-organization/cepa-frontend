@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle, Target, Calendar, TrendingUp, FileText, Download } from "lucide-react";
 import { FocusAreaService, FocusArea } from "@/lib/focus-area-service";
+import { toPublicDocumentUrl } from "@/lib/document-url";
 
 interface FocusAreaDetailClientProps {
   slug: string;
@@ -409,7 +410,7 @@ const FocusAreaDetailClient: React.FC<FocusAreaDetailClientProps> = ({ slug }) =
                       >
                         <Card className="p-6 h-full bg-white/40 border border-white/50 backdrop-blur-sm hover:shadow-lg transition-all hover:scale-105">
                           <a
-                            href={resource.file_url}
+                            href={toPublicDocumentUrl(resource.file_url)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex flex-col h-full"

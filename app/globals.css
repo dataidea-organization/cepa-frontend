@@ -81,11 +81,18 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --muted: #1e293b;
-    --border: #334155;
-  }
+/*
+  Theme is controlled by the `dark` class on <html> (see ThemeToggle and the inline
+  script in layout.tsx), so it follows the visitor's explicit choice first and their
+  OS preference second. Tokens are space-separated RGB triplets, consumed as
+  `rgb(var(--token))` in the @theme block above.
+*/
+:root {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -112,16 +119,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background: rgb(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary);
+  background: rgb(var(--secondary));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: rgb(var(--primary));
 }
 
 /* Smooth transitions */
@@ -129,39 +136,150 @@ body {
   transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Dark theme tokens (RGB triplets, same format as :root) */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: 15 17 23;
+  --foreground: 229 231 235;
+  --card: 24 27 35;
+  --card-foreground: 229 231 235;
+  --popover: 24 27 35;
+  --popover-foreground: 229 231 235;
+  /* Lighter blue so text-primary stays legible on dark surfaces */
+  --primary: 96 165 250;
+  --primary-foreground: 15 23 42;
+  --secondary: 245 158 11;
+  --secondary-foreground: 0 0 0;
+  --accent: 16 185 129;
+  --accent-foreground: 255 255 255;
+  --destructive: 248 113 113;
+  --destructive-foreground: 255 255 255;
+  --muted: 31 36 46;
+  --muted-foreground: 156 163 175;
+  --border: 55 62 76;
+  --input: 55 62 76;
+  --ring: 96 165 250;
+  --chart-1: 96 165 250;
+  --chart-2: 245 158 11;
+  --chart-3: 16 185 129;
+  --chart-4: 248 113 113;
+  --chart-5: 167 139 250;
+  --sidebar: 24 27 35;
+  --sidebar-foreground: 229 231 235;
+  --sidebar-primary: 96 165 250;
+  --sidebar-primary-foreground: 15 23 42;
+  --sidebar-accent: 245 158 11;
+  --sidebar-accent-foreground: 0 0 0;
+  --sidebar-border: 55 62 76;
+  --sidebar-ring: 96 165 250;
 }
+
+/*
+  Dark-mode remaps for classes that are hard-coded across pages (bg-white, text-gray-*,
+  pastel status badges, cream/maroon brand colours, light gradients). Keeping them here
+  avoids touching every page component. These rules are intentionally un-layered so they
+  win over Tailwind's utilities layer.
+
+  To keep an element light in dark mode (e.g. a logo tile), add `theme-fixed-light`
+  next to `bg-white`.
+*/
+
+/* Footer logo backing: white in light mode, none in dark mode (dark logo variant is used) */
+.logo-tile { background-color: #fff; }
+.dark .logo-tile { background-color: transparent; }
+
+/* Surfaces */
+.dark .bg-white { background-color: rgb(var(--card)); }
+.dark .bg-white.theme-fixed-light { background-color: #fff; }
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-gray-50:hover,
+.dark .focus\:bg-gray-100:focus { background-color: rgb(var(--muted)); }
+.dark .bg-\[\#f5f0e8\] { background-color: rgb(var(--card)); }
+.dark .bg-\[\#fafaf8\] { background-color: rgb(var(--background)); }
+
+/* Translucent "glass" surfaces */
+.dark .bg-white\/15 { background-color: rgb(var(--card) / 0.35); }
+.dark .bg-white\/20 { background-color: rgb(var(--card) / 0.45); }
+.dark .bg-white\/30 { background-color: rgb(var(--card) / 0.55); }
+.dark .bg-white\/40 { background-color: rgb(var(--card) / 0.7); }
+.dark .bg-white\/50 { background-color: rgb(var(--card) / 0.8); }
+.dark .bg-white\/60 { background-color: rgb(var(--card) / 0.85); }
+.dark .bg-white\/70 { background-color: rgb(var(--card) / 0.9); }
+.dark .bg-white\/80 { background-color: rgb(var(--card) / 0.92); }
+.dark .bg-white\/90 { background-color: rgb(var(--card) / 0.95); }
+.dark .hover\:bg-white\/20:hover,
+.dark .hover\:bg-white\/30:hover,
+.dark .hover\:bg-white\/50:hover,
+.dark .hover\:bg-white\/70:hover { background-color: rgb(255 255 255 / 0.12); }
+
+/* Text */
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .hover\:text-gray-900:hover,
+.dark .focus\:text-gray-900:focus { color: rgb(var(--foreground)); }
+.dark .text-gray-700 { color: rgb(209 213 219); }
+.dark .text-gray-600,
+.dark .text-gray-500 { color: rgb(var(--muted-foreground)); }
+.dark .text-blue-600,
+.dark .text-blue-800,
+.dark .hover\:text-blue-800:hover { color: rgb(96 165 250); }
+.dark .text-blue-900 { color: rgb(147 197 253); }
+.dark .text-green-600 { color: rgb(74 222 128); }
+.dark .text-green-800,
+.dark .text-green-900 { color: rgb(134 239 172); }
+.dark .text-red-600 { color: rgb(248 113 113); }
+.dark .text-red-800,
+.dark .text-red-900 { color: rgb(252 165 165); }
+.dark .text-yellow-600 { color: rgb(250 204 21); }
+.dark .text-yellow-900,
+.dark .text-amber-800 { color: rgb(253 224 71); }
+.dark .text-orange-900 { color: rgb(253 186 116); }
+.dark .text-purple-900 { color: rgb(216 180 254); }
+.dark .text-\[\#800020\] { color: rgb(244 114 140); }
+
+/* Borders and rings */
+.dark .border-gray-200,
+.dark .border-gray-300 { border-color: rgb(var(--border)); }
+.dark .border-blue-200 { border-color: rgb(59 130 246 / 0.35); }
+.dark .ring-blue-200 { --tw-ring-color: rgb(59 130 246 / 0.35); }
+.dark .border-green-200 { border-color: rgb(34 197 94 / 0.35); }
+.dark .border-red-200,
+.dark .border-red-300 { border-color: rgb(239 68 68 / 0.35); }
+.dark .border-green-300 { border-color: rgb(34 197 94 / 0.35); }
+.dark .border-amber-200,
+.dark .border-yellow-200 { border-color: rgb(245 158 11 / 0.35); }
+.dark .border-purple-200 { border-color: rgb(168 85 247 / 0.35); }
+.dark .border-orange-200 { border-color: rgb(249 115 22 / 0.35); }
+.dark .border-gray-100 { border-color: rgb(var(--border)); }
+
+/* Pastel badges and alerts */
+.dark .bg-blue-100 { background-color: rgb(59 130 246 / 0.2); }
+.dark .bg-green-100 { background-color: rgb(34 197 94 / 0.2); }
+.dark .bg-green-50 { background-color: rgb(34 197 94 / 0.1); }
+.dark .bg-red-100 { background-color: rgb(239 68 68 / 0.2); }
+.dark .bg-red-50 { background-color: rgb(239 68 68 / 0.12); }
+.dark .bg-yellow-100 { background-color: rgb(234 179 8 / 0.2); }
+.dark .bg-purple-100 { background-color: rgb(168 85 247 / 0.2); }
+.dark .bg-amber-100 { background-color: rgb(245 158 11 / 0.2); }
+.dark .bg-amber-50 { background-color: rgb(245 158 11 / 0.1); }
+.dark .bg-pink-100 { background-color: rgb(236 72 153 / 0.2); }
+.dark .bg-orange-50 { background-color: rgb(249 115 22 / 0.1); }
+.dark .bg-blue-50 { background-color: rgb(59 130 246 / 0.1); }
+.dark .bg-gray-300 { background-color: rgb(75 85 99); }
+.dark .hover\:bg-green-100:hover { background-color: rgb(34 197 94 / 0.3); }
+.dark .hover\:bg-blue-100:hover { background-color: rgb(59 130 246 / 0.3); }
+
+/* Light page-section gradients */
+.dark .from-blue-50 { --tw-gradient-from: rgb(17 24 39); }
+.dark .to-green-50 { --tw-gradient-to: rgb(15 28 26); }
+.dark .to-purple-50 { --tw-gradient-to: rgb(24 20 36); }
+.dark .via-white { --tw-gradient-via: rgb(var(--background)); }
+.dark .via-yellow-50 { --tw-gradient-via: rgb(28 25 18); }
+.dark .from-gray-50 { --tw-gradient-from: rgb(var(--muted)); }
+.dark .to-gray-100 { --tw-gradient-to: rgb(var(--muted)); }
+.dark .from-\[\#fafaf8\] { --tw-gradient-from: rgb(var(--background)); }
+.dark .to-\[\#f5f0e8\] { --tw-gradient-to: rgb(var(--card)); }
 
 @layer base {
   * {

@@ -5,6 +5,14 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import ChatbotWindow from "@/components/ChatbotWindow";
+import { themeInitScript } from "@/lib/theme";
+import {
+  DEFAULT_SHARE_IMAGE_PATH,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_SHORT_NAME,
+  getSiteUrl,
+} from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +31,12 @@ const gabarito = Gabarito({
 });
 
 export const metadata: Metadata = {
-  title: "CEPA - Centre for Policy Analysis",
+  // Required so relative image/canonical URLs resolve to absolute https URLs in og:/twitter: tags.
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_SHORT_NAME}`,
+  },
   description: "The Centre for Policy Analysis (CEPA) is a leading think tank in Uganda focused on parliamentary democracy, governance, transparency, accountability, and human rights.",
   keywords: "policy analysis, Uganda, parliamentary democracy, governance, transparency, accountability, human rights, think tank",
   authors: [{ name: "Centre for Policy Analysis" }],
@@ -33,24 +46,26 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "CEPA - Centre for Policy Analysis",
-    description: "Leading think tank in Uganda focused on policy analysis and governance",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
     type: "website",
+    siteName: SITE_NAME,
     locale: "en_UG",
+    url: "/",
     images: [
       {
-        url: "/CEPA-logo.png",
-        width: 512,
-        height: 512,
-        alt: "CEPA Logo"
+        url: DEFAULT_SHARE_IMAGE_PATH,
+        width: 1242,
+        height: 936,
+        alt: SITE_NAME
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "CEPA - Centre for Policy Analysis",
-    description: "Leading think tank in Uganda focused on policy analysis and governance",
-    images: ["/CEPA-LOGO.png"]
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_SHARE_IMAGE_PATH]
   }
 };
 
@@ -60,7 +75,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${gabarito.variable} antialiased`}
       >

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, MapPin, Clock, Users, ExternalLink } from "lucide-react";
 import { EventsService, Event } from "@/lib/events-service";
+import { rewriteMediaLinksInHtml } from "@/lib/document-url";
 
 interface EventDetailPageProps {
   slug: string;
@@ -148,7 +149,7 @@ const EventDetailPage: React.FC<EventDetailPageProps> = ({ slug }) => {
             <div className="lg:col-span-2">
               <article 
                 className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg"
-                dangerouslySetInnerHTML={{ __html: event.content || event.description }}
+                dangerouslySetInnerHTML={{ __html: rewriteMediaLinksInHtml(event.content || event.description) }}
               />
             </div>
             

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { cohortService, Cohort } from '@/lib/cohort-service';
 import { FocusAreaService, FocusAreaListItem } from '@/lib/focus-area-service';
 
@@ -138,10 +139,18 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
+            {/* Light/dark variants: the dark one has the wordmark text recoloured to off-white
+                so it stays legible without a white backing tile. */}
             <img
               src="/CEPA-logo.png"
               alt="CEPA Logo"
-              className="h-12 w-auto"
+              className="h-12 w-auto dark:hidden"
+            />
+            <img
+              src="/CEPA-logo-dark.png"
+              alt="CEPA Logo"
+              loading="lazy"
+              className="hidden h-12 w-auto dark:block"
             />
           </Link>
 
@@ -188,6 +197,8 @@ const Navbar = () => {
               </a>
             </Button>
 
+            <ThemeToggle className="text-gray-700 hover:text-gray-900 hover:bg-gray-100" />
+
             {/* Support Us Button */}
             <Button asChild className="bg-green-800 hover:bg-green-900 text-white font-medium py-2 px-4 rounded-md transition-all duration-200">
               <Link href="/get-involved/donate">
@@ -197,7 +208,8 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-1">
+            <ThemeToggle className="text-gray-700 hover:text-gray-900 hover:bg-gray-100" />
             <Button
               variant="ghost"
               size="icon"

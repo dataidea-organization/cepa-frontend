@@ -9,6 +9,8 @@ import { Calendar, ArrowLeft, ExternalLink, Bell, AlertCircle } from "lucide-rea
 import { AnnouncementService, Announcement } from "@/lib/announcement-service";
 import { formatDisplayDate } from "@/lib/date-utils";
 import AnnouncementDetailClient from "./client";
+import type { Metadata } from "next";
+import { buildShareMetadata, safeLookup } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
@@ -17,6 +19,23 @@ interface PageProps {
 }
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const announcement = await safeLookup(() => AnnouncementService.getAnnouncementBySlug(slug));
+
+  if (!announcement) return {};
+
+  return buildShareMetadata({
+    title: announcement.title,
+    description: announcement.summary,
+    path: `/get-involved/announcements/${slug}`,
+    image: announcement.image,
+    publishedTime: announcement.published_date,
+    modifiedTime: announcement.updated_at,
+    section: announcement.type,
+  });
+}
 
 const AnnouncementDetailPage = async ({ params }: PageProps) => {
   const { slug } = await params;

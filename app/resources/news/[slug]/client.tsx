@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Calendar, Tag, Eye, MessageCircle } from "lucide-react";
 import { NewsService, NewsArticle, NewsComment } from "@/lib/news-service";
+import { rewriteMediaLinksInHtml } from "@/lib/document-url";
 
 interface NewsDetailPageProps {
   slug: string;
@@ -231,7 +232,7 @@ const NewsDetailPage: React.FC<NewsDetailPageProps> = ({ slug }) => {
           
           <article 
             className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:p-6 prose-blockquote:rounded-r-lg"
-            dangerouslySetInnerHTML={{ __html: article.content || article.description }}
+            dangerouslySetInnerHTML={{ __html: rewriteMediaLinksInHtml(article.content || article.description) }}
           />
           
           <div className="mt-12 pt-8 border-t border-border">

@@ -7,11 +7,30 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Calendar, Clock, Briefcase, ArrowLeft, ExternalLink } from "lucide-react";
 import { CareerService, CareerOpportunity } from "@/lib/career-service";
 import CareerDetailClient from "./client";
+import type { Metadata } from "next";
+import { buildShareMetadata, safeLookup } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const opportunity = await safeLookup(() => CareerService.getOpportunityBySlug(slug));
+
+  if (!opportunity) return {};
+
+  return buildShareMetadata({
+    title: opportunity.title,
+    description: opportunity.description,
+    path: `/get-involved/career/${slug}`,
+    image: opportunity.image,
+    publishedTime: opportunity.posted_date,
+    modifiedTime: opportunity.updated_at,
+    section: opportunity.type,
+  });
 }
 
 const CareerDetailPage = async ({ params }: PageProps) => {
